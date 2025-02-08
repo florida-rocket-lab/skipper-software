@@ -1,0 +1,21 @@
+
+# This file stores the directories to look in for each individual "build"
+# when `generate_build_directories.py` is run, the names of each of these
+# lists will become a directory and all the files in the directory will
+# be flattened and all the of the "#include ..." will automatically update.
+# Please note that any other path will **NOT** be automatically updated.
+
+# This is the Arduino UNO/MEGA that will serve as the transceiver on the ground.
+ground_transceiver:
+  - "../Software/skipper-lib"
+  - "../Software/ground-transceiver"
+
+# This is the Arduino Nano that will serve as the transceiver on Skipper.
+skipper_transceiver:
+  - "../Software/skipper-lib"
+  - "../Software/skipper-transceiver"
+
+# This is the Teensy 4.0 that will serve as the flight computer for Skipper.
+skipper_flight_computer:
+  - "../Software/skipper-lib"
+  - "../Software/skipper-flight-computer"
