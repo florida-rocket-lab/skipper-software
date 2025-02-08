@@ -44,7 +44,7 @@ def print_matrix(matrix: list[list[str]]):
     stdout = "[\n"
     for row in matrix:
         stdout += '\t' + ' '.join(row) + ';\n'
-    return stdout + '];\n'
+    return stdout.replace('**', '^') + '];\n'
 
 def print_vector(vector: list[str]):
     return print_matrix([[term] for term in vector])

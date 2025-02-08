@@ -29,9 +29,9 @@ function [A, B, C, D, K] = lqrMatrices(theta0, psi0, phi0, u0, v0, w0, p0, q0, r
         0 0 0 0 r0 -q0 0 g*sin(theta0)*cos(psi0) g*sin(psi0)*cos(theta0) 0 -w0 v0;
         0 0 0 -r0 0 p0 -g*sin(phi0)*sin(psi0) - g*sin(theta0)*cos(phi0)*cos(psi0) -g*sin(phi0)*cos(psi0)*cos(theta0) g*sin(phi0)*sin(psi0)*sin(theta0) + g*cos(phi0)*cos(psi0) w0 0 -u0;
         0 0 0 q0 -p0 0 g*sin(phi0)*sin(theta0)*cos(psi0) - g*sin(psi0)*cos(phi0) -g*cos(phi0)*cos(psi0)*cos(theta0) -g*sin(phi0)*cos(psi0) + g*sin(psi0)*sin(theta0)*cos(phi0) -v0 u0 0;
-        0 0 0 0 0 0 q0*cos(phi0)*tan(theta0) - r0*sin(phi0)*tan(theta0) q0*sin(phi0)*tan(theta0)**2 + q0*sin(phi0) + r0*cos(phi0)*tan(theta0)**2 + r0*cos(phi0) 0 1 sin(phi0)*tan(theta0) cos(phi0)*tan(theta0);
+        0 0 0 0 0 0 q0*cos(phi0)*tan(theta0) - r0*sin(phi0)*tan(theta0) q0*sin(phi0)*tan(theta0)^2 + q0*sin(phi0) + r0*cos(phi0)*tan(theta0)^2 + r0*cos(phi0) 0 1 sin(phi0)*tan(theta0) cos(phi0)*tan(theta0);
         0 0 0 0 0 0 -q0*sin(phi0) - r0*cos(phi0) 0 0 0 cos(phi0) -sin(phi0);
-        0 0 0 0 0 0 q0*cos(phi0)/cos(theta0) - r0*sin(phi0)/cos(theta0) q0*sin(phi0)*sin(theta0)/cos(theta0)**2 + r0*sin(theta0)*cos(phi0)/cos(theta0)**2 0 0 sin(phi0)/cos(theta0) cos(phi0)/cos(theta0);
+        0 0 0 0 0 0 q0*cos(phi0)/cos(theta0) - r0*sin(phi0)/cos(theta0) q0*sin(phi0)*sin(theta0)/cos(theta0)^2 + r0*sin(theta0)*cos(phi0)/cos(theta0)^2 0 0 sin(phi0)/cos(theta0) cos(phi0)/cos(theta0);
         0 0 0 0 0 0 0 0 0 0 Iyy*r0/Ixx - Izz*r0/Ixx Iyy*q0/Ixx - Izz*q0/Ixx;
         0 0 0 0 0 0 0 0 0 -Ixx*r0/Iyy + Izz*r0/Iyy 0 -Ixx*p0/Iyy + Izz*p0/Iyy;
         0 0 0 0 0 0 0 0 0 Ixx*q0/Izz - Iyy*q0/Izz Ixx*p0/Izz - Iyy*p0/Izz 0;
@@ -65,9 +65,9 @@ function [A, B, C, D, K] = lqrMatrices(theta0, psi0, phi0, u0, v0, w0, p0, q0, r
         -g*psi0*sin(psi0)*cos(theta0) - g*theta0*sin(theta0)*cos(psi0) - g*cos(psi0)*cos(theta0) + q0*w0 - r0*v0 + T0*xi0*sin(xi0)*cos(zeta0)/M + T0*zeta0*sin(zeta0)*cos(xi0)/M;
         g*phi0*sin(phi0)*sin(psi0) + g*phi0*sin(theta0)*cos(phi0)*cos(psi0) - g*psi0*sin(phi0)*sin(psi0)*sin(theta0) - g*psi0*cos(phi0)*cos(psi0) + g*theta0*sin(phi0)*cos(psi0)*cos(theta0) - g*sin(phi0)*sin(theta0)*cos(psi0) + g*sin(psi0)*cos(phi0) - p0*w0 + r0*u0 - T0*zeta0*cos(zeta0)/M;
         -g*phi0*sin(phi0)*sin(theta0)*cos(psi0) + g*phi0*sin(psi0)*cos(phi0) + g*psi0*sin(phi0)*cos(psi0) - g*psi0*sin(psi0)*sin(theta0)*cos(phi0) + g*theta0*cos(phi0)*cos(psi0)*cos(theta0) - g*sin(phi0)*sin(psi0) - g*sin(theta0)*cos(phi0)*cos(psi0) + p0*v0 - q0*u0 + T0*xi0*cos(xi0)*cos(zeta0)/M - T0*zeta0*sin(xi0)*sin(zeta0)/M;
-        -phi0*q0*cos(phi0)*tan(theta0) + phi0*r0*sin(phi0)*tan(theta0) - q0*theta0*sin(phi0)*tan(theta0)**2 - q0*theta0*sin(phi0) - r0*theta0*cos(phi0)*tan(theta0)**2 - r0*theta0*cos(phi0);
+        -phi0*q0*cos(phi0)*tan(theta0) + phi0*r0*sin(phi0)*tan(theta0) - q0*theta0*sin(phi0)*tan(theta0)^2 - q0*theta0*sin(phi0) - r0*theta0*cos(phi0)*tan(theta0)^2 - r0*theta0*cos(phi0);
         phi0*q0*sin(phi0) + phi0*r0*cos(phi0);
-        -phi0*q0*cos(phi0)/cos(theta0) + phi0*r0*sin(phi0)/cos(theta0) - q0*theta0*sin(phi0)*sin(theta0)/cos(theta0)**2 - r0*theta0*sin(theta0)*cos(phi0)/cos(theta0)**2;
+        -phi0*q0*cos(phi0)/cos(theta0) + phi0*r0*sin(phi0)/cos(theta0) - q0*theta0*sin(phi0)*sin(theta0)/cos(theta0)^2 - r0*theta0*sin(theta0)*cos(phi0)/cos(theta0)^2;
         -Iyy*q0*r0/Ixx + Izz*q0*r0/Ixx;
         Ixx*p0*r0/Iyy - Izz*p0*r0/Iyy + T0*rho2*xi0*cos(xi0)*cos(zeta0)/Iyy - T0*rho2*zeta0*sin(xi0)*sin(zeta0)/Iyy;
         -Ixx*p0*q0/Izz + Iyy*p0*q0/Izz + T0*rho2*zeta0*cos(zeta0)/Izz;
