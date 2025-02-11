@@ -1,22 +1,21 @@
+
 #ifndef NANO_H
 #define NANO_H
 
 #include <Arduino.h>
-#include "../skipper-lib/UARTConnection.h"
-#include "../skipper-lib/RadioConnection.h"
-#include "../skipper-lib/Ground2Teensy.h"
+#include "../skipper-lib/_wrapper.h"
 
-class Nano {
+class Nano
+{
   public:
-    Nano();
-    void init();                // initializes UART & RF
-    void sendCommand(uint8_t command);  
-    void receiveCommand();    
-    void checkConnection();    
-
+    Nano() = default;
+    void ground_to_teensy();
+    void teensy_to_ground();
   private:
     UARTConnection _with_teensy;
     RadioConnection _with_ground;
+    Ground2Teensy _flight_data_intermediate;
+    Teensy2Ground _command_data_intermediate;
 };
 
-#endif 
+#endif // NANO_H

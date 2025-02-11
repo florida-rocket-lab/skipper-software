@@ -6,11 +6,6 @@
 #define WRAPPER_HPP
 
 #include "communication.h"
-#include "UARTConnection.h"
-#include "RadioConnection.h"
-#include "Ground2Teensy.h"
-#include "Teensy2Ground.h
-
 
 // I'm putting all the Skipper headers in here so that
 // in external scripts, I just need to do include "../skipper-lib/_wrapper.h"
