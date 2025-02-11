@@ -1,21 +1,24 @@
-
 #ifndef GROUND_H
 #define GROUND_H
 
 #include <Arduino.h>
 #include "../skipper-lib/_wrapper.h"
+#include "../skipper-lib/communication.h"
 
 class Ground
 {
 public:
     Ground();
-    void communication_loop() const;
+    void communication_loop();  /
+
 private:
-    RadioConnection _with_ground;
-    struct Teensy2Ground _received_flight_data;
-    struct Ground2Teensy _command_data_buffer;
-    void terminal_to_sky() const;
-    void sky_to_terminal() const;
+    RadioConnection _radio; 
+
+    Teensy2Ground _received_flight_data;  
+    Ground2Teensy _command_data_buffer;   
+
+    void send_command();  
+    void receive_telemetry(); 
 };
 
 #endif // GROUND_H
