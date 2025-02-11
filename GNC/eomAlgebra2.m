@@ -52,17 +52,17 @@ Tw2u = Tu2w'; % W -> U.
 
 % Kinematics.
 omega = [p q r]'; % Angular velocity.
-alpha = [pDot qDot rDot]'; % Angular acceleration.
+alph = [pDot qDot rDot]'; % Angular acceleration.
  
 nu = [u v w]'; % Velocity.
 a = [uDot vDot wDot]' + cross(omega, nu); % Acceleration. Need TT because 
-                                         % components of velocity are in U.
+                                          % components of velocity are in U.
 
 I = diag([Ixx Iyy Izz]); % Rotational inertia tensor.
 
 H = I*omega; % Angular momentum. THIS ONLY WORKS 
              % BECAUSE I IS DIAGONAL!
-HDot = I*alpha + cross(omega, H); % Angular momentum derivative, need TT. 
+HDot = I*alph + cross(omega, H); % Angular momentum derivative, need TT. 
                                   % Same rule regarding matrix
                                   % instead of tensor product as with H.
 
@@ -106,7 +106,7 @@ avel_rel = avel_rel_LHS == avel_rel_RHS; % Relation betwen euler angle
                                          % and body-frame rates.
 
 vel_rel_LHS = [xDot yDot zDot]'; % Body-frame velocity components.
-vel_rel_RHS = nu - [r*y + q*z -p*z+r*x -q*x+p*y]';
+vel_rel_RHS = nu - [r*y+q*z -p*z+r*x -q*x+p*y]';
 vel_rel = vel_rel_LHS == vel_rel_RHS; % Relation betwen inertial  
                                       % and body-frame velocities.
 
