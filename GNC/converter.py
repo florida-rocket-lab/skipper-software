@@ -38,7 +38,7 @@ def extract_constants(system: list[Expr], disallowed_symbols: list[Symbol]) -> l
     return vector
 
 def convert_matrix_to_string(matrix: list[list[Expr]]):
-    return [[str(term) for term in row] for row in matrix]
+    return [[str(term).replace(' ', '') for term in row] for row in matrix]
 
 def print_matrix(matrix: list[list[str]]):
     stdout = "[\n"
