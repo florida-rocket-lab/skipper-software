@@ -1,4 +1,4 @@
-function [A, B, C, D, K] = lqrMatrices(theta0, psi0, phi0, u0, v0, w0, p0, q0, r0, T0, xi0, zeta0, M, g, rho2, R, H)
+function [A, B, C, D, K, d] = lqrMatrices(x0, y0, z0, theta0, u0, v0, w0, psi0, phi0, p0, q0, r0, T0, xi0, zeta0, M, g, rho2, R, H)
 % ________________________________________________________________________
 %
 %                              LQR MATRICES
