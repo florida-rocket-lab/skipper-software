@@ -1,12 +1,14 @@
-
 #include "ground.h"
 
-Ground ground{};
+Ground ground;
+
 void setup()
 {
-    // I don't know what needs to be set up
+    Serial.begin(115200);
+    ground.communication_loop();
 }
+
 void loop()
 {
-    ground.communication_loop();
+    ground.communication_loop();  
 }
