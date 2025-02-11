@@ -7,10 +7,11 @@
 
 enum class SkipperFlag : unsigned char
 {
-  Idle      =     0x00,
-  Armed     =     0x01, // These four correspond to the last two bits because
-  Takeoff   =     0x02, // they are all mutually exclusive.
-  Hover     =     0x03,
+  Idle      =     0x66,
+  Armed     =     0x67, // These four correspond to the last two bits because
+  Takeoff   =     0x68, // they are all mutually exclusive.
+  Hover     =     0x69,
+  Land      =     0x9A,
   // add more as needed.
 };
 
