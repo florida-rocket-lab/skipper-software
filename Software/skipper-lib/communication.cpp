@@ -4,12 +4,6 @@
 
 #include "communication.h"
 
-SkipperState EKF::filter_data(const IMUData& imu_data)
-{
-  // TODO: filter an IMU Data struct using an extended Kalman filter.
-  return {};
-}
-
 UARTConnection::UARTConnection()
 {
   // TODO: write UART initializer between Nano and Teensy
