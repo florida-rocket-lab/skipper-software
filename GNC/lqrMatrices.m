@@ -23,7 +23,7 @@ function [A, B, C, D, K, d] = lqrMatrices(x0, y0, z0, theta0, u0, v0, w0, psi0, 
 
     % BEGIN "A"; Do not modify this. The python script looks for this line.
     A = [
-        0 -r0 -q0 1 0 0 0 0 0 0 -z0 -y0;
+        0 r0 -q0 1 0 0 0 0 0 0 -z0 y0;
         -r0 0 p0 0 1 0 0 0 0 z0 0 -x0;
         q0 -p0 0 0 0 1 0 0 0 -y0 x0 0;
         0 0 0 0 r0 -q0 0 g*sin(theta0)*cos(psi0) g*sin(psi0)*cos(theta0) 0 -w0 v0;
@@ -59,7 +59,7 @@ function [A, B, C, D, K, d] = lqrMatrices(x0, y0, z0, theta0, u0, v0, w0, psi0, 
 
     % BEGIN "d"; Do not modify this. The python script looks for this line.
     d = [
-        q0*z0 + r0*y0;
+        q0*z0 - r0*y0;
         -p0*z0 + r0*x0;
         p0*y0 - q0*x0;
         -g*psi0*sin(psi0)*cos(theta0) - g*theta0*sin(theta0)*cos(psi0) - g*cos(psi0)*cos(theta0) + q0*w0 - r0*v0 + T0*xi0*sin(xi0)*cos(zeta0)/M + T0*zeta0*sin(zeta0)*cos(xi0)/M;
