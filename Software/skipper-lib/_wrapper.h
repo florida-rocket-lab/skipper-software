@@ -6,6 +6,8 @@
 #define WRAPPER_HPP
 
 #include "communication.h"
+#include "datatypes.h"
+#include "filter.h"
 
 // I'm putting all the Skipper headers in here so that
 // in external scripts, I just need to do include "../skipper-lib/_wrapper.h"
