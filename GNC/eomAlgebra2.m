@@ -84,6 +84,7 @@ d3 = [rho3x rho3y rho3z]'; % Defined in U.
 % both sides of each law are first defined seperately and then combined.
 
 first_law_LHS = Tw2u*F_aero + Ti2u*F_grav + Tt2u*F_thrust + F_peturb;
+Tt2u*F_thrust
 first_law_RHS = M*a;
 first_law = first_law_LHS == first_law_RHS;
 
@@ -106,7 +107,7 @@ avel_rel = avel_rel_LHS == avel_rel_RHS; % Relation betwen euler angle
                                          % and body-frame rates.
 
 vel_rel_LHS = [xDot yDot zDot]'; % Body-frame velocity components.
-vel_rel_RHS = nu - [r*y+q*z -p*z+r*x -q*x+p*y]';
+vel_rel_RHS = nu - [-r*y+q*z -p*z+r*x -q*x+p*y]';
 vel_rel = vel_rel_LHS == vel_rel_RHS; % Relation betwen inertial  
                                       % and body-frame velocities.
 
