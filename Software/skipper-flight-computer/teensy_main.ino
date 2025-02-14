@@ -58,6 +58,16 @@ void send_message_to_nano(const IMUData &id, const SkipperState &ss, const Contr
   // TODO: send the data to the Nano via UART
 }
 
+void calibrateESC(){
+  // calibrates both ESCs (should hear a beep after)
+    esc1.attach(#PIN); // Connect ESC signal wire to pin 9
+    esc2.attach(#PIN); // Connect ESC signal wire to pin 9
+    esc1.writeMicroseconds(1000); // Start at minimum throttle
+    esc2.writeMicroseconds(1000);
+    delay(5000); // Wait 5 seconds before arming
+
+
+}
 IMUData imu_data {};
 SkipperState skipper_state {};
 EKF ekf {};

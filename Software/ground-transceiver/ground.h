@@ -9,7 +9,7 @@ class Ground
 {
 public:
     Ground();
-    void communication_loop();  /
+    void communication_loop();  
 
 private:
     RadioConnection _radio; 
@@ -21,4 +21,4 @@ private:
     void receive_telemetry(); 
 };
 
-#endif // GROUND_H
+#endif 
