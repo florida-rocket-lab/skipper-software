@@ -23,13 +23,14 @@ void Ground::send_command()
         } else if (command == "LAND") {
             _command_data_buffer.buildPacket(105);
         } else {
-            Serial.println("Invalid Command!");
+            Serial.println("STDERR: Invalid Command!\t");  // I apologize, but I read from serial in a specific manner; add the header "STDERR: " to specify an error.
             return;
         }
 
         _radio.send(_command_data_buffer);
-        Serial.print("Sent Command: ");
-        Serial.println(command);
+        Serial.print("STDOUT: Sent Command: ");
+        Serial.print(command);
+        Serial.println('\t');  // the "\t" character is replaced with a newline in the code because "\n" is treated as an "end of message" character.
     }
 }
 
