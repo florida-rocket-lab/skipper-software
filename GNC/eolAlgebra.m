@@ -1,5 +1,5 @@
 
-clear; clc;
+% clear; clc;
 
 % 3-2-1 Euler Angles; psi-theta-phi
 % 2-3 Euler Angles; beta-alpha
@@ -54,7 +54,7 @@ vel = [u; v; w] + omega * [x; 0; 0] + omega * [0; y; 0] + omega * [0; 0; z];
 % a(t) = v(1).*u_x + v(1)*ωxu_x + v(2).*u_y + v(2)*ωxu_y + v(3).*u_z + v(3)*ωxu_z
 syms uD vD wD real;
 a_der = simplify([uD; vD; wD] + omega * [vel(1); 0; 0] + omega * [0; vel(2); 0] + omega * [0; 0; vel(3)]);
-a_for = simplify(F_gb / M + [F_tb(1); 0; 0] / M);  % it's only the parallel component of thrust that adds to the linear acceleration.
+a_for = simplify(F_gb / M + F_tb / M);
 
 syms Ixx Iyy Izz real;
 I = [
@@ -134,8 +134,22 @@ eqns = [
 ];
 linearized = simplify(taylor(eqns, vars, locations, Order=2));
 linear_eqns = linearized(1:2:end) == linearized(2:2:end);
-solved = solve(linear_eqns, [xD yD zD uD vD wD phiD thetaD psiD pD qD rD])
+solved = solve(linear_eqns, [xD yD zD uD vD wD phiD thetaD psiD pD qD rD]);
 % state_space = [x y z u v w phi theta psi p q r]
 % sub out: sub [xD yD zD] for [u v w]
 % sub out: sub [phiD thetaD psiD] for [p q r]
 
+disp("system = [");
+disp(strcat('    "', string(solved.xD), '", '));
+disp(strcat('    "', string(solved.yD), '", '));
+disp(strcat('    "', string(solved.zD), '", '));
+disp(strcat('    "', string(solved.uD), '", '));
+disp(strcat('    "', string(solved.vD), '", '));
+disp(strcat('    "', string(solved.wD), '", '));
+disp(strcat('    "', string(solved.phiD), '", '));
+disp(strcat('    "', string(solved.thetaD), '", '));
+disp(strcat('    "', string(solved.psiD), '", '));
+disp(strcat('    "', string(solved.pD), '", '));
+disp(strcat('    "', string(solved.qD), '", '));
+disp(strcat('    "', string(solved.rD), '"'));
+disp("]");
