@@ -102,18 +102,18 @@ S = [
 
 avel_rel_LHS = [phiDot thetaDot psiDot]'; % Euler angle rates.
 avel_rel_RHS = S*omega;
-avel_rel = avel_rel_LHS == avel_rel_RHS; % Relation betwen euler angle 
+avel_rel = avel_rel_LHS == avel_rel_RHS % Relation betwen euler angle 
                                          % and body-frame rates.
 
 vel_rel_LHS = [xDot yDot zDot]'; % Body-frame velocity components.
-vel_rel_RHS = nu - [-r*y+q*z -p*z+r*x -q*x+p*y]';
-vel_rel = vel_rel_LHS == vel_rel_RHS; % Relation betwen inertial  
+vel_rel_RHS = Tu2i*nu;
+vel_rel = vel_rel_LHS == vel_rel_RHS % Relation betwen inertial  
                                       % and body-frame velocities.
 
 
 % Solve the EOM using 'solve'.
 nonlinear_sol = solve([first_law, second_law], ...
-    [uDot vDot wDot pDot qDot rDot]);
+    [uDot vDot wDot pDot qDot rDot])
 
 % Linearize the nonlinear EOM using 'taylor' and generic initial
 % conditions. The second order terms have already been solved for and thus
@@ -152,25 +152,10 @@ vel_rel_RHS_linear = taylor(vel_rel_RHS, eom_variables, ...
 first_law_linear = first_law_LHS_linear == first_law_RHS_linear;
 second_law_linear = second_law_LHS_linear == second_law_RHS_linear;
 
-avel_rel_linear = avel_rel_LHS == avel_rel_RHS_linear;
-vel_rel_linear = vel_rel_LHS == vel_rel_RHS_linear;
+avel_rel_linear = avel_rel_LHS == avel_rel_RHS_linear
+vel_rel_linear = vel_rel_LHS == vel_rel_RHS_linear
 
 
 % Solve the linearized EOM.
 linear_sol = solve([first_law_linear, second_law_linear], ...
-    [uDot vDot wDot pDot qDot rDot]);
-
-disp("system = [");
-disp(strcat('    "', string(vel_rel_RHS_linear(1)), '", '));
-disp(strcat('    "', string(vel_rel_RHS_linear(2)), '", '));
-disp(strcat('    "', string(vel_rel_RHS_linear(3)), '", '));
-disp(strcat('    "', string(linear_sol.uDot), '", '));
-disp(strcat('    "', string(linear_sol.vDot), '", '));
-disp(strcat('    "', string(linear_sol.wDot), '", '));
-disp(strcat('    "', string(avel_rel_RHS_linear(1)), '", '));
-disp(strcat('    "', string(avel_rel_RHS_linear(2)), '", '));
-disp(strcat('    "', string(avel_rel_RHS_linear(3)), '", '));
-disp(strcat('    "', string(linear_sol.pDot), '", '));
-disp(strcat('    "', string(linear_sol.qDot), '", '));
-disp(strcat('    "', string(linear_sol.rDot), '"'));
-disp("]");
+    [uDot vDot wDot pDot qDot rDot])
