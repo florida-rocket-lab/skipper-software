@@ -102,12 +102,12 @@ S = [
 
 avel_rel_LHS = [phiDot thetaDot psiDot]'; % Euler angle rates.
 avel_rel_RHS = S*omega;
-avel_rel = avel_rel_LHS == avel_rel_RHS; % Relation betwen euler angle 
+avel_rel = avel_rel_LHS == avel_rel_RHS % Relation betwen euler angle 
                                          % and body-frame rates.
 
 vel_rel_LHS = [xDot yDot zDot]'; % Body-frame velocity components.
-vel_rel_RHS = nu - [r*y+q*z -p*z+r*x -q*x+p*y]';
-vel_rel = vel_rel_LHS == vel_rel_RHS; % Relation betwen inertial  
+vel_rel_RHS = Tu2i*nu;
+vel_rel = vel_rel_LHS == vel_rel_RHS % Relation betwen inertial  
                                       % and body-frame velocities.
 
 
