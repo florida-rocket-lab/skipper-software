@@ -152,11 +152,8 @@ void getIMUdata() {
   int16_t AcX,AcY,AcZ,GyX,GyY,GyZ; //MgX,MgY,MgZ;  // commeted since not being used
 
 
-  #if defined USE_MPU6050_I2C
-    mpu6050.getMotion6(&AcX, &AcY, &AcZ, &GyX, &GyY, &GyZ);
-  #elif defined USE_MPU9250_SPI
-    mpu9250.getMotion9(&AcX, &AcY, &AcZ, &GyX, &GyY, &GyZ, &MgX, &MgY, &MgZ);
-  #endif
+  mpu6050.getMotion6(&AcX, &AcY, &AcZ, &GyX, &GyY, &GyZ);
+ 
 
  //Accelerometer
   AccX = AcX / ACCEL_SCALE_FACTOR; //G's
@@ -208,7 +205,7 @@ void getIMUdata() {
   MagZ_prev = MagZ;
 }
 
-oid calculate_IMU_error() {
+void calculate_IMU_error() {
   //DESCRIPTION: Computes IMU accelerometer and gyro error on startup. Note: vehicle should be powered up on flat surface
   /*
    * Don't worry too much about what this is doing. The error values it computes are applied to the raw gyro and 

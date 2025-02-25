@@ -10,7 +10,7 @@ class RadioConnection {
   public:
     RadioConnection();
     
-    void init();  // initializes the RF module
+    void init(const byte address[6]); // initialization with address parameter
     bool available();  // checks if data is available
     
     void send(const Ground2Teensy& command);

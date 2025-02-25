@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "nano.h"
 #include "../skipper-lib/_wrapper.h"
+RF24 radio(CE_PIN, CSN_PIN);
+
+
 
 void Nano::ground_to_teensy()
 {

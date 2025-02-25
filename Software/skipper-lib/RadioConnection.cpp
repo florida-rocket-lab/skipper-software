@@ -2,16 +2,16 @@
 
 RadioConnection::RadioConnection() : nrf24() {}
 
-void RadioConnection::init() {
-    if (!nrf24.init()) {
+void RadioConnection::init(const byte address[6]) {
+    if (!nrf24.begin()) {
         Serial.println("NRF24 Initialization Failed!");
     }
-    if (!nrf24.setChannel(1)) {
-        Serial.println("NRF24 Set Channel Failed!");
-    }
-    if (!nrf24.setRF(RH_NRF24::DataRate2Mbps, RH_NRF24::TransmitPower0dBm)) {
-        Serial.println("NRF24 RF Settings Failed!");
-    }
+    nrf24.setChannel(108);
+    nrf24.setDataRate(RF24_250KBPS); // possible values: RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
+    nrf24.setPALevel(RF24_PA_LOW); // possible values: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX 
+    nrf24.openWritingPipe(address); // writing pipe address 
+    nrf24.openReadingPipe(1, address); // reading pipe address
+    nrf24.stopListening(); // default as transmitter
 }
 
 // is the data avaiable? like to go on a date?
