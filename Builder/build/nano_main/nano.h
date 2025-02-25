@@ -6,8 +6,8 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include <Arduino.h>
-#include "../skipper-lib/_wrapper.h"
-#include "../skipper-lib/RadioConnection.h"
+#include "_wrapper.h"
+#include "RadioConnection.h"
 
 
 //defined pins 

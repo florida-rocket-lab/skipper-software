@@ -3,7 +3,6 @@
 
 Nano communicator{};
 
-RadioConnection radio;
 Ground2Teensy receivedCommand;
 
 void setup() {
