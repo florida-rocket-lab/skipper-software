@@ -2,6 +2,11 @@
 #ifndef _DATATYPES_H
 #define _DATATYPES_H
 
+
+#include <stdint.h>  
+#include <string.h> 
+
+
 struct IMUData
 {
 
@@ -50,7 +55,17 @@ struct ControlSignal
 struct Ground2Teensy
 {
   Ground2Teensy(): command{} {};
-  char command[32]; // 32 is a placeholder; whatever the size of our message from the UART packet requires
+  char command[32]; // 32 is a placeholder;
+  
+  void serialize(uint8_t* buffer) const {
+    memcpy(buffer, command, sizeof(command)); // copy command into buffer
+}
+
+static bool deserialize(const uint8_t* buffer, char* out_command) {
+    memcpy(out_command, buffer, 32);  // copy back into command
+    return true; 
+}
+
 };
 
 struct Teensy2Ground
@@ -60,6 +75,16 @@ struct Teensy2Ground
   IMUData imu_data;
   SkipperState skipper_state;
   ControlSignal control_signal; // We're just forwarding our data to the ground station.
+
+  void serialize(uint8_t* buffer) const {
+    memcpy(buffer, this, sizeof(Teensy2Ground));  // Copy full struct
+  }
+
+  bool deserialize(const uint8_t* buffer) {
+    memcpy(this, buffer, sizeof(Teensy2Ground));
+    return true;
+  }
+
 };
 
 #endif //_DATATYPES_H

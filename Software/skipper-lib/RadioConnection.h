@@ -3,12 +3,14 @@
 
 #include <Arduino.h>
 #include <SPI.h>
-#include <RH_NRF24.h>
-#include "../skipper-lib/communication.h"
+#include <nRF24L01.h>
+#include <RF24.h>
+#include "communication.h"
+
 
 class RadioConnection {
   public:
-    RadioConnection();
+    RadioConnection(RF24& radioInstance);
     
     void init(const byte address[6]); // initialization with address parameter
     bool available();  // checks if data is available
@@ -22,7 +24,7 @@ class RadioConnection {
     bool testConnection();  
 
   private:
-    RH_NRF24 nrf24;  
+    RF24& nrf24;
 };
 
 #endif 

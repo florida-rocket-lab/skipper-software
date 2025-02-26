@@ -1,6 +1,6 @@
 #include "RadioConnection.h"
 
-RadioConnection::RadioConnection() : nrf24() {}
+RadioConnection::RadioConnection(RF24& radioInstance) : nrf24(radioInstance) {}
 
 void RadioConnection::init(const byte address[6]) {
     if (!nrf24.begin()) {
@@ -23,55 +23,47 @@ bool RadioConnection::available() {
 void RadioConnection::send(const Ground2Teensy& command) {
     uint8_t buffer[4];
     command.serialize(buffer);
-    nrf24.send(buffer, sizeof(buffer));
-    nrf24.waitPacketSent();
+    nrf24.write(buffer, sizeof(buffer));
+    nrf24.available();
 }
 
 // send `Teensy2Ground` (telemetry from vehicle)
 void RadioConnection::send(const Teensy2Ground& flightData) {
     uint8_t buffer[sizeof(Teensy2Ground)];
     flightData.serialize(buffer);
-    nrf24.send(buffer, sizeof(buffer));
-    nrf24.waitPacketSent();
+    nrf24.write(buffer, sizeof(buffer));
+    nrf24.available();
 }
 
 // receive `Ground2Teensy` (Command)
 bool RadioConnection::receive(Ground2Teensy& command) {
-    if (nrf24.available()) {
-        uint8_t buffer[4];
-        uint8_t len = sizeof(buffer);
-        if (nrf24.recv(buffer, &len)) {
-            return Ground2Teensy::deserialize(buffer, command.command);
-        }
+    if (!nrf24.available()) {
+        return false;
     }
-    return false;
+
+    uint8_t buffer[sizeof(Ground2Teensy)];
+    nrf24.read(buffer, sizeof(buffer));  
+    return Ground2Teensy::deserialize(buffer, command.command); 
 }
 
-// receive `Teensy2Ground` (Telemetry)
-bool RadioConnection::receive(Teensy2Ground& flightData) {
-    if (nrf24.available()) {
-        uint8_t buffer[sizeof(Teensy2Ground)];
-        uint8_t len = sizeof(buffer);
-        if (nrf24.recv(buffer, &len)) {
-            return flightData.deserialize(buffer);
-        }
-    }
-    return false;
-}
+
 
 // test NRF24 Connection
 bool RadioConnection::testConnection() {
     uint8_t testMessage[] = "PING";
-    nrf24.send(testMessage, sizeof(testMessage));
-    nrf24.waitPacketSent();
-    
+    nrf24.write(testMessage, sizeof(testMessage)); 
+
     uint8_t buf[4];
     uint8_t len = sizeof(buf);
-    
-    if (nrf24.waitAvailableTimeout(500)) {
-        if (nrf24.recv(buf, &len)) {
-            return (strncmp((char*)buf, "PONG", 4) == 0);
+
+    unsigned long start = millis();  
+    while (!nrf24.available()) {    
+        if (millis() - start > 500) {  
+            return false;  
         }
     }
-    return false;
+
+    nrf24.read(buf, sizeof(buf)); 
+
+    return (strncmp((char*)buf, "PONG", 4) == 0);
 }
