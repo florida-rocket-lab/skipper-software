@@ -5,7 +5,8 @@ Ground ground;
 void setup()
 {
     Serial.begin(115200);
-    ground.communication_loop();
+    const byte address[6] = "00001"; // Ensure it matches the Nano
+    ground.init_radio(address);
 }
 
 void loop()
