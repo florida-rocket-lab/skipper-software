@@ -1,22 +1,22 @@
 #include <Servo.h>
 
-Servo ESC1;
-Servo ESC2;
-int Speed;
-int counter;
+Servo ESCone;
+Servo ESCtwo;
 
-// Define pin numbers
 
-const int buzzerPin = 11;
+
+const int buzzerPin = 22;
 
 // Enumeration to define states
 enum State {UNARMED, ARMED, DOING};
 State currentState = UNARMED;
 
 void setup() {
+
+    Serial.begin(9600);
   // Attach the ESC to pin 9
-  ESC1.attach(9);
-  ESC2.attach(7);
+  ESCone.attach(9);
+  ESCtwo.attach(6);
   armESC();
 
   // Set pins as outputs
@@ -40,17 +40,18 @@ void loop() {
 }
 
 void armESC() {
-   ESC1.writeMicroseconds(1000); // Minimum throttle
-   ESC2.writeMicroseconds(1000);
-  delay(2000); // Wait for 2 seconds to arm the ESCs
+   ESCone.writeMicroseconds(1000); // Minimum throttle
+   delay(2000); 
+   ESCtwo.writeMicroseconds(1000); 
+   delay(2000);
 }
 
 void setUnarmed() {
-  ESC1.writeMicroseconds(1000);
-  ESC2.writeMicroseconds(1000);
+   ESCone.writeMicroseconds(1000);
+   ESCtwo.writeMicroseconds(1000);
   currentState = UNARMED;
   
-  tone(buzzerPin, 500);
+  tone(buzzerPin, 25);
   delay(1000);
   noTone(buzzerPin);
 }
@@ -58,13 +59,14 @@ void setUnarmed() {
 void setArmed() {
   currentState = ARMED;
 
-  tone(buzzerPin, 5000); 
+  tone(buzzerPin, 100); 
   delay(1000);        
   noTone(buzzerPin);
-  tone(buzzerPin, 5000); 
+  delay(1000);        
+  tone(buzzerPin, 100); 
   delay(1000);        
   noTone(buzzerPin);
-  tone(buzzerPin, 5000); 
+  tone(buzzerPin, 100); 
   delay(1000);        
   noTone(buzzerPin);
 
@@ -72,15 +74,18 @@ void setArmed() {
 
 void setDoing() {
   currentState = DOING;
-  tone(buzzerPin, 1000); 
-  delay(1000);      
-  tone(buzzerPin, 1000);
+  tone(buzzerPin, 100); 
+  delay(1000);
+  noTone(buzzerPin);
+
+  tone(buzzerPin, 100);
   delay(1000);        
   noTone(buzzerPin);
   
-   throttle25(); // Call the function to perform the desired speed pattern
-
+   throttle100(); // Call the function to perform the desired speed pattern
+   //justTwo();
 }
+
 
 void rampThrottle(int targetThrottle) {
   int currentThrottle = 1000;
@@ -88,17 +93,19 @@ void rampThrottle(int targetThrottle) {
   
   for (int i = 0; i < 50; i++) {
     currentThrottle += stepSize;
-    ESC1.writeMicroseconds(currentThrottle);
-    ESC2.writeMicroseconds(currentThrottle);
+    Serial.print("ESC2 Throttle: ");
+    Serial.println(currentThrottle);
+    ESCone.writeMicroseconds(currentThrottle);
+    ESCtwo.writeMicroseconds(currentThrottle);
     delay(100);
   }
 
-  delay(5000); // Hold at target throttle for 5 seconds
+  delay(3000); // Hold at target throttle for 3 seconds
 
   for (int i = 0; i < 30; i++) {
     currentThrottle -= stepSize * (50 / 30); // Adjust in 3-second ramp-down steps
-    ESC1.writeMicroseconds(currentThrottle);
-    ESC2.writeMicroseconds(currentThrottle);
+    ESCone.writeMicroseconds(currentThrottle);
+    ESCtwo.writeMicroseconds(currentThrottle);
     delay(100);
   }
 }
@@ -119,6 +126,12 @@ void throttle100() {
   rampThrottle(2000);
 }
 
+
+void justTwo() {
+  ESCtwo.writeMicroseconds(1500); // Should spin at mid-throttle
+  delay(5000);
+  ESCtwo.writeMicroseconds(1000); // Stop
+}
 
 
 
