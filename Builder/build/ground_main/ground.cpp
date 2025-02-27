@@ -1,16 +1,15 @@
 #include <Arduino.h>
 #include "ground.h"
 
-Ground::Ground() 
-    : _radio(CE_PIN, CSN_PIN), _with_uno(_radio)
-{
-    Serial.begin(115200);
-}
+Ground::Ground() : _radio(CE_PIN, CSN_PIN), _with_uno(_radio){}
+
+
 
 void Ground::init_radio(const byte address[6]) {
     _with_uno.init(address);
     Serial.println("Ground station RF initialized.");
 }
+
 
 
 void Ground::send_command()

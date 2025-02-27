@@ -11,5 +11,5 @@ void setup()
 
 void loop()
 {
-    ground.communication_loop();  
+    ground.send_command(); 
 }
