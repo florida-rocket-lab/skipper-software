@@ -21,7 +21,7 @@ subject to change in the future:
    |      if multiple devices need the code, put
    |      it here and then include it.)
    |
-   |--ground-transceiver
+   |--ground_main
    |  +--(.ino Arduino files and .hpp header
    |      files to be uploaded to the Arduino
    |      UNO/MEGA on the ground)
@@ -32,12 +32,12 @@ subject to change in the future:
    |      with Skipper and receiving valuable
    |      flight data from Skipper)
    |
-   |--skipper-flight-computer
+   |--teensy_main
    |  +--(.ino Arduino files and .hpp header
    |      files to be uploaded to the Teensy
    |      4.0 on Skipper)
    |
-   +--skipper-transceiver
+   +--nano_main
       +--(.ino Arduino files and .hpp header
           files to be uploaded to the Arduino
           Nano on Skipper)
