@@ -3,36 +3,40 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/GNC/skipperLQI.slx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/7iUYm0hqVdwksvZdGi-2jpJbehY/XgxeQZrfb0fiqBZ-jZzQV4N6lJcd.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/7iUYm0hqVdwksvZdGi-2jpJbehY/XgxeQZrfb0fiqBZ-jZzQV4N6lJcp.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/7iUYm0hqVdwksvZdGi-2jpJbehYd.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/7iUYm0hqVdwksvZdGi-2jpJbehYp.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/IpDvBzw1nxbDJBG5szY-MXYof-gp.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/KrnKJGr70TOqBQuQGVGIAP7q5qUd.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/KrnKJGr70TOqBQuQGVGIAP7q5qUp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/converter.py" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/converter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/eomAlgebra2.m" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/deriveEOM.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/lqrMatrices.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/skipperLQR.slx" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/skipperLQR.slx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/YbJzP9fl0U36E89-nBTsW507ytAd.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/project/7iUYm0hqVdwksvZdGi-2jpJbehY/8GrhxMCx3EnKlJQQRHojiAOE6sQd.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/YbJzP9fl0U36E89-nBTsW507ytAp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/project/7iUYm0hqVdwksvZdGi-2jpJbehY/8GrhxMCx3EnKlJQQRHojiAOE6sQp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/eJPBmp2p5fyJfPb4UKdgEMmI5ywd.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/IpDvBzw1nxbDJBG5szY-MXYof-gd.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/eJPBmp2p5fyJfPb4UKdgEMmI5ywp.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/CX6YeLX6wVQdBpM95MqLKUTSflwd.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/CX6YeLX6wVQdBpM95MqLKUTSflwp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/oSNvJBlEjYpLAGR_k2lDQtkhS6Md.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/oSNvJBlEjYpLAGR_k2lDQtkhS6Mp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/u3jft0Axz2YHxGVYyyfqtl-6MWwd.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/u3jft0Axz2YHxGVYyyfqtl-6MWwp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/communication.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper-lib/communication.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/datatypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper-lib/datatypes.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2tHR1jgM4mepIqAXvgyhbwtkBDb" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -45,6 +49,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/logan/MATLAB/Projects/Skipper-GNC/Software/include/boost",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -53,6 +58,16 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\logan\MATLAB\Projects\Skipper-GNC\Software\include\boost" />
+      <recent name="C:\Users\logan\MATLAB\Projects\Skipper-GNC\Software\skipper-lib\boost" />
+      <recent name="C:\Users\logan\MATLAB\Projects\Skipper-GNC\Software\skipper-lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\logan\MATLAB\Projects\Skipper-GNC\Software\skipper-lib\boost" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

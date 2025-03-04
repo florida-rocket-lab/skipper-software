@@ -77,7 +77,7 @@ SkipperFlag skipper_flag = SkipperFlag::Idle;
 
 void setup() 
 {
-  // I don't know what needs to be initialized. Is there an initial UART handshake?
+  Serial1.begin(9600);  // UART handshake...
 }
 
 void loop() 

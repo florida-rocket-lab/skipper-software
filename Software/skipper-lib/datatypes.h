@@ -2,10 +2,8 @@
 #ifndef _DATATYPES_H
 #define _DATATYPES_H
 
-
 #include <stdint.h>  
-#include <string.h> 
-
+#include <string.h>
 
 struct IMUData
 {
@@ -55,36 +53,40 @@ struct ControlSignal
 struct Ground2Teensy
 {
   Ground2Teensy(): command{} {};
-  char command[32]; // 32 is a placeholder;
+  constexpr unsigned int command_length = 32;
+  char command[command_length]; // 32 is a placeholder;
   
-  void serialize(uint8_t* buffer) const {
-    memcpy(buffer, command, sizeof(command)); // copy command into buffer
-}
-
-static bool deserialize(const uint8_t* buffer, char* out_command) {
-    memcpy(out_command, buffer, 32);  // copy back into command
-    return true; 
-}
+  void serialize(uint8_t* buffer) const
+  {
+      memcpy(buffer, command, command_length * sizeof(uint8_t)); // copy command into buffer
+  }
+  static bool deserialize(const uint8_t* buffer, char* out_command)
+  {
+      memcpy(out_command, buffer, command_length * sizeof(uint8_t));  // copy back into command
+      return true;
+  }
 
 };
 
+#pragma pack(push,1)
 struct Teensy2Ground
 {
   Teensy2Ground() = default;
   Teensy2Ground(const IMUData &id, const SkipperState &ss, const ControlSignal &cs): imu_data(id), skipper_state(ss), control_signal(cs) {};
+  explicit Teeensy2Ground(const uint8_t* buffer) {this->deserialize(buffer)}
   IMUData imu_data;
   SkipperState skipper_state;
   ControlSignal control_signal; // We're just forwarding our data to the ground station.
 
   void serialize(uint8_t* buffer) const {
-    memcpy(buffer, this, sizeof(Teensy2Ground));  // Copy full struct
+      memcpy(buffer, this, sizeof(Teensy2Ground));  // Copy full struct
   }
 
   bool deserialize(const uint8_t* buffer) {
-    memcpy(this, buffer, sizeof(Teensy2Ground));
-    return true;
+      memcpy(this, buffer, sizeof(Teensy2Ground));
+      return true;
   }
-
 };
+#pragma pack(pop)
 
 #endif //_DATATYPES_H
