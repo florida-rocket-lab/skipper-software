@@ -29,7 +29,8 @@ syms x y z ...                     % Displacements.
         p q r ...                  % Angular rates in U.
         pDot qDot rDot ...         % Angular rate derivatives.
         xi zeta ...                % Gimbal angles.
-        M Ixx Iyy Izz ...          % Linear and rotational inertias.
+        M Ixx Ixy Ixz Iyx Iyy ...  % Linear and rotational inertias.
+        Iyz Izx Izy Izz ...          
         rho1 rho2 ...     
         rho3x rho3y rho3z ...      % Lever arm distances.
         g ...                      % Acceleration due to gravity.
@@ -58,7 +59,9 @@ nu = [u v w]'; % Velocity.
 a = [uDot vDot wDot]' + cross(omega, nu); % Acceleration. Need TT because 
                                           % components of velocity are in U.
 
-I = diag([Ixx Iyy Izz]); % Rotational inertia tensor.
+I = [Ixx Ixy Ixz;
+     Iyx Iyy Iyz;
+     Izx Izy Izz]; % Rotational inertia tensor.
 
 H = I*omega; % Angular momentum. THIS ONLY WORKS 
              % BECAUSE I IS DIAGONAL!
