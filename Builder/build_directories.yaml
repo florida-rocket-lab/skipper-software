@@ -6,16 +6,16 @@
 # Please note that any other path will **NOT** be automatically updated.
 
 # This is the Arduino UNO/MEGA that will serve as the transceiver on the ground.
-ground_main:
-  - "../Software/skipper-lib"
-  - "../Software/ground_main"
+ground-transceiver:
+  - "../Software/shared"
+  - "../Software/ground_transceiver"
 
 # This is the Arduino Nano that will serve as the transceiver on Skipper.
-nano_main:
-  - "../Software/skipper-lib"
-  - "../Software/nano_main"
+skipper-transceiver:
+  - "../Software/shared"
+  - "../Software/skipper_transceiver"
 
 # This is the Teensy 4.0 that will serve as the flight computer for Skipper.
-teensy_main:
-  - "../Software/skipper-lib"
-  - "../Software/teensy_main"
+flight-computer:
+  - "../Software/shared"
+  - "../Software/flight_computer"

@@ -1,0 +1,205 @@
+
+#ifndef SKIPPER_GNC_DATATYPES_H
+#define SKIPPER_GNC_DATATYPES_H
+
+#include <stdint.h>
+#include <utility>
+#include <memory>
+
+struct Vector3
+{
+    // CONSTRUCTORS
+    Vector3() = default;
+    Vector3(double x_, double y_, double z_): data{x_, y_, z_} {};
+    explicit Vector3(double* data_): data{data_[0], data_[1], data_[2]} {};
+    explicit Vector3(const std::unique_ptr<double[]>& data_): data{data_[0], data_[1], data_[2]} {};
+    explicit Vector3(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+
+    // INTERNAL DATA
+    double data[3] = {0, 0, 0};
+    double& x = data[0];
+    double& y = data[1];
+    double& z = data[2];
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = 3 * sizeof(double);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+
+    // MUTATORS
+    void set_data(double x_, double y_, double z_)
+    {
+        this->data[0] = x_;
+        this->data[0] = y_;
+        this->data[0] = z_;
+    }
+    void set_data(const double* data_)
+    {
+        this->data[0] = data_[0];
+        this->data[1] = data_[1];
+        this->data[2] = data_[2];
+    };
+    void set_data(const std::unique_ptr<double[]>& data_)
+    {
+        this->data[0] = data_[0];
+        this->data[1] = data_[1];
+        this->data[2] = data_[2];
+    };
+    void set_data(const Vector3& data_)
+    {
+        this->data[0] = data_.x;
+        this->data[1] = data_.y;
+        this->data[2] = data_.z;
+    };
+};
+
+struct IMUData
+{
+    // CONSTRUCTORS
+    IMUData() = default;
+    explicit IMUData(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+
+    // INTERNAL DATA
+    Vector3 acc{};
+    Vector3 gyr{};
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = 2 * Vector3::BUFFER_SIZE;
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+
+    // MUTATORS
+    template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
+    void set_acc(Args&&... args) {acc.set_data(std::forward<Args>(args)...);}
+    template <typename... Args>
+    void set_gyr(Args&&... args) {gyr.set_data(std::forward<Args>(args)...);}
+};
+
+struct StateSpace
+{
+    // CONSTRUCTORS
+    StateSpace() = default;
+    explicit StateSpace(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+
+    // INTERNAL DATA
+    Vector3 i_pos{};     // position in inertial frame
+    Vector3 b_vel{};     // velocity in body frame
+    Vector3 tb_rot{};    // rotation in 3-2-1 Tait-Bryan angles
+    Vector3 b_ang_vel{}; // angular velocity in body frame
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = 4 * Vector3::BUFFER_SIZE;
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+
+    // MUTATORS
+    template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
+    void set_i_pos(Args&&... args) {i_pos.set_data(std::forward<Args>(args)...);}
+    template <typename... Args>
+    void set_b_vel(Args&&... args) {b_vel.set_data(std::forward<Args>(args)...);}
+    template <typename... Args>
+    void set_tb_rot(Args&&... args) {tb_rot.set_data(std::forward<Args>(args)...);}
+    template <typename... Args>
+    void set_b_ang_vel(Args&&... args) {b_ang_vel.set_data(std::forward<Args>(args)...);}
+};
+
+struct Control
+{
+    // INDICES
+    static constexpr unsigned int THRUST_IDX = 0;
+    static constexpr unsigned int PRIMARY_GIMBAL_IDX = 1;
+    static constexpr unsigned int SECONDARY_GIMBAL_IDX = 2;
+    static constexpr unsigned int BODY_TORQUE_IDX = 3;
+
+    // CONSTRUCTORS
+    Control() = default;
+    Control(double T_, double x_, double z_, double t_): data{T_, x_, z_, t_} {};
+    explicit Control(double* data_): data{data_[0], data_[1], data_[2], data_[3]} {};
+    explicit Control(const std::unique_ptr<double[]>& data_): data{data_[0], data_[1], data_[2], data_[3]} {};
+    explicit Control(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+
+    // INTERNAL DATA
+    double data[4] = {0, 0, 0, 0};
+    double& T = data[THRUST_IDX];
+    double& xi = data[PRIMARY_GIMBAL_IDX];
+    double& zeta = data[SECONDARY_GIMBAL_IDX];
+    double& tauRCS = data[BODY_TORQUE_IDX];
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = 4 * sizeof(double);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+
+    // MUTATORS
+    void set_data(double T_, double x_, double z_, double t_)
+    {
+        this->data[0] = T_;
+        this->data[1] = x_;
+        this->data[2] = z_;
+        this->data[3] = t_;
+    };
+    void set_data(const double* data_)
+    {
+        this->data[0] = data_[0];
+        this->data[1] = data_[1];
+        this->data[2] = data_[2];
+        this->data[3] = data_[3];
+    };
+    void set_data(const std::unique_ptr<double[]>& data_)
+    {
+        this->data[0] = data_[0];
+        this->data[1] = data_[1];
+        this->data[2] = data_[2];
+        this->data[3] = data_[3];
+    };
+    void set_data(const Control& data_)
+    {
+        this->data[0] = data_.T;
+        this->data[1] = data_.xi;
+        this->data[2] = data_.zeta;
+        this->data[3] = data_.tauRCS;
+    };
+};
+
+struct TelemetryPacket
+{
+    // CONSTRUCTORS
+    TelemetryPacket() = default;
+    explicit TelemetryPacket(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+
+    // INTERNAL DATA
+    IMUData imu_data{};
+
+    StateSpace actual_state_space{};
+    StateSpace reference_state_space{};
+    StateSpace look_ahead_state_space{};
+    StateSpace base_point_state_space{};
+
+    Control target_control{};
+    Control actual_control{};
+    Control derivative_control{};
+    Control base_point_control{};
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = IMUData::BUFFER_SIZE + 4 * StateSpace::BUFFER_SIZE + 4 * Control::BUFFER_SIZE;
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+};
+
+template<unsigned int packet_size>
+struct StringPacket
+{
+    // CONSTRUCTORS
+    StringPacket() = default;
+    explicit StringPacket(std::unique_ptr<char[]>&& buffer);
+
+    char data[packet_size]{};
+
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = packet_size;
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
+    void deserialize(const std::unique_ptr<char[]>& buffer);
+};
+
+#endif //SKIPPER_GNC_DATATYPES_H
