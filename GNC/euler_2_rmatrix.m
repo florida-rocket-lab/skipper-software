@@ -1,4 +1,4 @@
-function rMatrix = euler2rMatrix(angle, axis)
+function rMatrix = euler_2_rmatrix(angle, axis)
 % ________________________________________________________________________
 %
 %                            euler2rMatrix.m
