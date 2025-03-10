@@ -17,9 +17,13 @@ class RadioConnection {
     
     void send(const Ground2Teensy& command);
     void send(const Teensy2Ground& flightData);
+    void send(const uint8_t* buffer, uint8_t len);
+
 
     bool receive(Ground2Teensy& command);
     bool receive(Teensy2Ground& flightData);
+    bool receive(uint8_t* buffer, uint8_t len);
+
     
     bool testConnection();  
 

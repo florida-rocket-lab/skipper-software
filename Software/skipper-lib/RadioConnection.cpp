@@ -33,6 +33,11 @@ void RadioConnection::send(const Teensy2Ground& flightData) {
     flightData.serialize(buffer);
     nrf24.write(buffer, sizeof(buffer));
     nrf24.available();
+    
+}
+// send messages 
+void RadioConnection::send(const uint8_t* buffer, uint8_t len) {
+    nrf24.write(buffer, len);
 }
 
 // receive `Ground2Teensy` (Command)
@@ -45,6 +50,14 @@ bool RadioConnection::receive(Ground2Teensy& command) {
     nrf24.read(buffer, sizeof(buffer));  
     return Ground2Teensy::deserialize(buffer, command.command); 
 }
+bool RadioConnection::receive(uint8_t* buffer, uint8_t len) {
+    if (nrf24.available()) {
+        nrf24.read(buffer, len);
+        return true;
+    }
+    return false;
+}
+
 
 
 
@@ -53,17 +66,21 @@ bool RadioConnection::testConnection() {
     uint8_t testMessage[] = "PING";
     nrf24.write(testMessage, sizeof(testMessage)); 
 
-    uint8_t buf[4];
+    uint8_t buf[5] = {0};  
     uint8_t len = sizeof(buf);
 
     unsigned long start = millis();  
     while (!nrf24.available()) {    
-        if (millis() - start > 500) {  
+        if (millis() - start > 1000) { 
+            Serial.println("Timeout: No response received.");
             return false;  
         }
     }
 
     nrf24.read(buf, sizeof(buf)); 
+
+    Serial.print("Received: ");
+    Serial.println((char*)buf);  
 
     return (strncmp((char*)buf, "PONG", 4) == 0);
 }

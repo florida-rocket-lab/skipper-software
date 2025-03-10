@@ -22,6 +22,8 @@ public:
     void init_radio(const byte address[6]);
     void send_command();
     void receive_telemetry();
+    void testConnection();
+
 
 private:
     RF24 _radio;

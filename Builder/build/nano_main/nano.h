@@ -22,6 +22,9 @@ class Nano
     void init_radio(const byte address[6]);
     void receive_from_ground();
     void send_to_ground();
+    void listenForPing();
+    
+    
     
   private:
     RF24 _radio;

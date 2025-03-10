@@ -26,5 +26,18 @@ void Nano::send_to_ground() {
 
 void processCommand(const Ground2Teensy& command) {
     Serial.print("Processing Command: ");
-    Serial.println(command.command);  // Assuming command is a char array
+    Serial.println(command.command); 
+}
+
+void Nano::listenForPing() {
+    if (_with_ground.available()) {
+        uint8_t buffer[4] = {0};
+        _with_ground.receive(buffer, sizeof(buffer));
+        
+        if (strncmp((char*)buffer, "PING", 4) == 0) {
+            Serial.println("Received PING, sending PONG...");
+            uint8_t response[] = "PONG";
+            _with_ground.send(response, sizeof(response));
+        }
+    }
 }

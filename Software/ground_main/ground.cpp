@@ -87,3 +87,34 @@ static bool Ground2Teensy::deserialize(const uint8_t* buffer, char* out_command)
     memcpy(out_command, buffer, 32);
     return true;
 }
+void Ground::testConnection() {
+    uint8_t testMessage[] = "PING";
+    uint8_t responseBuffer[4] = {0};  // buffer to store response
+
+    Serial.println("Testing connection...");
+
+    // send test message
+    _with_uno.send(testMessage, sizeof(testMessage));
+
+    unsigned long start = millis();
+    while (!_with_uno.available()) {
+        if (millis() - start > 1000) {  // timeout after 1 second
+            Serial.println("ERROR: No response received.");
+            return;
+        }
+    }
+
+    // read response
+    _with_uno.receive(responseBuffer);
+
+    
+    Serial.print("Received: ");
+    Serial.println((char*)responseBuffer);
+
+    // check if response is "PONG"
+    if (strncmp((char*)responseBuffer, "PONG", 4) == 0) {
+        Serial.println("Connection Test: SUCCESS");
+    } else {
+        Serial.println("Connection Test: FAILED");
+    }
+}

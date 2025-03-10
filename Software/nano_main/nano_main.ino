@@ -10,6 +10,9 @@ void setup() {
 }
 
 void loop() {
-    communicator.receive_from_ground();  // Listen for ground commands
-    communicator.send_to_ground();       // Send telemetry to ground
+    //communicator.receive_from_ground();  // Listen for ground commands
+    //communicator.send_to_ground();       // Send telemetry to ground
+    communicator.testConnection(); 
+    listenForPing();
+
 }

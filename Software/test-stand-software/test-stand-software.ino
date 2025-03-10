@@ -74,15 +74,15 @@ void setArmed() {
 
 void setDoing() {
   currentState = DOING;
-  tone(buzzerPin, 100); 
-  delay(1000);
-  noTone(buzzerPin);
+  // tone(buzzerPin, 100); 
+  // delay(1000);
+  // noTone(buzzerPin);
 
-  tone(buzzerPin, 100);
-  delay(1000);        
-  noTone(buzzerPin);
+  // tone(buzzerPin, 100);
+  // delay(1000);        
+  // noTone(buzzerPin);
   
-   throttle100(); // Call the function to perform the desired speed pattern
+   throttle25(); // Call the function to perform the desired speed pattern
    //justTwo();
 }
 
@@ -100,16 +100,12 @@ void rampThrottle(int targetThrottle) {
     delay(100);
   }
 
-  delay(3000); // Hold at target throttle for 3 seconds
-
-  for (int i = 0; i < 30; i++) {
-    currentThrottle -= stepSize * (50 / 30); // Adjust in 3-second ramp-down steps
-    ESCone.writeMicroseconds(currentThrottle);
-    ESCtwo.writeMicroseconds(currentThrottle);
-    delay(100);
-  }
+  
 }
 
+void throttle5() {
+  rampThrottle(1050);
+}
 void throttle25() {
   rampThrottle(1250);
 }
