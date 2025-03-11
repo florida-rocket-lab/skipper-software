@@ -10,13 +10,16 @@
 class Nano
 {
 public:
-    // TODO: ADD SHIT.
+    Nano() = default;
+    void receive_from_ground();
+    void send_to_ground();
 
 private:
-    RTX1Communication<TelemetryPacket> from_teensy;
-    RTX1Communication<StringPacket<MESSAGE_SIZE>> to_teensy;
-    RadioCommunication<TelemetryPacket> to_uno;
-    RadioCommunication<StringPacket<MESSAGE_SIZE>> from_uno;
+    std::unique_ptr<CommandPacket> command_buffer;
+    std::unique_ptr<TelemetryPacket> telemetry_buffer;
+
+    RTX1Communication teensy_pipe{};
+    RadioCommunication uno_pipe{NANO_CE_PIN, NANO_CSN_PIN};
 };
 
 

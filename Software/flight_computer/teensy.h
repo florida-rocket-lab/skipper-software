@@ -1,6 +1,3 @@
-//
-// Created by logan on 3/5/2025.
-//
 
 #ifndef SKIPPER_GNC_TEENSY_H
 #define SKIPPER_GNC_TEENSY_H
@@ -10,11 +7,14 @@
 class Teensy
 {
 public:
-    // TODO: ADD SHIT.
+    Teensy() = default;
+    void receive_command();
+    void send_telemetry();
 
 private:
-    RTX3Communication<TelemetryPacket> to_nano;
-    RTX3Communication<StringPacket<MESSAGE_SIZE>> from_nano;
+    std::unique_ptr<CommandPacket> command_buffer;
+    std::unique_ptr<TelemetryPacket> telemetry_buffer;
+    RTX3Communication nano_pipe{};
 };
 
 

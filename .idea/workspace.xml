@@ -23,85 +23,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Added some UART stuff...">
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/catch2/catch_amalgamated.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/catch2/catch_amalgamated.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/flight_computer/flight_computer.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/ground_transceiver/ground_transceiver.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/shared/communication.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/shared/constants.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/shared/datatypes.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/shared/datatypes.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/shared/skipper_lib.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/skipper_transceiver/skipper_transceiver.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/tests/test_suite.cpp" afterDir="false" />
+    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/RadioConnection.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/RadioConnection.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/_wrapper.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/communication.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/communication.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/datatypes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/datatypes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/filter.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/filter.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/ground.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/ground.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/ground_main/ground_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/RadioConnection.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/RadioConnection.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/_wrapper.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/communication.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/communication.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/datatypes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/datatypes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/filter.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/filter.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/nano.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/nano.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/nano_main/nano_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/RadioConnection.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/RadioConnection.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/_wrapper.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/communication.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/communication.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/datatypes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/datatypes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/filter.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/filter.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/teensy.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/teensy.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build/teensy_main/teensy_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build_directories.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Builder/build_directories.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/.vscode/c_cpp_properties.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_main/ground.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_main/ground.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_main/ground_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/interactive-terminal/monitor_app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/nano_main/nano.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/nano_main/nano.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/nano_main/nano_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/RadioConnection.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/RadioConnection.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/_wrapper.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/communication.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/communication.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/datatypes.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/datatypes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/filter.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper-lib/filter.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/teensy_main/teensy.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/teensy_main/teensy.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/teensy_main/teensy_main.ino" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/test-stand-software/test-stand-software.ino" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/flight_computer/flight_computer.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/flight_computer.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/flight_computer/teensy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/flight_computer/teensy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/ground_transceiver.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/ground_transceiver.ino" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/uno.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/uno.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/shared/communication.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/communication.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/shared/datatypes.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/datatypes.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/shared/datatypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/datatypes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/nano.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/nano.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/skipper_transceiver.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/skipper_transceiver.ino" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,28 +88,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.converter.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.west.config.association.type.startup.service&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;skipper-new&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/logan/MATLAB/Projects/Skipper-GNC/Software/catch2&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.converter.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.west.config.association.type.startup.service": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "skipper-new",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/logan/MATLAB/Projects/Skipper-GNC/Software/catch2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "structure.view.defaults.are.configured": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\logan\MATLAB\Projects\Skipper-GNC\Software\catch2" />
@@ -193,11 +129,6 @@
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
         <option name="BeforeTestRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration default="true" type="lua.app" factoryName="Lua Application">
@@ -229,7 +160,8 @@
       <updated>1740006801657</updated>
       <workItem from="1740006802770" duration="1951000" />
       <workItem from="1741216715398" duration="20946000" />
-      <workItem from="1741240299971" duration="5622000" />
+      <workItem from="1741240299971" duration="11535000" />
+      <workItem from="1741648401754" duration="6685000" />
     </task>
     <task id="LOCAL-00001" summary="Added some UART stuff...">
       <option name="closed" value="true" />
@@ -239,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741113546041</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;.">
+      <option name="closed" value="true" />
+      <created>1741246943432</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741246943432</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,7 +192,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added some UART stuff..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added some UART stuff..." />
+    <MESSAGE value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
+    <option name="LAST_COMMIT_MESSAGE" value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Skipper$converter.coverage" NAME="converter Coverage Results" MODIFIED="1740011752046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GNC" />

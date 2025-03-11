@@ -220,26 +220,52 @@ void TelemetryPacket::deserialize(const std::unique_ptr<char[]> &buffer)
 }
 // End: TelemetryPacket Serializer and Deserializer
 
-// Begin: StringPacket Serializer and Deserializer
+// Begin: Message Serializer and Deserializer
 
 template<unsigned int packet_size>
-std::pair<std::unique_ptr<char[]>, unsigned int> StringPacket<packet_size>::serialize() const
+std::pair<std::unique_ptr<char[]>, unsigned int> Message<packet_size>::serialize() const
 {
     std::pair<std::unique_ptr<char[]>, unsigned int> buffer_info{};
-    buffer_info.second = StringPacket<packet_size>::BUFFER_SIZE;
+    buffer_info.second = Message<packet_size>::BUFFER_SIZE;
     buffer_info.first = std::make_unique<char[]>(buffer_info.second);
 
-    std::memcpy(buffer_info.first.get(), this->data, StringPacket<packet_size>::BUFFER_SIZE);
+    std::memcpy(buffer_info.first.get(), this->data, Message<packet_size>::BUFFER_SIZE);
 
     return buffer_info;
 }
 template<unsigned int packet_size>
-void StringPacket<packet_size>::deserialize(const std::unique_ptr<char[]>& buffer)
+void Message<packet_size>::deserialize(const std::unique_ptr<char[]>& buffer)
 {
-    std::memcpy(this->data, buffer.get(), StringPacket<packet_size>::BUFFER_SIZE);
+    std::memcpy(this->data, buffer.get(), Message<packet_size>::BUFFER_SIZE);
 }
 
-// End: StringPacket Serializer and Deserializer
+// End: Message Serializer and Deserializer
+
+// Begin: Command Packet Serializer and Deserializer
+
+std::pair<std::unique_ptr<char[]>, unsigned int> CommandPacket::serialize() const
+{
+    const std::pair<std::unique_ptr<char[]>, unsigned int> message_info = message.serialize();
+    std::pair<std::unique_ptr<char[]>, unsigned int> buffer_info{};
+
+    buffer_info.second = message_info.second;
+    buffer_info.first = std::make_unique<char[]>(buffer_info.second);
+
+    unsigned int buffer_offset = 0;
+    add_to_buffer(buffer_info.first, message_info, buffer_offset);
+
+    return buffer_info;
+}
+void CommandPacket::deserialize(const std::unique_ptr<char[]>& buffer)
+{
+    std::unique_ptr<char[]> message_buffer = std::make_unique<char[]>(Message<MESSAGE_SIZE>::BUFFER_SIZE);
+
+    unsigned int buffer_offset = 0;
+    read_from_buffer(message_buffer, buffer, IMUData::BUFFER_SIZE, buffer_offset);
+    this->message.deserialize(message_buffer);
+}
+
+// End: Command Packet Serializer and Deserializer
 
 // ======================== END SERIALIZERS AND DESERIALIZERS FOR ALL TYPES ========================
 
@@ -247,28 +273,28 @@ void StringPacket<packet_size>::deserialize(const std::unique_ptr<char[]>& buffe
 
 Vector3::Vector3(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    Vector3::deserialize(buffer);
 }
 IMUData::IMUData(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    IMUData::deserialize(buffer);
 }
 StateSpace::StateSpace(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    StateSpace::deserialize(buffer);
 }
 Control::Control(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    Control::deserialize(buffer);
 }
 TelemetryPacket::TelemetryPacket(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    TelemetryPacket::deserialize(buffer);
 }
 template<unsigned int packet_size>
-StringPacket<packet_size>::StringPacket(std::unique_ptr<char[]> &&buffer)
+Message<packet_size>::Message(std::unique_ptr<char[]> &&buffer)
 {
-    this->deserialize(buffer);
+    Message<packet_size>::deserialize(buffer);
 }
 
 // ======================== END DESERIALIZATION CONSTRUCTORS ========================

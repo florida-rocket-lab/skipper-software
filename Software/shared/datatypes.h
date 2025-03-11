@@ -2,11 +2,17 @@
 #ifndef SKIPPER_GNC_DATATYPES_H
 #define SKIPPER_GNC_DATATYPES_H
 
-#include <stdint.h>
 #include <utility>
 #include <memory>
+#include "constants.h"
 
-struct Vector3
+struct BaseSerializable
+{
+    [[nodiscard]] virtual std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const = 0;
+    virtual void deserialize(const std::unique_ptr<char[]>& buffer) = 0;
+};
+
+struct Vector3 : public BaseSerializable
 {
     // CONSTRUCTORS
     Vector3() = default;
@@ -23,8 +29,8 @@ struct Vector3
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 3 * sizeof(double);
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 
     // MUTATORS
     void set_data(double x_, double y_, double z_)
@@ -53,7 +59,7 @@ struct Vector3
     };
 };
 
-struct IMUData
+struct IMUData : public BaseSerializable
 {
     // CONSTRUCTORS
     IMUData() = default;
@@ -65,8 +71,8 @@ struct IMUData
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 2 * Vector3::BUFFER_SIZE;
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 
     // MUTATORS
     template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
@@ -75,7 +81,7 @@ struct IMUData
     void set_gyr(Args&&... args) {gyr.set_data(std::forward<Args>(args)...);}
 };
 
-struct StateSpace
+struct StateSpace : public BaseSerializable
 {
     // CONSTRUCTORS
     StateSpace() = default;
@@ -89,8 +95,8 @@ struct StateSpace
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 4 * Vector3::BUFFER_SIZE;
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 
     // MUTATORS
     template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
@@ -103,7 +109,7 @@ struct StateSpace
     void set_b_ang_vel(Args&&... args) {b_ang_vel.set_data(std::forward<Args>(args)...);}
 };
 
-struct Control
+struct Control : public BaseSerializable
 {
     // INDICES
     static constexpr unsigned int THRUST_IDX = 0;
@@ -127,8 +133,8 @@ struct Control
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 4 * sizeof(double);
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 
     // MUTATORS
     void set_data(double T_, double x_, double z_, double t_)
@@ -161,7 +167,7 @@ struct Control
     };
 };
 
-struct TelemetryPacket
+struct TelemetryPacket : public BaseSerializable
 {
     // CONSTRUCTORS
     TelemetryPacket() = default;
@@ -182,24 +188,37 @@ struct TelemetryPacket
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = IMUData::BUFFER_SIZE + 4 * StateSpace::BUFFER_SIZE + 4 * Control::BUFFER_SIZE;
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 };
 
 template<unsigned int packet_size>
-struct StringPacket
+struct Message : public BaseSerializable
 {
     // CONSTRUCTORS
-    StringPacket() = default;
-    explicit StringPacket(std::unique_ptr<char[]>&& buffer);
+    Message() = default;
+    explicit Message(std::unique_ptr<char[]>&& buffer);
 
     char data[packet_size]{};
 
-
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = packet_size;
-    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const;
-    void deserialize(const std::unique_ptr<char[]>& buffer);
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
+};
+
+struct CommandPacket : public BaseSerializable
+{
+    // CONSTRUCTORS
+    CommandPacket() = default;
+    explicit CommandPacket(std::unique_ptr<char[]>&& buffer);
+
+    Message<MESSAGE_SIZE> message{};
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = Message<MESSAGE_SIZE>::BUFFER_SIZE;
+    [[nodiscard]] std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const std::unique_ptr<char[]>& buffer) override;
 };
 
 #endif //SKIPPER_GNC_DATATYPES_H
