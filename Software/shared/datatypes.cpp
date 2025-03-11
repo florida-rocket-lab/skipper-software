@@ -296,6 +296,10 @@ Message<packet_size>::Message(std::unique_ptr<char[]> &&buffer)
 {
     Message<packet_size>::deserialize(buffer);
 }
+CommandPacket::CommandPacket(std::unique_ptr<char[]> &&buffer)
+{
+    CommandPacket::deserialize(buffer);
+}
 
 // ======================== END DESERIALIZATION CONSTRUCTORS ========================
 

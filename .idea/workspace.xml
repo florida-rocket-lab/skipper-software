@@ -23,20 +23,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;.">
+    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Some more refactoring and beautification...">
+      <change afterPath="$PROJECT_DIR$/Software/terminal/skipper/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Software/terminal/skipper/utility/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Software/terminal/skipper/utility/serialize.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Software/terminal/terminal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/flight_computer/flight_computer.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/flight_computer.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/flight_computer/teensy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/flight_computer/teensy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/flight_computer/teensy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/ground_transceiver.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/ground_transceiver.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/uno.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/ground_transceiver/uno.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/ground_transceiver/uno.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/shared/communication.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/communication.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Software/shared/datatypes.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/datatypes.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/shared/datatypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/datatypes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/nano.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/nano.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/nano.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/skipper_transceiver/skipper_transceiver.ino" beforeDir="false" afterPath="$PROJECT_DIR$/Software/skipper_transceiver/skipper_transceiver.ino" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +44,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CMakeLists.txt" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -100,13 +94,13 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "skipper-new",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/logan/MATLAB/Projects/Skipper-GNC/Software/catch2",
+    "last_opened_file_path": "C:/Users/logan/MATLAB/Projects/Skipper-GNC/.venv/Scripts/python.exe",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "structure.view.defaults.are.configured": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -125,6 +119,11 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="unit_test" type="CMakeCatchTestRunConfigurationType" factoryName="Catch Test" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Skipper" TARGET_NAME="unit_test" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Skipper" RUN_TARGET_NAME="unit_test" TEST_MODE="SUITE_TEST">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -161,7 +160,7 @@
       <workItem from="1740006802770" duration="1951000" />
       <workItem from="1741216715398" duration="20946000" />
       <workItem from="1741240299971" duration="11535000" />
-      <workItem from="1741648401754" duration="6685000" />
+      <workItem from="1741648401754" duration="11877000" />
     </task>
     <task id="LOCAL-00001" summary="Added some UART stuff...">
       <option name="closed" value="true" />
@@ -179,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741246943432</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Some more refactoring and beautification...">
+      <option name="closed" value="true" />
+      <created>1741655582392</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741655582392</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,7 +200,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added some UART stuff..." />
     <MESSAGE value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
-    <option name="LAST_COMMIT_MESSAGE" value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
+    <MESSAGE value="Some more refactoring and beautification..." />
+    <option name="LAST_COMMIT_MESSAGE" value="Some more refactoring and beautification..." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Skipper$converter.coverage" NAME="converter Coverage Results" MODIFIED="1740011752046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GNC" />
