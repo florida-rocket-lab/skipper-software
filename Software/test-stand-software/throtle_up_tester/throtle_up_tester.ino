@@ -13,10 +13,10 @@ State currentState = UNARMED;
 
 void setup() {
 
-    Serial.begin(9600);
+  Serial.begin(9600);
   // Attach the ESC to pin 9
-  ESCone.attach(9);
-  ESCtwo.attach(6);
+  ESCone.attach(3);
+  ESCtwo.attach(1);
   armESC();
 
   // Set pins as outputs
@@ -74,15 +74,15 @@ void setArmed() {
 
 void setDoing() {
   currentState = DOING;
-  // tone(buzzerPin, 100); 
-  // delay(1000);
-  // noTone(buzzerPin);
+  tone(buzzerPin, 100); 
+  delay(1000);
+  noTone(buzzerPin);
 
-  // tone(buzzerPin, 100);
-  // delay(1000);        
-  // noTone(buzzerPin);
+  tone(buzzerPin, 100);
+  delay(1000);        
+  noTone(buzzerPin);
   
-   throttle25(); // Call the function to perform the desired speed pattern
+   throttle50(); // Call the function to perform the desired speed pattern
    //justTwo();
 }
 
@@ -129,7 +129,27 @@ void justTwo() {
   ESCtwo.writeMicroseconds(1000); // Stop
 }
 
+void spinSlowestRamp() {
+  int minThrottle = 1000;  // ESC minimum throttle
+  int targetThrottle = 1030; // Minimum stable throttle where motor starts
+  int stepSize = 1;        // Increase by 1 microsecond per step
+  int delayTime = 100;     // Small delay for smooth transition
 
+  Serial.println("Slowly ramping up to minimum throttle...");
+
+  for (int throttle = minThrottle; throttle <= targetThrottle; throttle += stepSize) {
+    ESCone.writeMicroseconds(throttle);
+    ESCtwo.writeMicroseconds(throttle);
+    Serial.print("Throttle: ");
+    Serial.println(throttle);
+    delay(delayTime); // Smooth transition delay
+  }
+
+  Serial.println("Holding at minimum stable throttle.");
+  delay(2000);
+  ESCone.writeMicroseconds(1000);
+    ESCtwo.writeMicroseconds(1000);
+}
 
 
 
