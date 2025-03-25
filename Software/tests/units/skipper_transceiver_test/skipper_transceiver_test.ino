@@ -1,8 +1,15 @@
-//
-// Created by logan on 3/24/2025.
-//
 
-#ifndef SKIPPER_SKIPPER_TRANSCEIVER_INO
-#define SKIPPER_SKIPPER_TRANSCEIVER_INO
+#include "../../shared/arduinotest.h"
+#include "../../../skipper_transceiver/nano.h"
+#include "../../../shared/skipper_lib.h"
 
-#endif //SKIPPER_SKIPPER_TRANSCEIVER_INO
+ArduinoTest tester{NANO_FAIL_PIN, NANO_SUCCESS_PIN};
+Nano me{};
+void setup()
+{
+
+}
+void loop()
+{
+
+}

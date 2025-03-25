@@ -1,0 +1,8 @@
+
+#ifndef SKIPPER_CASES_H
+#define SKIPPER_CASES_H
+
+#define SUITE_A {0.0, 0.0, 0.0}
+#define SUITE_B1 {0.9628312 , 0.02327522, 0.21874253};
+
+#endif //SKIPPER_CASES_H
