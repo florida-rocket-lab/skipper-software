@@ -23,18 +23,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Added Python implementation for datatypes.cpp and datatypes.h in skipper.utilities.serialize">
-      <change afterPath="$PROJECT_DIR$/Software/tests/shared/arduinotest.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Software/tests/shared/arduinotest.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/build_directories.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Builder/build_directories.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Builder/generate_build_directories.py" beforeDir="false" afterPath="$PROJECT_DIR$/Builder/generate_build_directories.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/catch2/catch_amalgamated.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/catch2/catch_amalgamated.hpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/shared/constants.h" beforeDir="false" afterPath="$PROJECT_DIR$/Software/shared/constants.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Software/tests/test_suite.cpp" beforeDir="false" />
-    </list>
+    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Begun the test suite and made makefile more verbose." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -167,7 +156,7 @@
       <workItem from="1741240299971" duration="11535000" />
       <workItem from="1741648401754" duration="13783000" />
       <workItem from="1741790824577" duration="661000" />
-      <workItem from="1742857990520" duration="3424000" />
+      <workItem from="1742857990520" duration="3762000" />
     </task>
     <task id="LOCAL-00001" summary="Added some UART stuff...">
       <option name="closed" value="true" />
@@ -201,7 +190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741660920593</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Begun the test suite and made makefile more verbose.">
+      <option name="closed" value="true" />
+      <created>1742861776456</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742861776456</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,7 +214,8 @@
     <MESSAGE value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
     <MESSAGE value="Some more refactoring and beautification..." />
     <MESSAGE value="Added Python implementation for datatypes.cpp and datatypes.h in skipper.utilities.serialize" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Python implementation for datatypes.cpp and datatypes.h in skipper.utilities.serialize" />
+    <MESSAGE value="Begun the test suite and made makefile more verbose." />
+    <option name="LAST_COMMIT_MESSAGE" value="Begun the test suite and made makefile more verbose." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Skipper$converter.coverage" NAME="converter Coverage Results" MODIFIED="1740011752046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GNC" />
