@@ -31,25 +31,19 @@ syms x y z ...                     % Displacements.
         xi zeta ...                % Gimbal angles.
         M Ixx Ixy Ixz Iyx Iyy ...  % Linear and rotational inertias.
         Iyz Izx Izy Izz ...          
-        rho1 rho2 ...     
-        rho3x rho3y rho3z ...      % Lever arm distances.
+        rho ...                    % Lever arm.
         g ...                      % Acceleration due to gravity.
         T tauR ...                 % Control forces.
-        alpha beta ...             % Wind angles.
-        L D Q ...                  % Aerodynamic forces.
-        Px Py Pz...                % Peturbation forces
         real % Avoid 'conj' popping up when performing matrix operations, 
              % always place after the last uncommented variable in 'syms' 
              % initialization.
 
 % Generate transformation matrices.
-Ti2u = euler2rMatrix(phi, 1)*euler2rMatrix(theta, 2)*...
-        euler2rMatrix(psi, 3); % I -> U.
+Ti2u = euler_2_rmatrix(phi, 1)*euler_2_rmatrix(theta, 2)*...
+        euler_2_rmatrix(psi, 3); % I -> U.
 Tu2i = Ti2u.'; % U -> I.
-Tu2t = euler2rMatrix(zeta, 3)*euler2rMatrix(xi, 2); % U -> T.
+Tu2t = euler_2_rmatrix(zeta, 3)*euler_2_rmatrix(xi, 2); % U -> T.
 Tt2u = Tu2t.'; % T -> U.
-Tu2w = euler2rMatrix(alpha, 3)*euler2rMatrix(beta, 2); % U -> W.
-Tw2u = Tu2w'; % W -> U.
 
 % Kinematics.
 omega = [p q r]'; % Angular velocity.
@@ -59,9 +53,9 @@ nu = [u v w]'; % Velocity.
 a = [uDot vDot wDot]' + cross(omega, nu); % Acceleration. Need TT because 
                                           % components of velocity are in U.
 
-I = [Ixx Ixy Ixz;
-     Iyx Iyy Iyz;
-     Izx Izy Izz]; % Rotational inertia tensor.
+I = [Ixx 0 0;
+     0 Iyy 0;
+     0 0 Izz]; % Rotational inertia tensor.
 
 H = I*omega; % Angular momentum. THIS ONLY WORKS 
              % BECAUSE I IS DIAGONAL!
@@ -70,28 +64,23 @@ HDot = I*alph + cross(omega, H); % Angular momentum derivative, need TT.
                                   % instead of tensor product as with H.
 
 % Kinetics. Aerodynamic and peturbation forces are disabled for now.
-F_aero = [0 0 0]'; % [-D Q -L]'; % Defined in W.
 F_grav = [-M*g 0 0]'; % Defined in I.
 F_thrust = [T 0 0]'; % Defined in T.
-F_peturb = [0 0 0]'; % [Px Py Pz]'; % Defined in U.
 
-tau_RCS = [tauR 0 0]';
+tau_RCS = [tauR 0 0]'; % Defined in T.
 
 % Convert lever arm distances to positions in U.
-d1 = [rho1 0 0]'; % Defined in U.
-d2 = [-rho2 0 0]'; % Defined in U.
-d3 = [rho3x rho3y rho3z]'; % Defined in U.
+d = [-rho 0 0]'; % Defined in U.
 
 % EOM derived via Newton-Euler laws. Note that all quantities are converted
 % to U using rotation matricies. To make the use of 'taylor' possible later
 % both sides of each law are first defined seperately and then combined.
 
-first_law_LHS = Tw2u*F_aero + Ti2u*F_grav + Tt2u*F_thrust + F_peturb;
+first_law_LHS = Ti2u*F_grav + Tt2u*F_thrust;
 first_law_RHS = M*a;
 first_law = first_law_LHS == first_law_RHS;
 
-second_law_LHS = cross(d1, Tw2u*F_aero) + cross(d2, Tt2u*F_thrust) + ...
-        cross(d3, F_peturb) + tau_RCS;
+second_law_LHS = cross(d, Tt2u*F_thrust) + Tt2u*tau_RCS;
 second_law_RHS = HDot; 
 second_law = second_law_LHS == second_law_RHS; % Where Q = CM.
 
@@ -111,8 +100,7 @@ avel_rel = avel_rel_LHS == avel_rel_RHS % Relation betwen euler angle
 vel_rel_LHS = [xDot yDot zDot]'; % Body-frame velocity components.
 vel_rel_RHS = Tu2i*nu;
 vel_rel = vel_rel_LHS == vel_rel_RHS % Relation betwen inertial  
-                                      % and body-frame velocities.
-
+                                     % and body-frame velocities.
 
 % Solve the EOM using 'solve'.
 nonlinear_sol = solve([first_law, second_law], ...

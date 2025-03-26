@@ -1,2 +1,0 @@
-function simulate_episode
-end

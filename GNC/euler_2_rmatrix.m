@@ -1,7 +1,7 @@
 function rMatrix = euler_2_rmatrix(angle, axis)
 % ________________________________________________________________________
 %
-%                            euler2rMatrix.m
+%                            euler_2_rmatrix.m
 % ________________________________________________________________________
 % 
 % BY:       FLORIDA ROCKET LAB - GNC SUBTEAM
