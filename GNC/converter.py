@@ -14,7 +14,7 @@ def extract_symbols_from_system(system: list[str]) -> set[str]:
     return total_symbols
 
 def extract_coefficient(eqn: Expr, sym: Symbol) -> Expr:
-    return sum(term.coeff(sym) for term in eqn.as_ordered_terms() if sym in term.free_symbols)
+    return sum(term.as_numer_denom()[0].coeff(sym)/term.as_numer_denom()[1] for term in eqn.as_ordered_terms() if sym in term.free_symbols)
 
 def convert_to_matrix(system: list[Expr], vector_terms: list[Symbol]):
     """
