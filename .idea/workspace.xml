@@ -3,59 +3,34 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
+  <component name="CMakeRunConfigurationManager">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/Archived/lqrMatrices.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/MC Tuner/mc_control.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/MC Tuner/mc_estimate.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/MC Tuner/mc_improve.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/MC Tuner/simulate_episode.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/TransverseCrosswind.mldatx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/derive_eom.m" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/derive_eom.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/euler_2_rmatrix.m" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/euler_2_rmatrix.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/skipperLQI.slx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/skipperLQR.slx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/skipperLQR.slx.original" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/skipperLQRPP.slx" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/Path Pursuit/skipperLQRPP.slx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/velocityArray.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/ONMmXJA_8E1OUCZ4xDUGWMP43d4d.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/EEtUlUb-dLAdf0KpMVivaUlztwA/ONMmXJA_8E1OUCZ4xDUGWMP43d4p.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/H7_zf3V9fMnuQrmyCsmmLqFW2eY/inike1K4KjLrbsPRFJxFh4qszeod.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/H7_zf3V9fMnuQrmyCsmmLqFW2eY/inike1K4KjLrbsPRFJxFh4qszeop.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/H7_zf3V9fMnuQrmyCsmmLqFW2eYd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/H7_zf3V9fMnuQrmyCsmmLqFW2eYp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/IpDvBzw1nxbDJBG5szY-MXYof-gd.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/project/A-npNsTsB8d6Df8aumbbLR3Nehk/0Yaa6LshDZSFRGk5Q7eoKVw-M5Yd.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/IpDvBzw1nxbDJBG5szY-MXYof-gp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/KrnKJGr70TOqBQuQGVGIAP7q5qUd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/KrnKJGr70TOqBQuQGVGIAP7q5qUp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/O3JKeu0QLBtFuxqVaHATjKGRRmEd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/O3JKeu0QLBtFuxqVaHATjKGRRmEp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/project/A-npNsTsB8d6Df8aumbbLR3Nehk/0Yaa6LshDZSFRGk5Q7eoKVw-M5Yp.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/XSBJwHsDy3fdLSgO7U1xis3o7-sd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/XSBJwHsDy3fdLSgO7U1xis3o7-sp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/gFZ4VQvR1HG2LK7OhAl3qSw3PaId.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/project/td2o4TlawYdX9PLahELwftY0-5k/gFZ4VQvR1HG2LK7OhAl3qSw3PaIp.xml" beforeDir="false" />
-    </list>
+    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Fixed converter.py..." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="skipper-new" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;nicholashirsch&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/florida-rocket-lab/Complete-Skipper-Software&quot;,
-    &quot;accountId&quot;: &quot;71cd8683-9631-4c5e-bb6d-f560a123babd&quot;
-  }
-}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -64,26 +39,51 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.converter.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.converter.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.west.config.association.type.startup.service": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/logan/MATLAB/Projects/Skipper-GNC/.venv/Scripts/python.exe",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "structure.view.defaults.are.configured": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="lua.app" factoryName="Lua Application">
+      <option name="program" value="lua.exe" />
+      <option name="file" value="" />
+      <option name="workingDir" value="" />
+      <option name="debuggerType" value="1" />
+      <option name="params" value="" />
+      <option name="charset" value="UTF-8" />
+      <option name="showConsole" value="true" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
-        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-PY-243.23654.177" />
+        <option value="bundled-python-sdk-91d3a02ef49d-43b77aa2d136-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.23654.177" />
       </set>
     </attachedChunks>
   </component>
@@ -96,17 +96,100 @@
       <option name="presentableId" value="Default" />
       <updated>1740006801657</updated>
       <workItem from="1740006802770" duration="1951000" />
-      <workItem from="1742872926501" duration="157000" />
-      <workItem from="1742873127778" duration="48000" />
-      <workItem from="1743029947692" duration="124000" />
-      <workItem from="1743030781108" duration="3000" />
+      <workItem from="1741216715398" duration="20946000" />
+      <workItem from="1741240299971" duration="11535000" />
+      <workItem from="1741648401754" duration="13783000" />
+      <workItem from="1741790824577" duration="661000" />
+      <workItem from="1742857990520" duration="11729000" />
+      <workItem from="1743029932077" duration="1004000" />
     </task>
+    <task id="LOCAL-00001" summary="Added some UART stuff...">
+      <option name="closed" value="true" />
+      <created>1741113546041</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1741113546041</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;.">
+      <option name="closed" value="true" />
+      <created>1741246943432</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1741246943432</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Some more refactoring and beautification...">
+      <option name="closed" value="true" />
+      <created>1741655582392</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741655582392</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added Python implementation for datatypes.cpp and datatypes.h in skipper.utilities.serialize">
+      <option name="closed" value="true" />
+      <created>1741660920593</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741660920593</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Begun the test suite and made makefile more verbose.">
+      <option name="closed" value="true" />
+      <created>1742861776456</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742861776456</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Made unit test files.">
+      <option name="closed" value="true" />
+      <created>1742861957727</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1742861957727</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Started writing cases">
+      <option name="closed" value="true" />
+      <created>1742864371047</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1742864371047</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fixed converter.py...">
+      <option name="closed" value="true" />
+      <created>1743030839420</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1743030839420</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added some UART stuff..." />
+    <MESSAGE value="Major refactoring work; still need to implement specifics of &quot;Nano&quot;, &quot;Uno&quot;, and &quot;Teensy&quot;." />
+    <MESSAGE value="Some more refactoring and beautification..." />
+    <MESSAGE value="Added Python implementation for datatypes.cpp and datatypes.h in skipper.utilities.serialize" />
+    <MESSAGE value="Begun the test suite and made makefile more verbose." />
+    <MESSAGE value="Made unit test files." />
+    <MESSAGE value="Started writing cases" />
+    <MESSAGE value="Fixed converter.py..." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed converter.py..." />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Skipper$converter.coverage" NAME="converter Coverage Results" MODIFIED="1742872929065" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GNC" />
+    <SUITE FILE_PATH="coverage/Skipper$converter.coverage" NAME="converter Coverage Results" MODIFIED="1740011752046" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/GNC" />
   </component>
 </project>
