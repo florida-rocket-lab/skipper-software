@@ -7,24 +7,30 @@
 % EDITORS:  N. HIRSCH
 % DATE:     1/20/25
 %
-% OVERVIEW: Calculates A, B, C, D, Q, and R matices for use in a state
-% space Simulink model and LQR controller.
+% OVERVIEW: Calculates A, B, C, D, Q, and R matrices as well as feedforward
+% control and constant input disturbances for use in 'skipper_lqr_2.slx' or
+% 'skipper_lqi.slx' Simulink models. Run this before the models to add all
+% the nessecary variables for the model to use into the workspace.
     
     clear; clc;
     
-    % Initialize state space matricies. Since they are sparse simply use zeros
-    % and then input non-zero terms individually.
-    % X = [x y z u v w phi theta psi p q r]
-    % U = [T tauR xi zeta]
     
+    % Define known parameters of system.
     M = 1.71;
     g = 1;
     rho = 5.58/12;
     Ixx = 8.78;
     Iyy = 30.37;
     Izz = 30.93;
+
+    is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
     
-    % Equillibrium point.
+    % Define equillibrium point. When trimming for hovering all parameters
+    % should be zero except thrust, T, as defined by the state, X, and
+    % control, U, vectors of the form:
+    %   X: state (= [x y z u v w phi theta psi p q r])
+    %   U: control (= [T tauR xi zeta])
+    % A good equillibirum thrust is M*g as this counteracts gravity.
     x0 = 0;
     y0 = 0;
     z0 = 0;
@@ -37,12 +43,22 @@
     p0 = 0;
     q0 = 0;
     r0 = 0;
-    T0 = M*g;
-    tauR0 = 0;
-    xi0 = 0;
-    zeta0 = 0;
+    T0 = M*g; % Thrust
+    tauR0 = 0; % Reaction torque.
+    xi0 = 0; % Upper gimbal angle.
+    zeta0 = 0; % Lower gimbal angle.
 
-
+    % Define state space matrices. These are auto-generated from the EOM by
+    % the Python script 'converter.py'. Three variables are auto-defined:
+    %   A: state matrix
+    %   B: input matrix
+    %   d: disturbance (ie. disturbing forces such as gravity which are
+    %   indepdendent of X or U)
+    % In addition two other variables are manually generated:
+    %   C: output matrix (= I by default)
+    %   D: passthrough matrix (= 0 by default)
+    % NOTE: DO NOT MODIFY THE LINES IN THIS SECTION AS THE PYTHON SCRIPT
+    % LOOKS FOR THEM.
     % BEGIN "A"; Do not modify this. The python script looks for this line.
     A = [
         0 0 0 cos(psi0)*cos(theta0) sin(phi0)*sin(theta0)*cos(psi0)-sin(psi0)*cos(phi0) sin(phi0)*sin(psi0)+sin(theta0)*cos(phi0)*cos(psi0) v0*sin(phi0)*sin(psi0)+v0*sin(theta0)*cos(phi0)*cos(psi0)-w0*sin(phi0)*sin(theta0)*cos(psi0)+w0*sin(psi0)*cos(phi0) -u0*sin(theta0)*cos(psi0)+v0*sin(phi0)*cos(psi0)*cos(theta0)+w0*cos(phi0)*cos(psi0)*cos(theta0) -u0*sin(psi0)*cos(theta0)-v0*sin(phi0)*sin(psi0)*sin(theta0)-v0*cos(phi0)*cos(psi0)+w0*sin(phi0)*cos(psi0)-w0*sin(psi0)*sin(theta0)*cos(phi0) 0 0 0;
@@ -93,21 +109,57 @@
         -Ixx*p0*q0/Izz + Iyy*p0*q0/Izz + T0*rho*zeta0*cos(zeta0)/Izz + tauR0*xi0*cos(xi0)*cos(zeta0)/Izz - tauR0*zeta0*sin(xi0)*sin(zeta0)/Izz;
     ];
     % END "d"; Do not modify this. The python script looks for this line.
+
+    C = eye(12);
+    
+    D = zeros(size(B));
    
+    % Quick check to make sure linearized system is controllable (ie. the
+    % controllability matrix as defined by 'ctrb()' is full rank). If it
+    % fails change the equillibrium point.
     if rank(ctrb(A, B)) == 12
         fprintf('FULLY CONTROLLABLE!\n')
     else
         fprintf('NAH UR COOKED BUDDY >:| FIX YO SHIT\n')
     end
-
-    Uff = -pinv(B)*d;
-
-    C = eye(12);
     
-    D = zeros(size(B));
-
-    Q = diag([1 1 1 1 1 1 1 1 1 1 10 10]);
-    R = diag([1 1 1 1]);
+    % Define feedfoward control as equivallent to the disturbance.
+    % Equivallent to shifting the equillbirium point for the control. Note
+    % that in doing so we aren't shifting state equillibrium and hence end
+    % up with an overdefined system as U has less components than d.
+    % Nessicitates the use of the pseudoinverse, but for trimming for
+    % hovering it is exact.
+    Uff = -pinv(B)*d;
+    
+    % Define maximum values for each state and control to use with Bryson's
+    % rule to tune LQR gain matrix, K.
+    x_max = 10;
+    y_max = 25;
+    z_max = 25;
+    u_max = 10;
+    v_max = 10;
+    w_max = 10;
+    phi_max = 1;
+    theta_max = pi/2;
+    psi_max = pi/2;
+    p_max = 1;
+    q_max = 1;
+    r_max = 1;
+    T_max = M*g*4;
+    tauR_max = 1;
+    xi_max = pi/22;
+    zeta_max = pi/22;
+    
+    % Form LQR weighting matrices using Bryson's rule:
+    %   Q: LQR weight matrix on state
+    %   R: LQR weight matrix on control
+    % and then use 'lqr()' to calculate the LQR gain.
+    Q = diag([ ...
+        1/x_max^2 1/y_max^2 1/z_max^2 ...
+        1/u_max^2 1/v_max^2 1/w_max^2 ...
+        1/phi_max^2 1/theta_max^2 1/psi_max^2 ...
+        1/p_max^2 1/q_max^2 1/r_max^2 ...
+        ]);
+    R = diag([1/T_max^2 1/tauR_max^2 1/xi_max^2 1/zeta_max^2]);
 
     K = lqr(A, B, Q, R);
-
