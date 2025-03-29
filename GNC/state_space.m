@@ -166,21 +166,35 @@
 
     % Augment state space for LQI if using it.
     if is_lqi == true
+
+        % First define extraction matrix, E, which seperates states subject
+        % to integral error from rest of system. Then use that to augment
+        % state space to include error terms.
         E = [diag([1 1 1]) zeros([3 9])];
-        Ai = [A zeros([12 3]); -E zeros([3 3])];
-        Bi = [B; zeros([3, 4])];
-        r = [10 10 10]';
 
-        Ci = zeros(size(Ai));
-        Di = zeros(size(Bi));
+        Ai = [A zeros([12 3]); -E zeros([3 3])]; % Augmented A matrix.
+        Bi = [B; zeros([3, 4])]; % Augmented B matrix.
 
-        Qi = diag([diag(Q)' 100 100 100]);
+        % Define maximum values for error and then weight these according
+        % to Bryson's rule. Apply this to Q matrix to augment it.
+        % NOTE: Error never decreases, it only over grows, so the maximum
+        % values allowed for it naturally need to be large.
+        x_error_max = 500;
+        y_error_max = 500;
+        z_error_max = 500;
 
-        sys = ss(Ai, Bi, Ci, Di);
-        K = lqr(Ai, Bi, Qi, R);
+        Qi = diag([ ...
+            diag(Q)' ...
+            1/x_error_max^2 ...
+            1/y_error_max^2 ...
+            1/z_error_max^2 ...
+            ]); % Augmented Q matrix.
 
-        K1 = K(:, 1:12);
-        K2 = K(:, 13:end);
+        % Use 'lqr()' to compute gain for augmented system, Ki. Split into
+        % two seperate feedback gain matrices, K1 for the state and K2 for
+        % the error terms.
+        Ki = lqr(Ai, Bi, Qi, R);
 
-
+        K1 = Ki(:, 1:12);
+        K2 = Ki(:, 13:end);
     end
