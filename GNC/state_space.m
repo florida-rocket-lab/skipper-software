@@ -163,3 +163,24 @@
     R = diag([1/T_max^2 1/tauR_max^2 1/xi_max^2 1/zeta_max^2]);
 
     K = lqr(A, B, Q, R);
+
+    % Augment state space for LQI if using it.
+    if is_lqi == true
+        E = [diag([1 1 1]) zeros([3 9])];
+        Ai = [A zeros([12 3]); -E zeros([3 3])];
+        Bi = [B; zeros([3, 4])];
+        r = [10 10 10]';
+
+        Ci = zeros(size(Ai));
+        Di = zeros(size(Bi));
+
+        Qi = diag([diag(Q)' 100 100 100]);
+
+        sys = ss(Ai, Bi, Ci, Di);
+        K = lqr(Ai, Bi, Qi, R);
+
+        K1 = K(:, 1:12);
+        K2 = K(:, 13:end);
+
+
+    end
