@@ -21,7 +21,7 @@ def copy_directory(directory: str, destination_folder: str = "./build") -> list[
             file = str(os.path.join(folder, file))
             if os.path.exists(file):
                 warnings.warn(f"A file already exists at {file}; overwriting it. \n (However, this is intentional if making test-suites!)")
-                os.remove(file)
+                os.remove(os.path.join(destination_folder, os.path.split(file)[1]))
             shutil.copy(file, destination_folder)
             out_files.append(str(os.path.join(destination_folder, os.path.split(file)[-1])))
     return out_files
