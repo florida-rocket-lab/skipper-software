@@ -85,19 +85,19 @@ def indent(string: str):
 def update_matlab_script(system: list[str], x_variables: list[str], u_variables: list[str]):
     A_mat, B_mat, d_vec = print_system(system, x_variables, u_variables)
     write_to_script(
-        'lqrMatrices.m',
+        'state_space.m',
         '% BEGIN "A"; Do not modify this. The python script looks for this line.',
         '% END "A"; Do not modify this. The python script looks for this line.',
         indent('A = ' + A_mat)
     )
     write_to_script(
-        'lqrMatrices.m',
+        'state_space.m',
         '% BEGIN "B"; Do not modify this. The python script looks for this line.',
         '% END "B"; Do not modify this. The python script looks for this line.',
         indent('B = ' + B_mat)
     )
     write_to_script(
-        'lqrMatrices.m',
+        'state_space.m',
         '% BEGIN "d"; Do not modify this. The python script looks for this line.',
         '% END "d"; Do not modify this. The python script looks for this line.',
         indent('d = ' + d_vec)
@@ -121,10 +121,9 @@ if __name__ == '__main__':
         "p + (r0*cos(phi0)*(tan(theta0)^2 + 1) + q0*sin(phi0)*(tan(theta0)^2 + 1))*(theta - theta0) + (q0*cos(phi0)*tan(theta0) - r0*sin(phi0)*tan(theta0))*(phi - phi0) + r0*cos(phi0)*tan(theta0) + q0*sin(phi0)*tan(theta0) + cos(phi0)*tan(theta0)*(r - r0) + sin(phi0)*tan(theta0)*(q - q0)",
         "q0*cos(phi0) - r0*sin(phi0) - (phi - phi0)*(r0*cos(phi0) + q0*sin(phi0)) + cos(phi0)*(q - q0) - sin(phi0)*(r - r0)",
         "((q0*cos(phi0))/cos(theta0) - (r0*sin(phi0))/cos(theta0))*(phi - phi0) + (theta - theta0)*((r0*cos(phi0)*sin(theta0))/cos(theta0)^2 + (q0*sin(phi0)*sin(theta0))/cos(theta0)^2) + (cos(phi0)*(r - r0))/cos(theta0) + (sin(phi0)*(q - q0))/cos(theta0) + (r0*cos(phi0))/cos(theta0) + (q0*sin(phi0))/cos(theta0)",
-        "(tauR + Iyy*q*r0 + Iyy*q0*r - Iyy*q0*r0 - Izz*q*r0 - Izz*q0*r + Izz*q0*r0)/Ixx",
-        "-(Ixx*p*r0 + Ixx*p0*r - Ixx*p0*r0 - Izz*p*r0 - Izz*p0*r + Izz*p0*r0 + T*rho2*cos(zeta0)*sin(xi0) + T0*rho2*xi*cos(xi0)*cos(zeta0) - T0*rho2*xi0*cos(xi0)*cos(zeta0) + T0*rho2*zeta0*sin(xi0)*sin(zeta0) - T0*rho2*zeta*sin(xi0)*sin(zeta0))/Iyy",
-        "-(T*rho2*sin(zeta0) - Ixx*p*q0 - Ixx*p0*q + Ixx*p0*q0 + Iyy*p*q0 + Iyy*p0*q - Iyy*p0*q0 - T0*rho2*zeta0*cos(zeta0) + T0*rho2*zeta*cos(zeta0))/Izz"
+        "(Iyy*q*r0 + Iyy*q0*r - Iyy*q0*r0 - Izz*q*r0 - Izz*q0*r + Izz*q0*r0 + tauR*cos(xi0)*cos(zeta0) - tauR0*xi*cos(zeta0)*sin(xi0) + tauR0*xi0*cos(zeta0)*sin(xi0) + tauR0*zeta0*cos(xi0)*sin(zeta0) - tauR0*zeta*cos(xi0)*sin(zeta0))/Ixx",
+        "(tauR*sin(zeta0) - tauR0*zeta0*cos(zeta0) + tauR0*zeta*cos(zeta0) - Ixx*p*r0 - Ixx*p0*r + Ixx*p0*r0 + Izz*p*r0 + Izz*p0*r - Izz*p0*r0 - T*rho*cos(zeta0)*sin(xi0) - T0*rho*xi*cos(xi0)*cos(zeta0) + T0*rho*xi0*cos(xi0)*cos(zeta0) - T0*rho*zeta0*sin(xi0)*sin(zeta0) + T0*rho*zeta*sin(xi0)*sin(zeta0))/Iyy",
+        "-(T*rho*sin(zeta0) - Ixx*p*q0 - Ixx*p0*q + Ixx*p0*q0 + Iyy*p*q0 + Iyy*p0*q - Iyy*p0*q0 + tauR*cos(zeta0)*sin(xi0) + tauR0*xi*cos(xi0)*cos(zeta0) - tauR0*xi0*cos(xi0)*cos(zeta0) + tauR0*zeta0*sin(xi0)*sin(zeta0) - tauR0*zeta*sin(xi0)*sin(zeta0) - T0*rho*zeta0*cos(zeta0) + T0*rho*zeta*cos(zeta0))/Izz"
     ]
 
     update_matlab_script(system, x_variables, u_variables)
-
