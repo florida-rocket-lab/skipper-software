@@ -5,17 +5,35 @@
 # be flattened and all the of the "#include ..." will automatically update.
 # Please note that any other path will **NOT** be automatically updated.
 
-# This is the Arduino UNO/MEGA that will serve as the transceiver on the ground.
-ground_main:
-  - "../Software/skipper-lib"
-  - "../Software/ground_main"
+# This is the Arduino UNO that will serve as the transceiver on the ground.
+ground-transceiver:
+  - "../Software/shared"
+  - "../Software/ground_transceiver"
+
+ground-transceiver-test:  # This is the test suite to try on the UNO
+  - "../Software/shared"
+  - "../Software/ground_transceiver"
+  - "../Software/tests/shared"
+  - "../Software/tests/ground_transceiver_test"
 
 # This is the Arduino Nano that will serve as the transceiver on Skipper.
-nano_main:
-  - "../Software/skipper-lib"
-  - "../Software/nano_main"
+skipper-transceiver:
+  - "../Software/shared"
+  - "../Software/skipper_transceiver"
+
+skipper-transceiver-test:  # This is the test suite to try on the NANO
+  - "../Software/shared"
+  - "../Software/skipper_transceiver"
+  - "../Software/tests/shared"
+  - "../Software/tests/skipper_transceiver_test"
 
 # This is the Teensy 4.0 that will serve as the flight computer for Skipper.
-teensy_main:
-  - "../Software/skipper-lib"
-  - "../Software/teensy_main"
+flight-computer:
+  - "../Software/shared"
+  - "../Software/flight_computer"
+
+flight-computer-test:  # This is the test suite to try on the Teensy 4.0
+  - "../Software/shared"
+  - "../Software/flight_computer"
+  - "../Software/tests/shared"
+  - "../Software/tests/flight_computer_test"

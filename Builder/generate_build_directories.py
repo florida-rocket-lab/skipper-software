@@ -2,6 +2,7 @@
 import yaml
 import os
 import shutil
+import warnings
 
 #  This script is made because Arduino for whatever reason **CANNOT** build from files in different
 #  directories. This is a really dumb limitation, but it's a better idea to remain organized in folders
@@ -18,6 +19,9 @@ def copy_directory(directory: str, destination_folder: str = "./build") -> list[
     for folder, _, files in os.walk(directory):
         for file in files:
             file = str(os.path.join(folder, file))
+            if os.path.exists(file):
+                warnings.warn(f"A file already exists at {file}; overwriting it. \n (However, this is intentional if making test-suites!)")
+                os.remove(file)
             shutil.copy(file, destination_folder)
             out_files.append(str(os.path.join(destination_folder, os.path.split(file)[-1])))
     return out_files
