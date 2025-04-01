@@ -178,12 +178,16 @@ struct TelemetryPacket : public BaseSerializable
     // CONSTRUCTORS
     TelemetryPacket() = default;
     explicit TelemetryPacket(std::unique_ptr<char[]>&& buffer);  // construct from buffer
-    explicit Control(double* data_):
+    TelemetryPacket(double* data_, std::unique_ptr<char[]>& stdout_, std::unique_ptr<char[]>& stderr_):
         imu_data{data_}, actual_state_space{data_ + StateSpace::BUFFER_SIZE/sizeof(double)},
         reference_state_space{data_ + 2*StateSpace::BUFFER_SIZE/sizeof(double)}, look_ahead_state_space{data_ + 3*StateSpace::BUFFER_SIZE/sizeof(double)},
+
         base_point_state_space{data_ + 4*StateSpace::BUFFER_SIZE/sizeof(double)},
         target_control{data_ + 5*StateSpace::BUFFER_SIZE/sizeof(double)}, actual_control{data_ + (5*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE)/sizeof(double)},
-        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)}{};
+        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)}
+
+        stdout(std::move(stdout_)), stderr(std::move(stderr_))
+        {};
 
     // INTERNAL DATA
     IMUData imu_data{};
@@ -197,6 +201,9 @@ struct TelemetryPacket : public BaseSerializable
     Control actual_control{};
     Control derivative_control{};
     Control base_point_control{};
+
+    Message<256> stdout;
+    Message<256> stderr;
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = IMUData::BUFFER_SIZE + 4 * StateSpace::BUFFER_SIZE + 4 * Control::BUFFER_SIZE;
