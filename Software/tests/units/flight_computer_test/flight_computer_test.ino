@@ -11,5 +11,6 @@ void setup()
 }
 void loop()
 {
-
+    tester.show_assertion(true);
+    tester.show_assertion(false);
 }
