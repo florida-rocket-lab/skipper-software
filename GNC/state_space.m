@@ -134,17 +134,17 @@
     % Define maximum values for each state and control to use with Bryson's
     % rule to tune LQR gain matrix, K.
     x_max = 10;
-    y_max = 25;
-    z_max = 25;
+    y_max = 5;
+    z_max = 5;
     u_max = 10;
     v_max = 10;
     w_max = 10;
     phi_max = 1;
-    theta_max = pi/2;
-    psi_max = pi/2;
-    p_max = 1;
-    q_max = 1;
-    r_max = 1;
+    theta_max = pi/200;
+    psi_max = pi/200;
+    p_max = 1/10;
+    q_max = 1/10;
+    r_max = 1/10;
     T_max = M*g*4;
     tauR_max = 1;
     xi_max = pi/22;
