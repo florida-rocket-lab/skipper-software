@@ -31,7 +31,7 @@ def update_includes(file: str) -> None:
     :param file: A file to update the `#include`'s.
     :return: Nothing; although if the file is a valid C++ file, the `#include`'s have been updated.
     """
-    if os.path.splitext(file)[1] not in (".hpp", ".h", ".hh", ".cpp", ".c"):  # check if file is a C++ or C file
+    if os.path.splitext(file)[1] not in (".ino", ".hpp", ".h", ".hh", ".cpp", ".c"):  # check if file is a C++ or C file
         return
 
     file_contents = open(file, 'r').read().split('\n')
