@@ -8,7 +8,7 @@
 
 struct BaseSerializable
 {
-    [[nodiscard]] virtual std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const = 0;
+    virtual std::pair<std::unique_ptr<char[]>, unsigned int> serialize() const = 0;
     virtual void deserialize(const std::unique_ptr<char[]>& buffer) = 0;
 };
 
@@ -64,6 +64,7 @@ struct IMUData : public BaseSerializable
     // CONSTRUCTORS
     IMUData() = default;
     explicit IMUData(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+    explicit IMUData(double* data_): acc{data_[0], data_[1], data_[2]}, gyr{data_[3], data_[4], data_[5]} {};
 
     // INTERNAL DATA
     Vector3 acc{};
@@ -86,6 +87,11 @@ struct StateSpace : public BaseSerializable
     // CONSTRUCTORS
     StateSpace() = default;
     explicit StateSpace(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+    explicit StateSpace(double* data_):
+        i_pos{data_[0], data_[1], data_[2]},
+        b_vel{data_[3], data_[4], data_[5]},
+        tb_rot{data_[6], data_[7], data_[8]},
+        b_ang_vel{data_[9], data_[10], data_[11]} {};
 
     // INTERNAL DATA
     Vector3 i_pos{};     // position in inertial frame
@@ -172,6 +178,12 @@ struct TelemetryPacket : public BaseSerializable
     // CONSTRUCTORS
     TelemetryPacket() = default;
     explicit TelemetryPacket(std::unique_ptr<char[]>&& buffer);  // construct from buffer
+    explicit Control(double* data_):
+        imu_data{data_}, actual_state_space{data_ + StateSpace::BUFFER_SIZE/sizeof(double)},
+        reference_state_space{data_ + 2*StateSpace::BUFFER_SIZE/sizeof(double)}, look_ahead_state_space{data_ + 3*StateSpace::BUFFER_SIZE/sizeof(double)},
+        base_point_state_space{data_ + 4*StateSpace::BUFFER_SIZE/sizeof(double)},
+        target_control{data_ + 5*StateSpace::BUFFER_SIZE/sizeof(double)}, actual_control{data_ + (5*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE)/sizeof(double)},
+        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)}{};
 
     // INTERNAL DATA
     IMUData imu_data{};
