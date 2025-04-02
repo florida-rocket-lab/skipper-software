@@ -18,6 +18,10 @@ def copy_directory(directory: str, destination_folder: str = "./build") -> list[
     out_files = []
     for folder, _, files in os.walk(directory):
         for file in files:
+            if '.ino' in file:
+                if file[:-4] != os.path.split(destination_folder)[1]:
+                    warnings.warn(f"Found an .ino file ({file}) which doesn't match the folder name ({os.path.split(destination_folder)[1]}); not including it! \n (However, this is intentional if making test-suites!)")
+                    continue
             file = str(os.path.join(folder, file))
             if os.path.exists(os.path.join(destination_folder, os.path.split(file)[1])):
                 warnings.warn(f"A copy of the file ({file}) already exists at {destination_folder}; overwriting it. \n (However, this is intentional if making test-suites!)")
