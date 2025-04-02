@@ -6,6 +6,7 @@
 #define SKIPPER_CONSTANTS_H
 
 // I've just compiled all the pin information into one spot for easy access.
+#include <Arduino.h>
 
 #define RADIO_COMMUNICATION_ADDRESS "00001"
 #define PING_TIMEOUT_MS 500
@@ -23,8 +24,8 @@
 // TODO: CHANGE THESE PINS, MR. JOSE
 #define UNO_SUCCESS_PIN 20
 #define UNO_FAIL_PIN 21
-#define NANO_SUCCESS_PIN 20
-#define NANO_FAIL_PIN 21
+#define NANO_SUCCESS_PIN A1
+#define NANO_FAIL_PIN A2
 #define TEENSY_SUCCESS_PIN 20
 #define TEENSY_FAIL_PIN 21
 
