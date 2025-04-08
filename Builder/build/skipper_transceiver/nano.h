@@ -5,7 +5,7 @@
 #ifndef SKIPPER_GNC_NANO_H
 #define SKIPPER_GNC_NANO_H
 
-#include "../shared/skipper_lib.h"
+#include "skipper_lib.h"
 
 class Nano
 {

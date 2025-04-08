@@ -2,7 +2,7 @@
 #ifndef SKIPPER_GNC_UNO_H
 #define SKIPPER_GNC_UNO_H
 
-#include "../shared/skipper_lib.h"
+#include "skipper_lib.h"
 
 class Uno
 {

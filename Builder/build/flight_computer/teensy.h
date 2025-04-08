@@ -2,7 +2,7 @@
 #ifndef SKIPPER_GNC_TEENSY_H
 #define SKIPPER_GNC_TEENSY_H
 
-#include "../shared/skipper_lib.h"
+#include "skipper_lib.h"
 
 class Teensy
 {
