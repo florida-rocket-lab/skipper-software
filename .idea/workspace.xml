@@ -13,12 +13,7 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Fixed converter.py...">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/converter.py" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/converter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/lqrMatrices.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GNC/state_space.m" beforeDir="false" afterPath="$PROJECT_DIR$/GNC/state_space.m" afterDir="false" />
-    </list>
+    <list default="true" id="9dbbd911-ffc5-4622-9bb0-abb01854344b" name="Changes" comment="Fixed converter.py..." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,18 +31,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "nicholashirsch"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nicholashirsch&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/florida-rocket-lab/Complete-Skipper-Software",
-    "accountId": "71cd8683-9631-4c5e-bb6d-f560a123babd"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/florida-rocket-lab/Complete-Skipper-Software&quot;,
+    &quot;accountId&quot;: &quot;71cd8683-9631-4c5e-bb6d-f560a123babd&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -120,6 +115,7 @@
       <workItem from="1742857990520" duration="11729000" />
       <workItem from="1743029932077" duration="1004000" />
       <workItem from="1743031566492" duration="1789000" />
+      <workItem from="1743453844917" duration="9000" />
     </task>
     <task id="LOCAL-00001" summary="Added some UART stuff...">
       <option name="closed" value="true" />

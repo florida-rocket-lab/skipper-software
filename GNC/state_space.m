@@ -140,8 +140,8 @@
     v_max = 10;
     w_max = 10;
     phi_max = 1;
-    theta_max = pi/200;
-    psi_max = pi/200;
+    theta_max = pi/3;
+    psi_max = pi/3;
     p_max = 1/10;
     q_max = 1/10;
     r_max = 1/10;
