@@ -2,6 +2,7 @@
 import yaml
 import os
 import shutil
+import warnings
 
 #  This script is made because Arduino for whatever reason **CANNOT** build from files in different
 #  directories. This is a really dumb limitation, but it's a better idea to remain organized in folders
@@ -17,7 +18,14 @@ def copy_directory(directory: str, destination_folder: str = "./build") -> list[
     out_files = []
     for folder, _, files in os.walk(directory):
         for file in files:
+            if '.ino' in file:
+                if file[:-4] != os.path.split(destination_folder)[1]:
+                    warnings.warn(f"Found an .ino file ({file}) which doesn't match the folder name ({os.path.split(destination_folder)[1]}); not including it! \n (However, this is intentional if making test-suites!)")
+                    continue
             file = str(os.path.join(folder, file))
+            if os.path.exists(os.path.join(destination_folder, os.path.split(file)[1])):
+                warnings.warn(f"A copy of the file ({file}) already exists at {destination_folder}; overwriting it. \n (However, this is intentional if making test-suites!)")
+                os.remove(os.path.join(destination_folder, os.path.split(file)[1]))
             shutil.copy(file, destination_folder)
             out_files.append(str(os.path.join(destination_folder, os.path.split(file)[-1])))
     return out_files
@@ -27,7 +35,7 @@ def update_includes(file: str) -> None:
     :param file: A file to update the `#include`'s.
     :return: Nothing; although if the file is a valid C++ file, the `#include`'s have been updated.
     """
-    if os.path.splitext(file)[1] not in (".hpp", ".h", ".hh", ".cpp", ".c"):  # check if file is a C++ or C file
+    if os.path.splitext(file)[1] not in (".ino", ".hpp", ".h", ".hh", ".cpp", ".c"):  # check if file is a C++ or C file
         return
 
     file_contents = open(file, 'r').read().split('\n')
