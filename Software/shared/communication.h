@@ -3,6 +3,7 @@
 
 #include "arduino_compat.h"
 #include <type_traits>
+#include <cstring> 
 #include <Arduino.h>
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -41,7 +42,7 @@ protected:
 class RadioCommunication: virtual public BaseCommunication
 {
 public:
-    RadioCommunication(unsigned char ce_pin, unsigned char csn_pin, const char address[6] = RADIO_COMMUNICATION_ADDRESS, unsigned char rf_channel = 108);
+    RadioCommunication(unsigned char ce_pin, unsigned char csn_pin, const uint8_t address[6] = (const uint8_t *)RADIO_COMMUNICATION_ADDRESS, unsigned char rf_channel = 108);
 
     bool ping() override;
     [[nodiscard]] bool alive() const override;
@@ -53,13 +54,13 @@ public:
     UniquePtr<T> receive();
 
 private:
-    RF24 nrf24{};
+    mutable RF24 nrf24{};
 };
 
 class UARTCommunication: virtual public BaseCommunication
 {
 public:
-    explicit UARTCommunication(const HardwareSerial* serial);
+    explicit UARTCommunication(HardwareSerial* serial);
 
     bool ping() override;
     [[nodiscard]] bool alive() const override;
@@ -93,7 +94,7 @@ class RTX3Communication: virtual public UARTCommunication
 
 // ======================== BEGIN COMMUNICATION CONSTRUCTORS ========================
 
-RadioCommunication::RadioCommunication(const unsigned char ce_pin, const unsigned char csn_pin, const char address[6], const unsigned char rf_channel): BaseCommunication{}, nrf24(ce_pin, csn_pin)
+RadioCommunication::RadioCommunication(const unsigned char ce_pin, const unsigned char csn_pin, const uint8_t address[6], const unsigned char rf_channel): BaseCommunication{}, nrf24(ce_pin, csn_pin)
 {
 
     if (!nrf24.begin())
@@ -105,11 +106,11 @@ RadioCommunication::RadioCommunication(const unsigned char ce_pin, const unsigne
     nrf24.setChannel(rf_channel);  // Straight up ripped from Jose Reynaldo's original implementation.
     nrf24.setDataRate(RF24_250KBPS); // possible values: RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
     nrf24.setPALevel(RF24_PA_LOW); // possible values: RF24_PA_MIN, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX
-    nrf24.openWritingPipe(address); // writing pipe address
-    nrf24.openReadingPipe(1, address); // reading pipe address
+    nrf24.openWritingPipe(reinterpret_cast<const uint8_t*>(address));    // writing pipe address
+    nrf24.openReadingPipe(1, reinterpret_cast<const uint8_t*>(address)); // reading pipe address
     nrf24.stopListening(); // default as transmitter
 }
-UARTCommunication::UARTCommunication(const HardwareSerial* serial_): serial(serial_)
+UARTCommunication::UARTCommunication(HardwareSerial* serial_): serial(serial_)
 {
     serial->begin(9600);
     if (!(*serial))
@@ -226,7 +227,7 @@ bool RadioCommunication::ping()
     }
 
     nrf24.read(resp, resp_len);
-    const bool correct_response = (std::strncmp(reinterpret_cast<const char *>(resp), "PING", resp_len-1) == 0);
+    const bool correct_response = (strncmp(reinterpret_cast<const char *>(resp), "PING", resp_len-1) == 0);
 
     if (!correct_response)
     {
@@ -239,7 +240,7 @@ bool RadioCommunication::ping()
 }
 bool UARTCommunication::ping()
 {
-    unsigned char msg[] = "PING";
+    const char msg[] = "PING";
     serial->print(msg);
 
     constexpr unsigned char resp_len = 5;
@@ -257,7 +258,7 @@ bool UARTCommunication::ping()
 
     serial->readBytes(resp, resp_len-1);
     resp[resp_len-1] = 0;  // Serial doesn't use null-terminator
-    const bool correct_response = (std::strncmp(reinterpret_cast<const char *>(resp), "PING", resp_len-1) == 0);
+    const bool correct_response = (strncmp(reinterpret_cast<const char *>(resp), "PING", resp_len-1) == 0);
 
     if (!correct_response)
     {

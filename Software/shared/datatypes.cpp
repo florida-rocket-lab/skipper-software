@@ -27,16 +27,17 @@ namespace  // anonymous namespace means function is declared only in translation
 Pair<UniquePtr<char[]>, unsigned int> Vector3::serialize() const
 {
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
-    buffer_info.first = make_unique<char[]>(Vector3::BUFFER_SIZE);
+    buffer_info.first = make_unique<char>(Vector3::BUFFER_SIZE);
     buffer_info.second = Vector3::BUFFER_SIZE;
 
-    compat_memcpy(buffer_info.first.get(), this->data, buffer_info.second);
+    compat_memcpy(reinterpret_cast<char*>(buffer_info.first.get()), reinterpret_cast<const char*>(this->data), buffer_info.second);
+
 
     return buffer_info;
 }
 void Vector3::deserialize(const UniquePtr<char[]>& buffer)
 {
-    compat_memcpy(this->data, buffer.get(), Vector3::BUFFER_SIZE);
+    compat_memcpy(reinterpret_cast<char*>(this->data), reinterpret_cast<const char*>(buffer.get()), Vector3::BUFFER_SIZE);
 }
 // End: Vector3 Serializer and Deserializer
 
@@ -56,7 +57,7 @@ Pair<UniquePtr<char[]>, unsigned int> IMUData::serialize() const
 
     // buffer_info.second = IMUData::BUFFER_SIZE;
     buffer_info.second = acc_info.second + gyr_info.second;
-    buffer_info.first = make_unique<char[]>(buffer_info.second);
+    buffer_info.first = make_unique<char>(buffer_info.second);
 
     compat_memcpy(buffer_info.first.get(), acc_info.first.get(), acc_info.second);
     compat_memcpy(buffer_info.first.get() + acc_info.second, gyr_info.first.get(), gyr_info.second);
@@ -65,8 +66,8 @@ Pair<UniquePtr<char[]>, unsigned int> IMUData::serialize() const
 }
 void IMUData::deserialize(const UniquePtr<char[]> &buffer)
 {
-    UniquePtr<char[]> acc_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
-    UniquePtr<char[]> gyr_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> acc_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> gyr_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
 
     compat_memcpy(acc_buffer.get(), buffer.get(), Vector3::BUFFER_SIZE);
     compat_memcpy(gyr_buffer.get(), buffer.get() + Vector3::BUFFER_SIZE, Vector3::BUFFER_SIZE);
@@ -89,7 +90,7 @@ Pair<UniquePtr<char[]>, unsigned int> StateSpace::serialize() const
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
 
     buffer_info.second = i_pos_info.second + b_vel_info.second + tb_rot_info.second + b_ang_vel_info.second;
-    buffer_info.first = make_unique<char[]>(buffer_info.second);
+    buffer_info.first = make_unique<char>(buffer_info.second);
 
     unsigned int buffer_offset = 0;
 
@@ -102,10 +103,10 @@ Pair<UniquePtr<char[]>, unsigned int> StateSpace::serialize() const
 }
 void StateSpace::deserialize(const UniquePtr<char[]> &buffer)
 {
-    UniquePtr<char[]> i_pos_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
-    UniquePtr<char[]> b_vel_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
-    UniquePtr<char[]> tb_rot_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
-    UniquePtr<char[]> b_ang_vel_buffer = make_unique<char[]>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> i_pos_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> b_vel_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> tb_rot_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
+    UniquePtr<char[]> b_ang_vel_buffer = make_unique<char>(Vector3::BUFFER_SIZE);
 
     unsigned int buffer_offset = 0;
     read_from_buffer(i_pos_buffer, buffer, Vector3::BUFFER_SIZE, buffer_offset);
@@ -128,16 +129,16 @@ void StateSpace::deserialize(const UniquePtr<char[]> &buffer)
 Pair<UniquePtr<char[]>, unsigned int> Control::serialize() const
 {
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
-    buffer_info.first = make_unique<char[]>(Control::BUFFER_SIZE);
+    buffer_info.first = make_unique<char>(Control::BUFFER_SIZE);
     buffer_info.second = Control::BUFFER_SIZE;
 
-    compat_memcpy(buffer_info.first.get(), this->data, buffer_info.second);
+    compat_memcpy(buffer_info.first.get(), reinterpret_cast<const char*>(this->data), Control::BUFFER_SIZE);
 
     return buffer_info;
 }
 void Control::deserialize(const UniquePtr<char[]> &buffer)
 {
-    compat_memcpy(this->data, buffer.get(), Control::BUFFER_SIZE);
+    compat_memcpy(reinterpret_cast<char*>(this->data), buffer.get(), Control::BUFFER_SIZE);
 }
 // End: Control Serializer and Deserializer
 
@@ -160,7 +161,7 @@ Pair<UniquePtr<char[]>, unsigned int> TelemetryPacket::serialize() const
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
 
     buffer_info.second = imu_data_info.second + actual_state_space_info.second + reference_state_space_info.second + look_ahead_state_space_info.second + base_point_state_space_info.second + target_control_info.second + actual_control_info.second + derivative_control_info.second + base_point_control_info.second;
-    buffer_info.first = make_unique<char[]>(buffer_info.second);
+    buffer_info.first = make_unique<char>(buffer_info.second);
 
     // Write serialized property data to buffer
     unsigned int buffer_offset = 0;
@@ -179,17 +180,17 @@ Pair<UniquePtr<char[]>, unsigned int> TelemetryPacket::serialize() const
 void TelemetryPacket::deserialize(const UniquePtr<char[]> &buffer)
 {
     // Make buffer for each property
-    UniquePtr<char[]> imu_data_buffer = make_unique<char[]>(IMUData::BUFFER_SIZE);
+    UniquePtr<char[]> imu_data_buffer = make_unique<char>(IMUData::BUFFER_SIZE);
 
-    UniquePtr<char[]> actual_state_space_buffer = make_unique<char[]>(StateSpace::BUFFER_SIZE);
-    UniquePtr<char[]> reference_state_space_buffer = make_unique<char[]>(StateSpace::BUFFER_SIZE);
-    UniquePtr<char[]> look_ahead_state_space_buffer = make_unique<char[]>(StateSpace::BUFFER_SIZE);
-    UniquePtr<char[]> base_point_state_space_buffer = make_unique<char[]>(StateSpace::BUFFER_SIZE);
+    UniquePtr<char[]> actual_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
+    UniquePtr<char[]> reference_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
+    UniquePtr<char[]> look_ahead_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
+    UniquePtr<char[]> base_point_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
 
-    UniquePtr<char[]> target_control_buffer = make_unique<char[]>(Control::BUFFER_SIZE);
-    UniquePtr<char[]> actual_control_buffer = make_unique<char[]>(Control::BUFFER_SIZE);
-    UniquePtr<char[]> derivative_control_buffer = make_unique<char[]>(Control::BUFFER_SIZE);
-    UniquePtr<char[]> base_point_control_buffer = make_unique<char[]>(Control::BUFFER_SIZE);
+    UniquePtr<char[]> target_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
+    UniquePtr<char[]> actual_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
+    UniquePtr<char[]> derivative_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
+    UniquePtr<char[]> base_point_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
 
     // Copy and split the buffer into its corresponding property buffer
     unsigned int buffer_offset = 0;
@@ -227,7 +228,7 @@ Pair<UniquePtr<char[]>, unsigned int> Message<packet_size>::serialize() const
 {
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
     buffer_info.second = Message<packet_size>::BUFFER_SIZE;
-    buffer_info.first = make_unique<char[]>(buffer_info.second);
+    buffer_info.first = make_unique<char>(buffer_info.second);
 
     compat_memcpy(buffer_info.first.get(), this->data, Message<packet_size>::BUFFER_SIZE);
 
@@ -249,7 +250,7 @@ Pair<UniquePtr<char[]>, unsigned int> CommandPacket::serialize() const
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
 
     buffer_info.second = message_info.second;
-    buffer_info.first = make_unique<char[]>(buffer_info.second);
+    buffer_info.first = make_unique<char>(buffer_info.second);
 
     unsigned int buffer_offset = 0;
     add_to_buffer(buffer_info.first, message_info, buffer_offset);
@@ -258,7 +259,7 @@ Pair<UniquePtr<char[]>, unsigned int> CommandPacket::serialize() const
 }
 void CommandPacket::deserialize(const UniquePtr<char[]>& buffer)
 {
-    UniquePtr<char[]> message_buffer = make_unique<char[]>(Message<MESSAGE_SIZE>::BUFFER_SIZE);
+    UniquePtr<char[]> message_buffer = make_unique<char>(Message<MESSAGE_SIZE>::BUFFER_SIZE);
 
     unsigned int buffer_offset = 0;
     read_from_buffer(message_buffer, buffer, IMUData::BUFFER_SIZE, buffer_offset);

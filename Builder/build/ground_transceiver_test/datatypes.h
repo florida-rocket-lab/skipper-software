@@ -17,7 +17,7 @@ struct Vector3 : public BaseSerializable
     Vector3() = default;
     Vector3(double x_, double y_, double z_): data{x_, y_, z_} {};
     explicit Vector3(double* data_): data{data_[0], data_[1], data_[2]} {};
-    explicit Vector3(const UniquePtr<double[]>& data_): data{data_[0], data_[1], data_[2]} {};
+    explicit Vector3(const UniquePtr<double>& data_): data{data_.get()[0], data_.get()[1], data_.get()[2]} {}
     explicit Vector3(UniquePtr<char[]>&& buffer);  // construct from buffer
 
     // INTERNAL DATA
@@ -35,20 +35,20 @@ struct Vector3 : public BaseSerializable
     void set_data(double x_, double y_, double z_)
     {
         this->data[0] = x_;
-        this->data[0] = y_;
-        this->data[0] = z_;
-    }
+        this->data[1] = y_;
+        this->data[2] = z_;
+    };
     void set_data(const double* data_)
     {
         this->data[0] = data_[0];
         this->data[1] = data_[1];
         this->data[2] = data_[2];
     };
-    void set_data(const UniquePtr<double[]>& data_)
+    void set_data(const UniquePtr<double>& data_)
     {
-        this->data[0] = data_[0];
-        this->data[1] = data_[1];
-        this->data[2] = data_[2];
+    this->data[0] = data_.get()[0];
+    this->data[1] = data_.get()[1];
+    this->data[2] = data_.get()[2];
     };
     void set_data(const Vector3& data_)
     {
@@ -138,7 +138,7 @@ struct Control : public BaseSerializable
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 4 * sizeof(double);
-    [[nodiscard]] Pair::<UniquePtr<char[]>, unsigned int> serialize() const override;
+    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
     void deserialize(const UniquePtr<char[]>& buffer) override;
 
     // MUTATORS
@@ -171,45 +171,6 @@ struct Control : public BaseSerializable
         this->data[3] = data_.tauRCS;
     };
 };
-
-struct TelemetryPacket : public BaseSerializable
-{
-    // CONSTRUCTORS
-    TelemetryPacket() = default;
-    explicit TelemetryPacket(UniquePtr<char[]>&& buffer);  // construct from buffer
-    TelemetryPacket(double* data_, UniquePtr<char[]>& stdout_, UniquePtr<char[]>& stderr_):
-        imu_data{data_}, actual_state_space{data_ + StateSpace::BUFFER_SIZE/sizeof(double)},
-        reference_state_space{data_ + 2*StateSpace::BUFFER_SIZE/sizeof(double)}, look_ahead_state_space{data_ + 3*StateSpace::BUFFER_SIZE/sizeof(double)},
-
-        base_point_state_space{data_ + 4*StateSpace::BUFFER_SIZE/sizeof(double)},
-        target_control{data_ + 5*StateSpace::BUFFER_SIZE/sizeof(double)}, actual_control{data_ + (5*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE)/sizeof(double)},
-        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)}
-
-        stdout(Move(stdout_)), stderr(Move(stderr_))
-        {};
-
-    // INTERNAL DATA
-    IMUData imu_data{};
-
-    StateSpace actual_state_space{};
-    StateSpace reference_state_space{};
-    StateSpace look_ahead_state_space{};
-    StateSpace base_point_state_space{};
-
-    Control target_control{};
-    Control actual_control{};
-    Control derivative_control{};
-    Control base_point_control{};
-
-    Message<256> stdout;
-    Message<256> stderr;
-
-    // SERIALIZERS
-    static constexpr unsigned int BUFFER_SIZE = IMUData::BUFFER_SIZE + 4 * StateSpace::BUFFER_SIZE + 4 * Control::BUFFER_SIZE;
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
-};
-
 template<unsigned int packet_size>
 struct Message : public BaseSerializable
 {
@@ -225,6 +186,52 @@ struct Message : public BaseSerializable
     void deserialize(const UniquePtr<char[]>& buffer) override;
 };
 
+struct TelemetryPacket : public BaseSerializable
+{
+    // CONSTRUCTORS
+    TelemetryPacket() = default;
+    explicit TelemetryPacket(UniquePtr<char[]>&& buffer);  // construct from buffer
+
+    TelemetryPacket(double* data_, UniquePtr<char[]>& out_, UniquePtr<char[]>& err_) :
+        imu_data{data_},
+         actual_state_space{data_ + StateSpace::BUFFER_SIZE/sizeof(double)},
+        reference_state_space{data_ + 2*StateSpace::BUFFER_SIZE/sizeof(double)}, 
+        look_ahead_state_space{data_ + 3*StateSpace::BUFFER_SIZE/sizeof(double)},
+        base_point_state_space{data_ + 4*StateSpace::BUFFER_SIZE/sizeof(double)},
+        target_control{data_ + 5*StateSpace::BUFFER_SIZE/sizeof(double)},
+        actual_control{data_ + (5*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE)/sizeof(double)},
+        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, 
+        base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)},
+        out_stream(Move(out_)), err_stream(Move(err_)) 
+        {};
+
+    // INTERNAL DATA
+    IMUData imu_data{};
+
+    StateSpace actual_state_space{};
+    StateSpace reference_state_space{};
+    StateSpace look_ahead_state_space{};
+    StateSpace base_point_state_space{};
+
+    Control target_control{};
+    Control actual_control{};
+    Control derivative_control{};
+    Control base_point_control{};
+
+    Message<256> out_stream;
+    Message<256> err_stream;
+
+    // SERIALIZERS
+    static constexpr unsigned int BUFFER_SIZE = 
+    IMUData::BUFFER_SIZE +
+    4 * StateSpace::BUFFER_SIZE +
+    4 * Control::BUFFER_SIZE;
+
+    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>& buffer) override;
+};
+
+
 struct CommandPacket : public BaseSerializable
 {
     // CONSTRUCTORS
@@ -235,7 +242,7 @@ struct CommandPacket : public BaseSerializable
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = Message<MESSAGE_SIZE>::BUFFER_SIZE;
-    [[nodiscard]] Pair::<UniquePtr<char[]>, unsigned int> serialize() const override;
+    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
     void deserialize(const UniquePtr<char[]>& buffer) override;
 };
 

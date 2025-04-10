@@ -1,11 +1,13 @@
 #ifndef ARDUINO_COMPAT_H
 #define ARDUINO_COMPAT_H
+#include <cstddef> 
 
 //std::Pair
 template <typename T1, typename T2>
 struct Pair {
     T1 first;
     T2 second;
+    Pair() : first(), second() {}
     Pair(T1 f, T2 s) : first(f), second(s) {}
 };
 
@@ -21,8 +23,9 @@ T&& Forward(T& t) {
 }
 
 // std::memcpy    (raw byte copy)
-inline void compat_memcpy(char* dest, const char* src, size_t count) {
-    for (size_t i = 0; i < count; ++i) {
+template <typename T>
+inline void compat_memcpy(T* dest, const T* src, std::size_t count) {
+    for (std::size_t i = 0; i < count; ++i) {
         dest[i] = src[i];
     }
 }
@@ -31,7 +34,8 @@ inline void compat_memcpy(char* dest, const char* src, size_t count) {
 
 
 
-// std::unique_ptr  (i think this works)
+// std::unique_ptr  
+// for single objects
 template <typename T>
 class UniquePtr {
 private:
@@ -47,24 +51,16 @@ public:
         ptr = nullptr;
         return temp;
     }
-    T& operator[](size_t index) {
-        return ptr[index];
-    }
-    
-    const T& operator[](size_t index) const {
-        return ptr[index];
-    }
-    
 
     void reset(T* p = nullptr) {
         delete ptr;
         ptr = p;
     }
 
-    UniquePtr(UniquePtr&& other) : ptr(other.ptr) {
-        other.ptr = nullptr;
-    }
+    T& operator*() const { return *ptr; }
+    T* operator->() const { return ptr; }
 
+    UniquePtr(UniquePtr&& other) : ptr(other.ptr) { other.ptr = nullptr; }
     UniquePtr& operator=(UniquePtr&& other) {
         if (this != &other) {
             delete ptr;
@@ -78,12 +74,50 @@ public:
     UniquePtr& operator=(const UniquePtr&) = delete;
 };
 
+// for arrays 
+template <typename T>
+class UniquePtr<T[]> {
+private:
+    T* ptr;
+public:
+    explicit UniquePtr(T* p = nullptr) : ptr(p) {}
+    ~UniquePtr() { delete[] ptr; }
+
+    T* get() const { return ptr; }
+
+    T& operator[](size_t index) { return ptr[index]; }
+    const T& operator[](size_t index) const { return ptr[index]; }
+
+    T* release() {
+        T* temp = ptr;
+        ptr = nullptr;
+        return temp;
+    }
+
+    void reset(T* p = nullptr) {
+        delete[] ptr;
+        ptr = p;
+    }
+
+    UniquePtr(UniquePtr&& other) : ptr(other.ptr) { other.ptr = nullptr; }
+    UniquePtr& operator=(UniquePtr&& other) {
+        if (this != &other) {
+            delete[] ptr;
+            ptr = other.ptr;
+            other.ptr = nullptr;
+        }
+        return *this;
+    }
+
+    UniquePtr(const UniquePtr&) = delete;
+    UniquePtr& operator=(const UniquePtr&) = delete;
+};
 
 
 // std::make_unique 
 template <typename T>
-UniquePtr<T> make_unique(size_t size) {
-    return UniquePtr<T>(new T[size]());
+UniquePtr<T[]> make_unique(std::size_t size) {
+    return UniquePtr<T[]>(new T[size]());
 }
 
 #endif // ARDUINO_COMPAT_H
