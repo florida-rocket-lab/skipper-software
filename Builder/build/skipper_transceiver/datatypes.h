@@ -5,15 +5,18 @@
 #include "arduino_compat.h"
 #include "constants.h"
 
-struct BaseSerializable
-{
-    virtual Pair<UniquePtr<char[]>, unsigned int> serialize() const = 0;
-    virtual void deserialize(const UniquePtr<char[]>& buffer) = 0;
-};
+class BaseSerializable {
+    public:
+        virtual ~BaseSerializable() = default;
+        virtual Pair<UniquePtr<char[]>, unsigned int> serialize() const = 0;
+        virtual void deserialize(const UniquePtr<char[]>& buffer) = 0;
+ };
 
 struct Vector3 : public BaseSerializable
 {
+    
     // CONSTRUCTORS
+    virtual ~Vector3() override = default;
     Vector3() = default;
     Vector3(double x_, double y_, double z_): data{x_, y_, z_} {};
     explicit Vector3(double* data_): data{data_[0], data_[1], data_[2]} {};
@@ -61,6 +64,7 @@ struct Vector3 : public BaseSerializable
 struct IMUData : public BaseSerializable
 {
     // CONSTRUCTORS
+    virtual ~IMUData() override = default;
     IMUData() = default;
     explicit IMUData(UniquePtr<char[]>&& buffer);  // construct from buffer
     explicit IMUData(double* data_): acc{data_[0], data_[1], data_[2]}, gyr{data_[3], data_[4], data_[5]} {};
@@ -84,6 +88,7 @@ struct IMUData : public BaseSerializable
 struct StateSpace : public BaseSerializable
 {
     // CONSTRUCTORS
+    virtual ~StateSpace() override = default;
     StateSpace() = default;
     explicit StateSpace(UniquePtr<char[]>&& buffer);  // construct from buffer
     explicit StateSpace(double* data_):
@@ -116,6 +121,8 @@ struct StateSpace : public BaseSerializable
 
 struct Control : public BaseSerializable
 {
+    virtual ~Control() override = default;
+
     // INDICES
     static constexpr unsigned int THRUST_IDX = 0;
     static constexpr unsigned int PRIMARY_GIMBAL_IDX = 1;
@@ -189,6 +196,7 @@ struct Message : public BaseSerializable
 struct TelemetryPacket : public BaseSerializable
 {
     // CONSTRUCTORS
+    virtual ~TelemetryPacket() override = default;
     TelemetryPacket() = default;
     explicit TelemetryPacket(UniquePtr<char[]>&& buffer);  // construct from buffer
 
@@ -235,6 +243,7 @@ struct TelemetryPacket : public BaseSerializable
 struct CommandPacket : public BaseSerializable
 {
     // CONSTRUCTORS
+    virtual ~CommandPacket() override = default;
     CommandPacket() = default;
     explicit CommandPacket(UniquePtr<char[]>&& buffer);
 

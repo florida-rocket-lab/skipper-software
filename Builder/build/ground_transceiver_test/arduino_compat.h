@@ -117,7 +117,8 @@ public:
 // std::make_unique 
 template <typename T>
 UniquePtr<T[]> make_unique(std::size_t size) {
-    return UniquePtr<T[]>(new T[size]());
+    return UniquePtr<T[]>(new T[size]()); 
 }
+
 
 #endif // ARDUINO_COMPAT_H

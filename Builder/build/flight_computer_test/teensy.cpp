@@ -7,6 +7,6 @@ void Teensy::receive_command()
 }
 void Teensy::send_telemetry()
 {
-    this->nano_pipe.send(this->telemetry_buffer);
+    this->nano_pipe.send(&this->telemetry_buffer);
 }
 

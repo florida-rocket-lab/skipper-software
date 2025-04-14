@@ -13,7 +13,7 @@ public:
 
 private:
     UniquePtr<CommandPacket> command_buffer;
-    <TelemetryPacket> telemetry_buffer;
+    TelemetryPacket telemetry_buffer;
     RTX3Communication nano_pipe{};
 };
 
