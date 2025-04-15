@@ -1,10 +1,28 @@
 #include "communication.h"
 
-RadioCommunication::RadioCommunication(unsigned char ce_pin, unsigned char csn_pin, const uint8_t address[6], unsigned char rf_channel)
-    : BaseCommunication(), nrf24(ce_pin, csn_pin)
+
+
+#if defined(__AVR_ATmega328P__)
+RTX1Communication::RTX1Communication() : UARTCommunication(&Serial) {}  // Uno
+#elif defined(__IMXRT1062__)
+RTX1Communication::RTX1Communication() : UARTCommunication(&Serial1) {}  // Teensy
+#else
+RTX1Communication::RTX1Communication() : UARTCommunication(nullptr) {}
+#endif
+
+
+RadioCommunication::RadioCommunication(unsigned char ce_pin, unsigned char csn_pin, const uint8_t address_[6], unsigned char rf_channel_)
+    : BaseCommunication(),
+      nrf24(ce_pin, csn_pin),
+      address(address_),
+      rf_channel(rf_channel_)
 {
+    // Intentionally left blank - call init() manually after Serial.begin()
+}
+
+void RadioCommunication::init() {
     if (!nrf24.begin()) {
-        this->status = Status::RADIO_INIT_FAILURE;
+        status = Status::RADIO_INIT_FAILURE;
         return;
     }
     nrf24.setChannel(rf_channel);
@@ -14,6 +32,8 @@ RadioCommunication::RadioCommunication(unsigned char ce_pin, unsigned char csn_p
     nrf24.openReadingPipe(1, address);
     nrf24.stopListening();
 }
+
+
 
 UARTCommunication::UARTCommunication(HardwareSerial* serial_) : serial(serial_)
 {
@@ -32,9 +52,6 @@ USBCommunication::USBCommunication()
     : UARTCommunication(nullptr)
 #endif
 {}
-
-RTX1Communication::RTX1Communication() : UARTCommunication(&Serial1) {}
-RTX3Communication::RTX3Communication() : UARTCommunication(&Serial3) {}
 
 bool RadioCommunication::alive() const {
     return nrf24.available();
@@ -71,8 +88,8 @@ void UARTCommunication::send(UniquePtr<BaseSerializable> data, uint8_t receiver_
     send(data.get(), receiver_id, sender_id, command_id);
 }
 
-UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
-    return UniquePtr<BaseSerializable>{nullptr};
+UniquePtr<BaseSerializable> RadioCommunication::receive(size_t buffer_size) {
+    return UniquePtr<BaseSerializable>(nullptr);
 }
 
 
@@ -119,10 +136,14 @@ UniquePtr<T> UARTCommunication::receive() {
     return UniquePtr<T>{obj};
 }
 
+UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
+    return UniquePtr<BaseSerializable>(nullptr);
+}
+
 template <typename T>
 UniquePtr<T> RadioCommunication::receive() {
     static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow risk");
-    
+
 
     // 1. Wait for start byte 0xAA
     uint8_t start_byte;

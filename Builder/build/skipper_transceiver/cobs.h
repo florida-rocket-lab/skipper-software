@@ -23,8 +23,6 @@
 #ifndef SKIPPER_COBS_H
 #define SKIPPER_COBS_H
 
-#include <cstddef>
-#include <cstdint>
 #include "arduino_compat.h"
 
 // max overhead = input size + 1

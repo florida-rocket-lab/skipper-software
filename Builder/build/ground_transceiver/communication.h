@@ -42,6 +42,7 @@ public:
 
 
     virtual UniquePtr<BaseSerializable> receive(size_t buffer_size) = 0;
+    
 
     Status get_status() { return this->status; }
 
@@ -52,7 +53,7 @@ protected:
 class RadioCommunication : virtual public BaseCommunication {
 public:
     RadioCommunication(unsigned char ce_pin, unsigned char csn_pin, const uint8_t address[6], unsigned char rf_channel = 108);
-
+    void init();
     bool ping() override;
     [[nodiscard]] bool alive() const override;
 
@@ -60,11 +61,16 @@ public:
     void send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) override;
     
 
+    UniquePtr<BaseSerializable> receive(size_t buffer_size) override;
+
+
     template <typename T>
     UniquePtr<T> receive();
 
 private:
     mutable RF24 nrf24;
+    const uint8_t* address;
+    unsigned char rf_channel;
 };
 
 class UARTCommunication : virtual public BaseCommunication {

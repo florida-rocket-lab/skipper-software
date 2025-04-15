@@ -7,16 +7,20 @@
 class Uno
 {
 public:
-    Uno() = default;
+    Uno();
     void send_to_sky();
     void receive_from_sky();
+    void init_radio();
+    Status get_radio_status() const { return nano_pipe.get_status(); }
+
+
 
 private:
     UniquePtr<CommandPacket> command_buffer;
     UniquePtr<TelemetryPacket> telemetry_buffer;
 
     USBCommunication terminal_pipe{};
-    RadioCommunication nano_pipe{UNO_CE_PIN, UNO_CSN_PIN};
+    RadioCommunication nano_pipe;
 };
 
 
