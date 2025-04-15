@@ -49,11 +49,11 @@
 #define CMD_IMU_DATA          101
 #define CMD_TELEMETRY         102
 #define CMD_COMMAND_PACKET    103
-#define CMD_STATE_ESTIMATE    104
+#define CMD_STATE_ESTIMATE    104 
 
 
 
-#define MAX_PACKET_SIZE 64  // might need to adjust based on largest serialized+encoded message
+#define MAX_PACKET_SIZE 576  // might need to adjust based on largest serialized+encoded message
 
 
 

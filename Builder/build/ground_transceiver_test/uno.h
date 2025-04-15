@@ -13,7 +13,7 @@ public:
 
 private:
     UniquePtr<CommandPacket> command_buffer;
-    <TelemetryPacket> telemetry_buffer;
+    UniquePtr<TelemetryPacket> telemetry_buffer;
 
     USBCommunication terminal_pipe{};
     RadioCommunication nano_pipe{UNO_CE_PIN, UNO_CSN_PIN};

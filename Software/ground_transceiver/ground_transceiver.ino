@@ -1,10 +1,11 @@
 #include "uno.h"
 
 // Only put setup and loop code in the .ino files; any control flow should happen in the .cpp and .h files.
-Uno me{};
 void setup()
 {
-
+    Serial.begin(9600);
+    while (!Serial);
+    Serial.println("UNO: Setup done");
 }
 void loop()
 {

@@ -75,6 +75,8 @@ UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
     return UniquePtr<BaseSerializable>{nullptr};
 }
 
+
+
 template <typename T>
 UniquePtr<T> UARTCommunication::receive() {
     static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow risk");
@@ -116,6 +118,56 @@ UniquePtr<T> UARTCommunication::receive() {
     auto obj = new T(Move(decoded_buf));
     return UniquePtr<T>{obj};
 }
+
+template <typename T>
+UniquePtr<T> RadioCommunication::receive() {
+    static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow risk");
+    
+
+    // 1. Wait for start byte 0xAA
+    uint8_t start_byte;
+    while (true) {
+        if (!nrf24.available()) continue;
+
+        nrf24.read(&start_byte, 1);
+        if (start_byte == 0xAA) break;
+    }
+
+    // 2. Wait for rest of the header (4 bytes: length, receiver_id, sender_id, command_id)
+    while (!nrf24.available()) ;
+    uint8_t header[4];
+    nrf24.read(header, 4);
+    uint8_t length      = header[0];
+    uint8_t receiver_id = header[1];
+    uint8_t sender_id   = header[2];
+    uint8_t command_id  = header[3];
+
+    (void)receiver_id;
+    (void)sender_id;
+    (void)command_id;
+
+    // 3. Wait for payload + CRC
+    size_t payload_len = length - 6;  // total - start - 4 header - crc
+    char raw_payload[MAX_PACKET_SIZE];
+    while (!nrf24.available()) ;
+    nrf24.read(raw_payload, payload_len + 1); // payload + crc
+
+    // 4. CRC check
+    uint8_t expected_crc = static_cast<uint8_t>(raw_payload[payload_len]);
+    uint8_t actual_crc   = compute_crc8(raw_payload, payload_len);
+    if (actual_crc != expected_crc) {
+        this->status = Status::RADIO_WRONG_HANDSHAKE_FAILURE;
+        return UniquePtr<T>{nullptr};
+    }
+
+    // 5. Decode + Deserialize
+    size_t decoded_len;
+    auto decoded_buf = cobs_decode(raw_payload, payload_len, decoded_len);
+    auto obj = new T(Move(decoded_buf));
+    return UniquePtr<T>{obj};
+}
+
+
 
 bool RadioCommunication::ping() {
     unsigned char msg[] = "PING";
@@ -164,3 +216,7 @@ bool UARTCommunication::ping() {
     status = Status::NOMINAL;
     return true;
 }
+
+
+template UniquePtr<CommandPacket> RadioCommunication::receive<CommandPacket>();
+template UniquePtr<TelemetryPacket> RadioCommunication::receive<TelemetryPacket>();

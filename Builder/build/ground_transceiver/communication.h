@@ -6,8 +6,6 @@
 #include "constants.h"
 #include "cobs.h"
 #include "packet.h"
-#include <type_traits>
-#include <cstring>
 #include <Arduino.h>
 #include <SPI.h>
 #include <nRF24L01.h>

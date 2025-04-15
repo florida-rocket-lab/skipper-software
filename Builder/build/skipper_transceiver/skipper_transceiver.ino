@@ -4,7 +4,9 @@
 Nano me{};
 void setup()
 {
-
+    Serial.begin(9600);
+    while (!Serial);
+    Serial.println("NANO: Setup done");
 }
 void loop()
 {
