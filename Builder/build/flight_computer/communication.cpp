@@ -45,11 +45,9 @@ bool UARTCommunication::alive() const {
 
 void RadioCommunication::send(const BaseSerializable* data) {
     auto [buffer, length] = data->serialize();
-    if (!alive()) {
-        status = Status::RADIO_AVAILABILITY_FAILURE;
-        return;
-    }
-    nrf24.write(buffer.get(), length);
+    size_t encoded_len;
+    auto encoded = cobs_encode(buffer.get(), length, encoded_len);
+    nrf24.write(encoded.get(), encoded_len);
 }
 
 void RadioCommunication::send(UniquePtr<BaseSerializable> data) {
@@ -58,7 +56,9 @@ void RadioCommunication::send(UniquePtr<BaseSerializable> data) {
 
 void UARTCommunication::send(const BaseSerializable* data) {
     auto [buffer, length] = data->serialize();
-    serial->write(buffer.get(), length);
+    size_t encoded_len;
+    auto encoded = cobs_encode(buffer.get(), length, encoded_len);
+    serial->write(encoded.get(), encoded_len);
 }
 
 void UARTCommunication::send(UniquePtr<BaseSerializable> data) {
@@ -67,6 +67,30 @@ void UARTCommunication::send(UniquePtr<BaseSerializable> data) {
 
 UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
     return UniquePtr<BaseSerializable>{nullptr};
+}
+
+template <typename T>
+UniquePtr<T> UARTCommunication::receive() {
+
+    static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow risk");
+
+    char raw_buf[MAX_PACKET_SIZE];
+    size_t len = T::BUFFER_SIZE + 2;
+
+    unsigned long start = millis();
+    while ((size_t)serial->available() < len) {
+        if (millis() - start > MESSAGE_TIMEOUT_MS) {
+            this->status = Status::SERIAL_AVAILABILITY_FAILURE;
+            return UniquePtr<T>{nullptr};
+        }
+    }
+
+    serial->readBytes(raw_buf, len);
+
+    size_t decoded_len;
+    auto decoded_buf = cobs_decode(raw_buf, len, decoded_len);
+    auto obj = new T(Move(decoded_buf));
+    return UniquePtr<T>{obj};
 }
 
 bool RadioCommunication::ping() {

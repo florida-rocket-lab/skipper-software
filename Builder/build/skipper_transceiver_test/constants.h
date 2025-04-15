@@ -39,4 +39,9 @@
 #define TEENSY_ESC2_PIN 7     // Same thing from above applies here, saying that this controls Servo 2; this is the other propeller.
 #define TEENSY_BUZZER_PIN 11  // Controls Buzzer
 
+#define MAX_PACKET_SIZE 64  // might need to adjust based on largest serialized+encoded message
+
+
+
+
 #endif //SKIPPER_CONSTANTS_H

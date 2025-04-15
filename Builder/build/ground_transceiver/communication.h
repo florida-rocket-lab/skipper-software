@@ -4,6 +4,7 @@
 #include "datatypes.h"
 #include "arduino_compat.h"
 #include "constants.h"
+#include "cobs.h"
 #include <type_traits>
 #include <cstring>
 #include <Arduino.h>
