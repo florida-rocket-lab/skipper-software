@@ -2,25 +2,30 @@
 #define ARDUINO_COMPAT_H
 #include <cstddef> 
 
-//std::Pair
-template <typename T1, typename T2>
-struct Pair {
-    T1 first;
-    T2 second;
-    Pair() : first(), second() {}
-    Pair(T1 f, T2 s) : first(f), second(s) {}
-};
+
 
 // std::Move 
 template <typename T>
 T&& Move(T& t) {
     return static_cast<T&&>(t);
 }
+
+
 // std::Forward 
 template <typename T>
 T&& Forward(T& t) {
     return static_cast<T&&>(t);
 }
+
+//std::Pair
+template <typename T1, typename T2>
+struct Pair {
+    T1 first;
+    T2 second;
+    Pair() : first(), second() {}
+    Pair(T1&& f, T2&& s) : first(Move(f)), second(Move(s)) {}
+};
+
 
 // std::memcpy    (raw byte copy)
 template <typename T>

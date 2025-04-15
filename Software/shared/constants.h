@@ -39,7 +39,22 @@
 #define TEENSY_ESC2_PIN 7     // Same thing from above applies here, saying that this controls Servo 2; this is the other propeller.
 #define TEENSY_BUZZER_PIN 11  // Controls Buzzer
 
+
+//communication IDs 
+#define GROUND_STATION_ID     1
+#define FLIGHT_COMPUTER_ID    2
+#define PAYLOAD_CONTROLLER_ID 3
+
+// command IDs 
+#define CMD_IMU_DATA          101
+#define CMD_TELEMETRY         102
+#define CMD_COMMAND_PACKET    103
+#define CMD_STATE_ESTIMATE    104
+
+
+
 #define MAX_PACKET_SIZE 64  // might need to adjust based on largest serialized+encoded message
+
 
 
 

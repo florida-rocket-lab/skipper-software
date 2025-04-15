@@ -5,6 +5,7 @@
 #include "arduino_compat.h"
 #include "constants.h"
 #include "cobs.h"
+#include "packet.h"
 #include <type_traits>
 #include <cstring>
 #include <Arduino.h>
@@ -22,6 +23,15 @@ enum class Status : unsigned char {
     SERIAL_WRONG_HANDSHAKE_FAILURE
 };
 
+
+struct PacketHeader {
+    uint8_t start_byte = 0xAA;
+    uint8_t length;
+    uint8_t receiver_id;
+    uint8_t sender_id;
+    uint8_t command_id;
+};
+
 class BaseCommunication {
 public:
     BaseCommunication() = default;
@@ -29,8 +39,10 @@ public:
     virtual bool ping() = 0;
     [[nodiscard]] virtual bool alive() const = 0;
 
-    virtual void send(const BaseSerializable* data) = 0;
-    virtual void send(UniquePtr<BaseSerializable> data) = 0;
+    virtual void send(const BaseSerializable* data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) = 0;
+    virtual void send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) = 0;
+
+
     virtual UniquePtr<BaseSerializable> receive(size_t buffer_size) = 0;
 
     Status get_status() { return this->status; }
@@ -46,8 +58,9 @@ public:
     bool ping() override;
     [[nodiscard]] bool alive() const override;
 
-    void send(const BaseSerializable* data) override;
-    void send(UniquePtr<BaseSerializable> data) override;
+    void send(const BaseSerializable* data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) override;
+    void send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) override;
+    
 
     template <typename T>
     UniquePtr<T> receive();
@@ -62,8 +75,9 @@ public:
     bool ping() override;
     [[nodiscard]] bool alive() const override;
 
-    void send(const BaseSerializable* data) override;
-    void send(UniquePtr<BaseSerializable> data) override;
+    void send(const BaseSerializable* data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) override;
+    void send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) override;
+
 
     UniquePtr<BaseSerializable> receive(size_t) override;
 

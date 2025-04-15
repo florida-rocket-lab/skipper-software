@@ -262,7 +262,7 @@ void CommandPacket::deserialize(const UniquePtr<char[]>& buffer)
     UniquePtr<char[]> message_buffer = make_unique<char>(Message<MESSAGE_SIZE>::BUFFER_SIZE);
 
     unsigned int buffer_offset = 0;
-    read_from_buffer(message_buffer, buffer, IMUData::BUFFER_SIZE, buffer_offset);
+    read_from_buffer(message_buffer, buffer, Message<MESSAGE_SIZE>::BUFFER_SIZE, buffer_offset);
     this->message.deserialize(message_buffer);
 }
 

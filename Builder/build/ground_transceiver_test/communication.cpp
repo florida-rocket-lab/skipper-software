@@ -43,26 +43,32 @@ bool UARTCommunication::alive() const {
     return true;
 }
 
-void RadioCommunication::send(const BaseSerializable* data) {
+void RadioCommunication::send(const BaseSerializable* data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) {
+    auto [buffer, length] = data->serialize();
+
+    size_t encoded_len;
+
+    auto encoded = cobs_encode(buffer.get(), length, encoded_len);
+    auto [packet, packet_len] = wrap_packet(encoded.get(), encoded_len, receiver_id, sender_id, command_id);
+    nrf24.write(packet.get(), packet_len);
+}
+
+
+
+void RadioCommunication::send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) {
+    send(data.get(), receiver_id, sender_id, command_id);
+}
+
+void UARTCommunication::send(const BaseSerializable* data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) {
     auto [buffer, length] = data->serialize();
     size_t encoded_len;
     auto encoded = cobs_encode(buffer.get(), length, encoded_len);
-    nrf24.write(encoded.get(), encoded_len);
+    auto [packet, packet_len] = wrap_packet(encoded.get(), encoded_len, receiver_id, sender_id, command_id);
+    serial->write(packet.get(), packet_len);
 }
 
-void RadioCommunication::send(UniquePtr<BaseSerializable> data) {
-    send(data.get());
-}
-
-void UARTCommunication::send(const BaseSerializable* data) {
-    auto [buffer, length] = data->serialize();
-    size_t encoded_len;
-    auto encoded = cobs_encode(buffer.get(), length, encoded_len);
-    serial->write(encoded.get(), encoded_len);
-}
-
-void UARTCommunication::send(UniquePtr<BaseSerializable> data) {
-    send(data.get());
+void UARTCommunication::send(UniquePtr<BaseSerializable> data, uint8_t receiver_id, uint8_t sender_id, uint8_t command_id) {
+    send(data.get(), receiver_id, sender_id, command_id);
 }
 
 UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
@@ -71,24 +77,42 @@ UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
 
 template <typename T>
 UniquePtr<T> UARTCommunication::receive() {
-
     static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow risk");
 
-    char raw_buf[MAX_PACKET_SIZE];
-    size_t len = T::BUFFER_SIZE + 2;
-
-    unsigned long start = millis();
-    while ((size_t)serial->available() < len) {
-        if (millis() - start > MESSAGE_TIMEOUT_MS) {
-            this->status = Status::SERIAL_AVAILABILITY_FAILURE;
-            return UniquePtr<T>{nullptr};
-        }
+    // 1. Wait for start byte
+    while (true) {
+        if (serial->available() && serial->read() == 0xAA) break;
     }
 
-    serial->readBytes(raw_buf, len);
+    // 2. Read header (length, receiver_id, sender_id, command_id)
+    while (serial->available() < 4); // wait until header is ready
 
+    uint8_t length = serial->read(); // total length
+    uint8_t receiver_id = serial->read();
+    uint8_t sender_id = serial->read();
+    uint8_t command_id = serial->read();
+
+    // 3. Wait for payload + CRC
+    while (serial->available() < length - 5); // -5 = 1 (start byte already read) + 4 header bytes
+
+    char raw_payload[MAX_PACKET_SIZE];
+    serial->readBytes(raw_payload, length - 5);
+
+    // 4. Split payload and CRC
+    size_t encoded_len = length - 6;  // total - header (5) - crc (1)
+    char* payload_data = raw_payload;
+    uint8_t expected_crc = static_cast<uint8_t>(raw_payload[encoded_len]);
+
+    // 5. Validate CRC
+    uint8_t actual_crc = compute_crc8(payload_data, encoded_len);
+    if (actual_crc != expected_crc) {
+        this->status = Status::SERIAL_WRONG_HANDSHAKE_FAILURE;
+        return UniquePtr<T>{nullptr};
+    }
+
+    // 6. Decode + Deserialize
     size_t decoded_len;
-    auto decoded_buf = cobs_decode(raw_buf, len, decoded_len);
+    auto decoded_buf = cobs_decode(payload_data, encoded_len, decoded_len);
     auto obj = new T(Move(decoded_buf));
     return UniquePtr<T>{obj};
 }
