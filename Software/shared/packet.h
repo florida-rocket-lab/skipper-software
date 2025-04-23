@@ -4,7 +4,7 @@
 #include "arduino_compat.h"
 #include "cobs.h"
 
-// wraps the encoded data in a strwuctured packet
+// wraps the encoded data in a structured packet
 inline Pair<UniquePtr<char[]>, size_t> wrap_packet(
     const char* encoded_data,
     size_t encoded_len,
