@@ -37,3 +37,17 @@ flight_computer_test:  # This is the test suite to try on the Teensy 4.0
   - "../Software/flight_computer"
   - "../Software/tests/shared"
   - "../Software/tests/units/flight_computer_test"
+
+
+groundstation:
+  - "../Software/shared"
+  - "../Software/ground_transceiver"
+  - "../Software/tests/shared"
+  - "../Software/tests/units/groundstation"
+
+nano_tester:
+  - "../Software/shared"
+  - "../Software/skipper_transceiver"
+  - "../Software/tests/shared"
+  - "../Software/tests/units/nano_tester"
+

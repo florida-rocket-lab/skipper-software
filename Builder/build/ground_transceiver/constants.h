@@ -17,6 +17,8 @@
 #define NANO_CSN_PIN 8  // I copied these from the great Jose Reynaldo's original
 #define UNO_CE_PIN 9    // source code.
 #define UNO_CSN_PIN 10
+#define MEGA_CE_PIN   9
+#define MEGA_CSN_PIN  53
 
 #define BLINK_ON_TIME_MS 200
 #define BLINK_OFF_TIME_MS 100

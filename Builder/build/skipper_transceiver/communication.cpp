@@ -20,19 +20,47 @@ RadioCommunication::RadioCommunication(unsigned char ce_pin, unsigned char csn_p
     // Intentionally left blank - call init() manually after Serial.begin()
 }
 
+// void RadioCommunication::init() {
+//     if (!nrf24.begin()) {
+//         status = Status::RADIO_INIT_FAILURE;
+//         return;
+//     }
+//     nrf24.setChannel(rf_channel);
+//     nrf24.setDataRate(RF24_250KBPS);
+//     nrf24.setPALevel(RF24_PA_LOW);
+//     nrf24.openWritingPipe(address);
+//     nrf24.openReadingPipe(1, address);
+//     nrf24.stopListening();
+// }
 void RadioCommunication::init() {
+    Serial.println("INIT: Starting radio...");
     if (!nrf24.begin()) {
+        Serial.println("INIT: Radio failed to begin");
         status = Status::RADIO_INIT_FAILURE;
         return;
     }
-    nrf24.setChannel(rf_channel);
-    nrf24.setDataRate(RF24_250KBPS);
-    nrf24.setPALevel(RF24_PA_LOW);
-    nrf24.openWritingPipe(address);
-    nrf24.openReadingPipe(1, address);
-    nrf24.stopListening();
-}
+    Serial.println("INIT: Radio began");
 
+    nrf24.setChannel(rf_channel);
+    Serial.println("INIT: Set channel");
+
+    nrf24.setDataRate(RF24_250KBPS);
+    Serial.println("INIT: Set data rate");
+
+    nrf24.setPALevel(RF24_PA_LOW);
+    Serial.println("INIT: Set PA level");
+
+    nrf24.openWritingPipe(address);
+    Serial.println("INIT: Opened writing pipe");
+
+    nrf24.openReadingPipe(1, address);
+    Serial.println("INIT: Opened reading pipe");
+
+    nrf24.stopListening();
+    Serial.println("INIT: Ready to transmit");
+
+    status = Status::OK;
+}
 
 
 UARTCommunication::UARTCommunication(HardwareSerial* serial_) : serial(serial_)

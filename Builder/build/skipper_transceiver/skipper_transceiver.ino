@@ -6,7 +6,8 @@ void setup() {
   while (!Serial);
   Serial.println("NANO: Setup begin");
 
-   me.init_radio();
+  me.init_radio();
+
 }
 
 void loop() {
