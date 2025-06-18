@@ -133,7 +133,7 @@
     
     % Define maximum values for each state and control to use with Bryson's
     % rule to tune LQR gain matrix, K.
-    x_max = 10;
+    x_max = 100;
     y_max = 5;
     z_max = 5;
     u_max = 10;
@@ -179,9 +179,9 @@
         % to Bryson's rule. Apply this to Q matrix to augment it.
         % NOTE: Error never decreases, it only over grows, so the maximum
         % values allowed for it naturally need to be large.
-        x_error_max = 500;
-        y_error_max = 500;
-        z_error_max = 500;
+        x_error_max = 1e3;
+        y_error_max = 100;
+        z_error_max = 100;
 
         Qi = diag([ ...
             diag(Q)' ...
