@@ -9,7 +9,7 @@
  *
  * Model version              : 1.113
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:25:28 2025
+ * C++ source code generated on : Wed Jun 18 17:35:23 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -132,7 +132,7 @@ void skipper_lqi::step()
     real_T tmp_1[15];
     real_T tmp_2[15];
     real_T tmp_3[15];
-    real_T rtb_state_gain[12];
+    real_T rtb_input_gain[12];
     real_T tmp[12];
     real_T rtb_saturator[4];
     real_T tmp_0[3];
@@ -146,14 +146,12 @@ void skipper_lqi::step()
     /* SignalConversion generated from: '<Root>/state_integrator' incorporates:
      *  Constant: '<Root>/initial_error'
      */
-    std::memset(&skipper_lqi_B.TmpSignalConversionAtstate_inte[0], 0, 15U *
-                sizeof(real_T));
+    std::memset(&skipper_lqi_B.initial_conditions[0], 0, 15U * sizeof(real_T));
 
     /* Integrator: '<Root>/state_integrator' */
     if (skipper_lqi_DW.state_integrator_DWORK1) {
       std::memcpy(&skipper_lqi_X.state_integrator_CSTATE[0],
-                  &skipper_lqi_B.TmpSignalConversionAtstate_inte[0], 15U *
-                  sizeof(real_T));
+                  &skipper_lqi_B.initial_conditions[0], 15U * sizeof(real_T));
     }
 
     for (i = 0; i < 4; i++) {
@@ -171,7 +169,7 @@ void skipper_lqi::step()
        *  Gain: '<Root>/lqi_gain'
        *  Gain: '<Root>/lqr_gain'
        *  Integrator: '<Root>/state_integrator'
-       *  Sum: '<Root>/CONTROL_OUT'
+       *  Sum: '<Root>/control_sum'
        */
       u0 = (((skipper_lqi_ConstP.lqi_gain_Gain[i + 4] *
               skipper_lqi_X.state_integrator_CSTATE[13] +
@@ -379,58 +377,58 @@ void skipper_lqi::step()
        *  Gain: '<Root>/passthrough_gain'
        *  SignalConversion generated from: '<Root>/input_gain'
        */
-      rtb_state_gain[i] = (((0.0 * skipper_lqi_B.thrust + 0.0 *
+      rtb_input_gain[i] = (((0.0 * skipper_lqi_B.thrust + 0.0 *
         skipper_lqi_B.counter_rotating) + 0.0 * skipper_lqi_B.upper_gimbal_angle)
                            + 0.0 * skipper_lqi_B.lower_gimbal_angle) + u0;
     }
 
     /* Outport: '<Root>/Out1' */
-    skipper_lqi_Y.altitude = rtb_state_gain[0];
+    skipper_lqi_Y.altitude = rtb_input_gain[0];
 
     /* Outport: '<Root>/Out2' */
-    skipper_lqi_Y.crossrange = rtb_state_gain[1];
+    skipper_lqi_Y.crossrange = rtb_input_gain[1];
 
     /* Outport: '<Root>/Out3' */
-    skipper_lqi_Y.downrange = rtb_state_gain[2];
+    skipper_lqi_Y.downrange = rtb_input_gain[2];
 
     /* Outport: '<Root>/Out4' */
-    skipper_lqi_Y.lateral_vel = rtb_state_gain[3];
+    skipper_lqi_Y.lateral_vel = rtb_input_gain[3];
 
     /* Outport: '<Root>/Out5' */
-    skipper_lqi_Y.longitudinal_vel = rtb_state_gain[4];
+    skipper_lqi_Y.longitudinal_vel = rtb_input_gain[4];
 
     /* Outport: '<Root>/Out6' */
-    skipper_lqi_Y.directional_vel = rtb_state_gain[5];
+    skipper_lqi_Y.directional_vel = rtb_input_gain[5];
 
     /* Outport: '<Root>/Out7' incorporates:
      *  Gain: '<Root>/Gain12'
      */
-    skipper_lqi_Y.roll = 57.295779513082323 * rtb_state_gain[6];
+    skipper_lqi_Y.roll = 57.295779513082323 * rtb_input_gain[6];
 
     /* Outport: '<Root>/Out8' incorporates:
      *  Gain: '<Root>/Gain11'
      */
-    skipper_lqi_Y.pitch = 57.295779513082323 * rtb_state_gain[7];
+    skipper_lqi_Y.pitch = 57.295779513082323 * rtb_input_gain[7];
 
     /* Outport: '<Root>/Out9' incorporates:
      *  Gain: '<Root>/Gain10'
      */
-    skipper_lqi_Y.yaw = 57.295779513082323 * rtb_state_gain[8];
+    skipper_lqi_Y.yaw = 57.295779513082323 * rtb_input_gain[8];
 
     /* Outport: '<Root>/Out10' incorporates:
      *  Gain: '<Root>/Gain9'
      */
-    skipper_lqi_Y.lateral_rate = 57.295779513082323 * rtb_state_gain[9];
+    skipper_lqi_Y.lateral_rate = 57.295779513082323 * rtb_input_gain[9];
 
     /* Outport: '<Root>/Out11' incorporates:
      *  Gain: '<Root>/Gain8'
      */
-    skipper_lqi_Y.longitudinal_rate = 57.295779513082323 * rtb_state_gain[10];
+    skipper_lqi_Y.longitudinal_rate = 57.295779513082323 * rtb_input_gain[10];
 
     /* Outport: '<Root>/Out12' incorporates:
      *  Gain: '<Root>/Gain7'
      */
-    skipper_lqi_Y.directional_rate = 57.295779513082323 * rtb_state_gain[11];
+    skipper_lqi_Y.directional_rate = 57.295779513082323 * rtb_input_gain[11];
 
     /* Outport: '<Root>/Out13' */
     skipper_lqi_Y.thrust = skipper_lqi_B.thrust;
@@ -465,10 +463,10 @@ void skipper_lqi::step()
      */
     skipper_lqi_Y.downrange_error = skipper_lqi_X.state_integrator_CSTATE[14];
 
-    /* Sum: '<Root>/IMU_IN' incorporates:
+    /* Sum: '<Root>/feedback_sum' incorporates:
      *  Integrator: '<Root>/state_integrator'
      */
-    std::memcpy(&rtb_state_gain[0], &skipper_lqi_X.state_integrator_CSTATE[0],
+    std::memcpy(&rtb_input_gain[0], &skipper_lqi_X.state_integrator_CSTATE[0],
                 12U * sizeof(real_T));
 
     /* Gain: '<Root>/state_gain' */
@@ -476,7 +474,7 @@ void skipper_lqi::step()
       u0 = 0.0;
       for (i_0 = 0; i_0 < 12; i_0++) {
         u0 += skipper_lqi_ConstP.state_gain_Gain[12 * i_0 + i] *
-          rtb_state_gain[i_0];
+          rtb_input_gain[i_0];
       }
 
       tmp[i] = u0;
@@ -489,7 +487,7 @@ void skipper_lqi::step()
       u0 = 0.0;
       for (i_0 = 0; i_0 < 12; i_0++) {
         u0 += skipper_lqi_ConstP.extraction_gain_Gain[3 * i_0 + i] *
-          rtb_state_gain[i_0];
+          rtb_input_gain[i_0];
       }
 
       tmp_0[i] = u0;
@@ -497,10 +495,10 @@ void skipper_lqi::step()
 
     /* End of Gain: '<Root>/extraction_gain' */
 
-    /* Sum: '<Root>/TARGET_IN' incorporates:
+    /* Sum: '<Root>/state_derivative_sum' incorporates:
      *  Constant: '<Root>/dummy_zeros'
-     *  Constant: '<Root>/gravity'
-     *  Constant: '<Root>/reference'
+     *  Constant: '<Root>/gravity_const'
+     *  Constant: '<Root>/reference_const'
      *  Gain: '<Root>/input_gain'
      *  SignalConversion generated from: '<Root>/input_gain'
      */
@@ -511,7 +509,7 @@ void skipper_lqi::step()
     tmp_2[13] = tmp_0[1];
     tmp_2[14] = tmp_0[2];
     for (i = 0; i < 12; i++) {
-      tmp_1[i] = skipper_lqi_ConstP.gravity_Value[i];
+      tmp_1[i] = skipper_lqi_ConstP.gravity_const_Value[i];
       tmp_2[i] = tmp[i];
       tmp_3[i] = ((skipper_lqi_ConstP.input_gain_Gain[i + 12] *
                    skipper_lqi_B.counter_rotating +
@@ -526,7 +524,7 @@ void skipper_lqi::step()
     tmp_3[13] = 0.0;
     tmp_3[14] = 0.0;
     for (i = 0; i < 15; i++) {
-      /* Sum: '<Root>/TARGET_IN' */
+      /* Sum: '<Root>/state_derivative_sum' */
       skipper_lqi_B.state_with_error_derivative[i] = (tmp_1[i] + tmp_2[i]) +
         tmp_3[i];
     }

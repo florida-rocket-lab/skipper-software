@@ -9,7 +9,7 @@
  *
  * Model version              : 1.113
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:25:28 2025
+ * C++ source code generated on : Wed Jun 18 17:35:23 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -159,12 +159,12 @@ extern "C"
 
 /* Block signals (default storage) */
 struct B_skipper_lqi_T {
-  real_T TmpSignalConversionAtstate_inte[15];
+  real_T initial_conditions[15];
   real_T thrust;                       /* '<S1>/Rate Limiter3' */
   real_T counter_rotating;             /* '<S1>/Rate Limiter2' */
   real_T upper_gimbal_angle;           /* '<S1>/Rate Limiter1' */
   real_T lower_gimbal_angle;           /* '<S1>/Rate Limiter' */
-  real_T state_with_error_derivative[15];/* '<Root>/TARGET_IN' */
+  real_T state_with_error_derivative[15];/* '<Root>/state_derivative_sum' */
 };
 
 /* Block states (default storage) for system '<Root>' */
@@ -218,9 +218,9 @@ struct ConstP_skipper_lqi_T {
   real_T ff_control_Value[4];
 
   /* Expression: d
-   * Referenced by: '<Root>/gravity'
+   * Referenced by: '<Root>/gravity_const'
    */
-  real_T gravity_Value[12];
+  real_T gravity_const_Value[12];
 
   /* Expression: C
    * Referenced by: '<Root>/output_gain'
@@ -247,11 +247,6 @@ struct ConstP_skipper_lqi_T {
    */
   real_T saturator_LowerSat[4];
 
-  /* Expression: A
-   * Referenced by: '<Root>/state_gain'
-   */
-  real_T state_gain_Gain[144];
-
   /* Expression: -E
    * Referenced by: '<Root>/extraction_gain'
    */
@@ -261,6 +256,11 @@ struct ConstP_skipper_lqi_T {
    * Referenced by: '<Root>/input_gain'
    */
   real_T input_gain_Gain[48];
+
+  /* Expression: A
+   * Referenced by: '<Root>/state_gain'
+   */
+  real_T state_gain_Gain[144];
 };
 
 /* External outputs (root outports fed by signals with default storage) */
