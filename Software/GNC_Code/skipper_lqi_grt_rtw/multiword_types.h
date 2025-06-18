@@ -9,11 +9,11 @@
  *
  * Model version              : 1.113
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:07:56 2025
+ * C++ source code generated on : Wed Jun 18 17:25:28 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex-M
  * Code generation objective: Debugging
  * Validation result: Not run
  */
@@ -25,13 +25,49 @@
 /*
  * MultiWord supporting definitions
  */
-typedef long long longlong_T;
+typedef long int long_T;
 
 /*
  * MultiWord types
  */
 typedef struct {
-  uint64_T chunks[2];
+  uint32_T chunks[2];
+} int64m_T;
+
+typedef struct {
+  int64m_T re;
+  int64m_T im;
+} cint64m_T;
+
+typedef struct {
+  uint32_T chunks[2];
+} uint64m_T;
+
+typedef struct {
+  uint64m_T re;
+  uint64m_T im;
+} cuint64m_T;
+
+typedef struct {
+  uint32_T chunks[3];
+} int96m_T;
+
+typedef struct {
+  int96m_T re;
+  int96m_T im;
+} cint96m_T;
+
+typedef struct {
+  uint32_T chunks[3];
+} uint96m_T;
+
+typedef struct {
+  uint96m_T re;
+  uint96m_T im;
+} cuint96m_T;
+
+typedef struct {
+  uint32_T chunks[4];
 } int128m_T;
 
 typedef struct {
@@ -40,7 +76,7 @@ typedef struct {
 } cint128m_T;
 
 typedef struct {
-  uint64_T chunks[2];
+  uint32_T chunks[4];
 } uint128m_T;
 
 typedef struct {
@@ -49,7 +85,25 @@ typedef struct {
 } cuint128m_T;
 
 typedef struct {
-  uint64_T chunks[3];
+  uint32_T chunks[5];
+} int160m_T;
+
+typedef struct {
+  int160m_T re;
+  int160m_T im;
+} cint160m_T;
+
+typedef struct {
+  uint32_T chunks[5];
+} uint160m_T;
+
+typedef struct {
+  uint160m_T re;
+  uint160m_T im;
+} cuint160m_T;
+
+typedef struct {
+  uint32_T chunks[6];
 } int192m_T;
 
 typedef struct {
@@ -58,7 +112,7 @@ typedef struct {
 } cint192m_T;
 
 typedef struct {
-  uint64_T chunks[3];
+  uint32_T chunks[6];
 } uint192m_T;
 
 typedef struct {
@@ -67,7 +121,25 @@ typedef struct {
 } cuint192m_T;
 
 typedef struct {
-  uint64_T chunks[4];
+  uint32_T chunks[7];
+} int224m_T;
+
+typedef struct {
+  int224m_T re;
+  int224m_T im;
+} cint224m_T;
+
+typedef struct {
+  uint32_T chunks[7];
+} uint224m_T;
+
+typedef struct {
+  uint224m_T re;
+  uint224m_T im;
+} cuint224m_T;
+
+typedef struct {
+  uint32_T chunks[8];
 } int256m_T;
 
 typedef struct {
@@ -76,7 +148,7 @@ typedef struct {
 } cint256m_T;
 
 typedef struct {
-  uint64_T chunks[4];
+  uint32_T chunks[8];
 } uint256m_T;
 
 typedef struct {
@@ -85,7 +157,25 @@ typedef struct {
 } cuint256m_T;
 
 typedef struct {
-  uint64_T chunks[5];
+  uint32_T chunks[9];
+} int288m_T;
+
+typedef struct {
+  int288m_T re;
+  int288m_T im;
+} cint288m_T;
+
+typedef struct {
+  uint32_T chunks[9];
+} uint288m_T;
+
+typedef struct {
+  uint288m_T re;
+  uint288m_T im;
+} cuint288m_T;
+
+typedef struct {
+  uint32_T chunks[10];
 } int320m_T;
 
 typedef struct {
@@ -94,7 +184,7 @@ typedef struct {
 } cint320m_T;
 
 typedef struct {
-  uint64_T chunks[5];
+  uint32_T chunks[10];
 } uint320m_T;
 
 typedef struct {
@@ -103,7 +193,25 @@ typedef struct {
 } cuint320m_T;
 
 typedef struct {
-  uint64_T chunks[6];
+  uint32_T chunks[11];
+} int352m_T;
+
+typedef struct {
+  int352m_T re;
+  int352m_T im;
+} cint352m_T;
+
+typedef struct {
+  uint32_T chunks[11];
+} uint352m_T;
+
+typedef struct {
+  uint352m_T re;
+  uint352m_T im;
+} cuint352m_T;
+
+typedef struct {
+  uint32_T chunks[12];
 } int384m_T;
 
 typedef struct {
@@ -112,7 +220,7 @@ typedef struct {
 } cint384m_T;
 
 typedef struct {
-  uint64_T chunks[6];
+  uint32_T chunks[12];
 } uint384m_T;
 
 typedef struct {
@@ -121,7 +229,25 @@ typedef struct {
 } cuint384m_T;
 
 typedef struct {
-  uint64_T chunks[7];
+  uint32_T chunks[13];
+} int416m_T;
+
+typedef struct {
+  int416m_T re;
+  int416m_T im;
+} cint416m_T;
+
+typedef struct {
+  uint32_T chunks[13];
+} uint416m_T;
+
+typedef struct {
+  uint416m_T re;
+  uint416m_T im;
+} cuint416m_T;
+
+typedef struct {
+  uint32_T chunks[14];
 } int448m_T;
 
 typedef struct {
@@ -130,7 +256,7 @@ typedef struct {
 } cint448m_T;
 
 typedef struct {
-  uint64_T chunks[7];
+  uint32_T chunks[14];
 } uint448m_T;
 
 typedef struct {
@@ -139,7 +265,25 @@ typedef struct {
 } cuint448m_T;
 
 typedef struct {
-  uint64_T chunks[8];
+  uint32_T chunks[15];
+} int480m_T;
+
+typedef struct {
+  int480m_T re;
+  int480m_T im;
+} cint480m_T;
+
+typedef struct {
+  uint32_T chunks[15];
+} uint480m_T;
+
+typedef struct {
+  uint480m_T re;
+  uint480m_T im;
+} cuint480m_T;
+
+typedef struct {
+  uint32_T chunks[16];
 } int512m_T;
 
 typedef struct {
@@ -148,7 +292,7 @@ typedef struct {
 } cint512m_T;
 
 typedef struct {
-  uint64_T chunks[8];
+  uint32_T chunks[16];
 } uint512m_T;
 
 typedef struct {
@@ -157,7 +301,25 @@ typedef struct {
 } cuint512m_T;
 
 typedef struct {
-  uint64_T chunks[9];
+  uint32_T chunks[17];
+} int544m_T;
+
+typedef struct {
+  int544m_T re;
+  int544m_T im;
+} cint544m_T;
+
+typedef struct {
+  uint32_T chunks[17];
+} uint544m_T;
+
+typedef struct {
+  uint544m_T re;
+  uint544m_T im;
+} cuint544m_T;
+
+typedef struct {
+  uint32_T chunks[18];
 } int576m_T;
 
 typedef struct {
@@ -166,7 +328,7 @@ typedef struct {
 } cint576m_T;
 
 typedef struct {
-  uint64_T chunks[9];
+  uint32_T chunks[18];
 } uint576m_T;
 
 typedef struct {
@@ -175,7 +337,25 @@ typedef struct {
 } cuint576m_T;
 
 typedef struct {
-  uint64_T chunks[10];
+  uint32_T chunks[19];
+} int608m_T;
+
+typedef struct {
+  int608m_T re;
+  int608m_T im;
+} cint608m_T;
+
+typedef struct {
+  uint32_T chunks[19];
+} uint608m_T;
+
+typedef struct {
+  uint608m_T re;
+  uint608m_T im;
+} cuint608m_T;
+
+typedef struct {
+  uint32_T chunks[20];
 } int640m_T;
 
 typedef struct {
@@ -184,7 +364,7 @@ typedef struct {
 } cint640m_T;
 
 typedef struct {
-  uint64_T chunks[10];
+  uint32_T chunks[20];
 } uint640m_T;
 
 typedef struct {
@@ -193,7 +373,25 @@ typedef struct {
 } cuint640m_T;
 
 typedef struct {
-  uint64_T chunks[11];
+  uint32_T chunks[21];
+} int672m_T;
+
+typedef struct {
+  int672m_T re;
+  int672m_T im;
+} cint672m_T;
+
+typedef struct {
+  uint32_T chunks[21];
+} uint672m_T;
+
+typedef struct {
+  uint672m_T re;
+  uint672m_T im;
+} cuint672m_T;
+
+typedef struct {
+  uint32_T chunks[22];
 } int704m_T;
 
 typedef struct {
@@ -202,7 +400,7 @@ typedef struct {
 } cint704m_T;
 
 typedef struct {
-  uint64_T chunks[11];
+  uint32_T chunks[22];
 } uint704m_T;
 
 typedef struct {
@@ -211,7 +409,25 @@ typedef struct {
 } cuint704m_T;
 
 typedef struct {
-  uint64_T chunks[12];
+  uint32_T chunks[23];
+} int736m_T;
+
+typedef struct {
+  int736m_T re;
+  int736m_T im;
+} cint736m_T;
+
+typedef struct {
+  uint32_T chunks[23];
+} uint736m_T;
+
+typedef struct {
+  uint736m_T re;
+  uint736m_T im;
+} cuint736m_T;
+
+typedef struct {
+  uint32_T chunks[24];
 } int768m_T;
 
 typedef struct {
@@ -220,7 +436,7 @@ typedef struct {
 } cint768m_T;
 
 typedef struct {
-  uint64_T chunks[12];
+  uint32_T chunks[24];
 } uint768m_T;
 
 typedef struct {
@@ -229,7 +445,25 @@ typedef struct {
 } cuint768m_T;
 
 typedef struct {
-  uint64_T chunks[13];
+  uint32_T chunks[25];
+} int800m_T;
+
+typedef struct {
+  int800m_T re;
+  int800m_T im;
+} cint800m_T;
+
+typedef struct {
+  uint32_T chunks[25];
+} uint800m_T;
+
+typedef struct {
+  uint800m_T re;
+  uint800m_T im;
+} cuint800m_T;
+
+typedef struct {
+  uint32_T chunks[26];
 } int832m_T;
 
 typedef struct {
@@ -238,7 +472,7 @@ typedef struct {
 } cint832m_T;
 
 typedef struct {
-  uint64_T chunks[13];
+  uint32_T chunks[26];
 } uint832m_T;
 
 typedef struct {
@@ -247,7 +481,25 @@ typedef struct {
 } cuint832m_T;
 
 typedef struct {
-  uint64_T chunks[14];
+  uint32_T chunks[27];
+} int864m_T;
+
+typedef struct {
+  int864m_T re;
+  int864m_T im;
+} cint864m_T;
+
+typedef struct {
+  uint32_T chunks[27];
+} uint864m_T;
+
+typedef struct {
+  uint864m_T re;
+  uint864m_T im;
+} cuint864m_T;
+
+typedef struct {
+  uint32_T chunks[28];
 } int896m_T;
 
 typedef struct {
@@ -256,7 +508,7 @@ typedef struct {
 } cint896m_T;
 
 typedef struct {
-  uint64_T chunks[14];
+  uint32_T chunks[28];
 } uint896m_T;
 
 typedef struct {
@@ -265,7 +517,25 @@ typedef struct {
 } cuint896m_T;
 
 typedef struct {
-  uint64_T chunks[15];
+  uint32_T chunks[29];
+} int928m_T;
+
+typedef struct {
+  int928m_T re;
+  int928m_T im;
+} cint928m_T;
+
+typedef struct {
+  uint32_T chunks[29];
+} uint928m_T;
+
+typedef struct {
+  uint928m_T re;
+  uint928m_T im;
+} cuint928m_T;
+
+typedef struct {
+  uint32_T chunks[30];
 } int960m_T;
 
 typedef struct {
@@ -274,7 +544,7 @@ typedef struct {
 } cint960m_T;
 
 typedef struct {
-  uint64_T chunks[15];
+  uint32_T chunks[30];
 } uint960m_T;
 
 typedef struct {
@@ -283,7 +553,25 @@ typedef struct {
 } cuint960m_T;
 
 typedef struct {
-  uint64_T chunks[16];
+  uint32_T chunks[31];
+} int992m_T;
+
+typedef struct {
+  int992m_T re;
+  int992m_T im;
+} cint992m_T;
+
+typedef struct {
+  uint32_T chunks[31];
+} uint992m_T;
+
+typedef struct {
+  uint992m_T re;
+  uint992m_T im;
+} cuint992m_T;
+
+typedef struct {
+  uint32_T chunks[32];
 } int1024m_T;
 
 typedef struct {
@@ -292,7 +580,7 @@ typedef struct {
 } cint1024m_T;
 
 typedef struct {
-  uint64_T chunks[16];
+  uint32_T chunks[32];
 } uint1024m_T;
 
 typedef struct {
@@ -301,7 +589,25 @@ typedef struct {
 } cuint1024m_T;
 
 typedef struct {
-  uint64_T chunks[17];
+  uint32_T chunks[33];
+} int1056m_T;
+
+typedef struct {
+  int1056m_T re;
+  int1056m_T im;
+} cint1056m_T;
+
+typedef struct {
+  uint32_T chunks[33];
+} uint1056m_T;
+
+typedef struct {
+  uint1056m_T re;
+  uint1056m_T im;
+} cuint1056m_T;
+
+typedef struct {
+  uint32_T chunks[34];
 } int1088m_T;
 
 typedef struct {
@@ -310,7 +616,7 @@ typedef struct {
 } cint1088m_T;
 
 typedef struct {
-  uint64_T chunks[17];
+  uint32_T chunks[34];
 } uint1088m_T;
 
 typedef struct {
@@ -319,7 +625,25 @@ typedef struct {
 } cuint1088m_T;
 
 typedef struct {
-  uint64_T chunks[18];
+  uint32_T chunks[35];
+} int1120m_T;
+
+typedef struct {
+  int1120m_T re;
+  int1120m_T im;
+} cint1120m_T;
+
+typedef struct {
+  uint32_T chunks[35];
+} uint1120m_T;
+
+typedef struct {
+  uint1120m_T re;
+  uint1120m_T im;
+} cuint1120m_T;
+
+typedef struct {
+  uint32_T chunks[36];
 } int1152m_T;
 
 typedef struct {
@@ -328,7 +652,7 @@ typedef struct {
 } cint1152m_T;
 
 typedef struct {
-  uint64_T chunks[18];
+  uint32_T chunks[36];
 } uint1152m_T;
 
 typedef struct {
@@ -337,7 +661,25 @@ typedef struct {
 } cuint1152m_T;
 
 typedef struct {
-  uint64_T chunks[19];
+  uint32_T chunks[37];
+} int1184m_T;
+
+typedef struct {
+  int1184m_T re;
+  int1184m_T im;
+} cint1184m_T;
+
+typedef struct {
+  uint32_T chunks[37];
+} uint1184m_T;
+
+typedef struct {
+  uint1184m_T re;
+  uint1184m_T im;
+} cuint1184m_T;
+
+typedef struct {
+  uint32_T chunks[38];
 } int1216m_T;
 
 typedef struct {
@@ -346,7 +688,7 @@ typedef struct {
 } cint1216m_T;
 
 typedef struct {
-  uint64_T chunks[19];
+  uint32_T chunks[38];
 } uint1216m_T;
 
 typedef struct {
@@ -355,7 +697,25 @@ typedef struct {
 } cuint1216m_T;
 
 typedef struct {
-  uint64_T chunks[20];
+  uint32_T chunks[39];
+} int1248m_T;
+
+typedef struct {
+  int1248m_T re;
+  int1248m_T im;
+} cint1248m_T;
+
+typedef struct {
+  uint32_T chunks[39];
+} uint1248m_T;
+
+typedef struct {
+  uint1248m_T re;
+  uint1248m_T im;
+} cuint1248m_T;
+
+typedef struct {
+  uint32_T chunks[40];
 } int1280m_T;
 
 typedef struct {
@@ -364,7 +724,7 @@ typedef struct {
 } cint1280m_T;
 
 typedef struct {
-  uint64_T chunks[20];
+  uint32_T chunks[40];
 } uint1280m_T;
 
 typedef struct {
@@ -373,7 +733,25 @@ typedef struct {
 } cuint1280m_T;
 
 typedef struct {
-  uint64_T chunks[21];
+  uint32_T chunks[41];
+} int1312m_T;
+
+typedef struct {
+  int1312m_T re;
+  int1312m_T im;
+} cint1312m_T;
+
+typedef struct {
+  uint32_T chunks[41];
+} uint1312m_T;
+
+typedef struct {
+  uint1312m_T re;
+  uint1312m_T im;
+} cuint1312m_T;
+
+typedef struct {
+  uint32_T chunks[42];
 } int1344m_T;
 
 typedef struct {
@@ -382,7 +760,7 @@ typedef struct {
 } cint1344m_T;
 
 typedef struct {
-  uint64_T chunks[21];
+  uint32_T chunks[42];
 } uint1344m_T;
 
 typedef struct {
@@ -391,7 +769,25 @@ typedef struct {
 } cuint1344m_T;
 
 typedef struct {
-  uint64_T chunks[22];
+  uint32_T chunks[43];
+} int1376m_T;
+
+typedef struct {
+  int1376m_T re;
+  int1376m_T im;
+} cint1376m_T;
+
+typedef struct {
+  uint32_T chunks[43];
+} uint1376m_T;
+
+typedef struct {
+  uint1376m_T re;
+  uint1376m_T im;
+} cuint1376m_T;
+
+typedef struct {
+  uint32_T chunks[44];
 } int1408m_T;
 
 typedef struct {
@@ -400,7 +796,7 @@ typedef struct {
 } cint1408m_T;
 
 typedef struct {
-  uint64_T chunks[22];
+  uint32_T chunks[44];
 } uint1408m_T;
 
 typedef struct {
@@ -409,7 +805,25 @@ typedef struct {
 } cuint1408m_T;
 
 typedef struct {
-  uint64_T chunks[23];
+  uint32_T chunks[45];
+} int1440m_T;
+
+typedef struct {
+  int1440m_T re;
+  int1440m_T im;
+} cint1440m_T;
+
+typedef struct {
+  uint32_T chunks[45];
+} uint1440m_T;
+
+typedef struct {
+  uint1440m_T re;
+  uint1440m_T im;
+} cuint1440m_T;
+
+typedef struct {
+  uint32_T chunks[46];
 } int1472m_T;
 
 typedef struct {
@@ -418,7 +832,7 @@ typedef struct {
 } cint1472m_T;
 
 typedef struct {
-  uint64_T chunks[23];
+  uint32_T chunks[46];
 } uint1472m_T;
 
 typedef struct {
@@ -427,7 +841,25 @@ typedef struct {
 } cuint1472m_T;
 
 typedef struct {
-  uint64_T chunks[24];
+  uint32_T chunks[47];
+} int1504m_T;
+
+typedef struct {
+  int1504m_T re;
+  int1504m_T im;
+} cint1504m_T;
+
+typedef struct {
+  uint32_T chunks[47];
+} uint1504m_T;
+
+typedef struct {
+  uint1504m_T re;
+  uint1504m_T im;
+} cuint1504m_T;
+
+typedef struct {
+  uint32_T chunks[48];
 } int1536m_T;
 
 typedef struct {
@@ -436,7 +868,7 @@ typedef struct {
 } cint1536m_T;
 
 typedef struct {
-  uint64_T chunks[24];
+  uint32_T chunks[48];
 } uint1536m_T;
 
 typedef struct {
@@ -445,7 +877,25 @@ typedef struct {
 } cuint1536m_T;
 
 typedef struct {
-  uint64_T chunks[25];
+  uint32_T chunks[49];
+} int1568m_T;
+
+typedef struct {
+  int1568m_T re;
+  int1568m_T im;
+} cint1568m_T;
+
+typedef struct {
+  uint32_T chunks[49];
+} uint1568m_T;
+
+typedef struct {
+  uint1568m_T re;
+  uint1568m_T im;
+} cuint1568m_T;
+
+typedef struct {
+  uint32_T chunks[50];
 } int1600m_T;
 
 typedef struct {
@@ -454,7 +904,7 @@ typedef struct {
 } cint1600m_T;
 
 typedef struct {
-  uint64_T chunks[25];
+  uint32_T chunks[50];
 } uint1600m_T;
 
 typedef struct {
@@ -463,7 +913,25 @@ typedef struct {
 } cuint1600m_T;
 
 typedef struct {
-  uint64_T chunks[26];
+  uint32_T chunks[51];
+} int1632m_T;
+
+typedef struct {
+  int1632m_T re;
+  int1632m_T im;
+} cint1632m_T;
+
+typedef struct {
+  uint32_T chunks[51];
+} uint1632m_T;
+
+typedef struct {
+  uint1632m_T re;
+  uint1632m_T im;
+} cuint1632m_T;
+
+typedef struct {
+  uint32_T chunks[52];
 } int1664m_T;
 
 typedef struct {
@@ -472,7 +940,7 @@ typedef struct {
 } cint1664m_T;
 
 typedef struct {
-  uint64_T chunks[26];
+  uint32_T chunks[52];
 } uint1664m_T;
 
 typedef struct {
@@ -481,7 +949,25 @@ typedef struct {
 } cuint1664m_T;
 
 typedef struct {
-  uint64_T chunks[27];
+  uint32_T chunks[53];
+} int1696m_T;
+
+typedef struct {
+  int1696m_T re;
+  int1696m_T im;
+} cint1696m_T;
+
+typedef struct {
+  uint32_T chunks[53];
+} uint1696m_T;
+
+typedef struct {
+  uint1696m_T re;
+  uint1696m_T im;
+} cuint1696m_T;
+
+typedef struct {
+  uint32_T chunks[54];
 } int1728m_T;
 
 typedef struct {
@@ -490,7 +976,7 @@ typedef struct {
 } cint1728m_T;
 
 typedef struct {
-  uint64_T chunks[27];
+  uint32_T chunks[54];
 } uint1728m_T;
 
 typedef struct {
@@ -499,7 +985,25 @@ typedef struct {
 } cuint1728m_T;
 
 typedef struct {
-  uint64_T chunks[28];
+  uint32_T chunks[55];
+} int1760m_T;
+
+typedef struct {
+  int1760m_T re;
+  int1760m_T im;
+} cint1760m_T;
+
+typedef struct {
+  uint32_T chunks[55];
+} uint1760m_T;
+
+typedef struct {
+  uint1760m_T re;
+  uint1760m_T im;
+} cuint1760m_T;
+
+typedef struct {
+  uint32_T chunks[56];
 } int1792m_T;
 
 typedef struct {
@@ -508,7 +1012,7 @@ typedef struct {
 } cint1792m_T;
 
 typedef struct {
-  uint64_T chunks[28];
+  uint32_T chunks[56];
 } uint1792m_T;
 
 typedef struct {
@@ -517,7 +1021,25 @@ typedef struct {
 } cuint1792m_T;
 
 typedef struct {
-  uint64_T chunks[29];
+  uint32_T chunks[57];
+} int1824m_T;
+
+typedef struct {
+  int1824m_T re;
+  int1824m_T im;
+} cint1824m_T;
+
+typedef struct {
+  uint32_T chunks[57];
+} uint1824m_T;
+
+typedef struct {
+  uint1824m_T re;
+  uint1824m_T im;
+} cuint1824m_T;
+
+typedef struct {
+  uint32_T chunks[58];
 } int1856m_T;
 
 typedef struct {
@@ -526,7 +1048,7 @@ typedef struct {
 } cint1856m_T;
 
 typedef struct {
-  uint64_T chunks[29];
+  uint32_T chunks[58];
 } uint1856m_T;
 
 typedef struct {
@@ -535,7 +1057,25 @@ typedef struct {
 } cuint1856m_T;
 
 typedef struct {
-  uint64_T chunks[30];
+  uint32_T chunks[59];
+} int1888m_T;
+
+typedef struct {
+  int1888m_T re;
+  int1888m_T im;
+} cint1888m_T;
+
+typedef struct {
+  uint32_T chunks[59];
+} uint1888m_T;
+
+typedef struct {
+  uint1888m_T re;
+  uint1888m_T im;
+} cuint1888m_T;
+
+typedef struct {
+  uint32_T chunks[60];
 } int1920m_T;
 
 typedef struct {
@@ -544,7 +1084,7 @@ typedef struct {
 } cint1920m_T;
 
 typedef struct {
-  uint64_T chunks[30];
+  uint32_T chunks[60];
 } uint1920m_T;
 
 typedef struct {
@@ -553,7 +1093,25 @@ typedef struct {
 } cuint1920m_T;
 
 typedef struct {
-  uint64_T chunks[31];
+  uint32_T chunks[61];
+} int1952m_T;
+
+typedef struct {
+  int1952m_T re;
+  int1952m_T im;
+} cint1952m_T;
+
+typedef struct {
+  uint32_T chunks[61];
+} uint1952m_T;
+
+typedef struct {
+  uint1952m_T re;
+  uint1952m_T im;
+} cuint1952m_T;
+
+typedef struct {
+  uint32_T chunks[62];
 } int1984m_T;
 
 typedef struct {
@@ -562,7 +1120,7 @@ typedef struct {
 } cint1984m_T;
 
 typedef struct {
-  uint64_T chunks[31];
+  uint32_T chunks[62];
 } uint1984m_T;
 
 typedef struct {
@@ -571,7 +1129,25 @@ typedef struct {
 } cuint1984m_T;
 
 typedef struct {
-  uint64_T chunks[32];
+  uint32_T chunks[63];
+} int2016m_T;
+
+typedef struct {
+  int2016m_T re;
+  int2016m_T im;
+} cint2016m_T;
+
+typedef struct {
+  uint32_T chunks[63];
+} uint2016m_T;
+
+typedef struct {
+  uint2016m_T re;
+  uint2016m_T im;
+} cuint2016m_T;
+
+typedef struct {
+  uint32_T chunks[64];
 } int2048m_T;
 
 typedef struct {
@@ -580,7 +1156,7 @@ typedef struct {
 } cint2048m_T;
 
 typedef struct {
-  uint64_T chunks[32];
+  uint32_T chunks[64];
 } uint2048m_T;
 
 typedef struct {

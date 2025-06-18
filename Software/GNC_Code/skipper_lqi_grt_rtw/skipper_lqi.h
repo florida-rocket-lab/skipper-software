@@ -9,11 +9,11 @@
  *
  * Model version              : 1.113
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:07:56 2025
+ * C++ source code generated on : Wed Jun 18 17:25:28 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex-M
  * Code generation objective: Debugging
  * Validation result: Not run
  */

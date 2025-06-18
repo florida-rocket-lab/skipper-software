@@ -9,18 +9,17 @@
  *
  * Model version              : 1.113
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:07:56 2025
+ * C++ source code generated on : Wed Jun 18 17:25:28 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: Intel->x86-64 (Windows64)
+ * Embedded hardware selection: ARM Compatible->ARM Cortex-M
  * Code generation objective: Debugging
  * Validation result: Not run
  */
 
 #include "skipper_lqi.h"
 #include <cstring>
-#include <emmintrin.h>
 #include "rtwtypes.h"
 #include "skipper_lqi_private.h"
 
@@ -130,9 +129,6 @@ void skipper_lqi::step()
   }
 
   {
-    __m128d tmp_4;
-    __m128d tmp_5;
-    __m128d tmp_7;
     real_T tmp_1[15];
     real_T tmp_2[15];
     real_T tmp_3[15];
@@ -140,7 +136,6 @@ void skipper_lqi::step()
     real_T tmp[12];
     real_T rtb_saturator[4];
     real_T tmp_0[3];
-    real_T tmp_6[2];
     real_T u0;
     real_T u1;
     real_T u2;
@@ -407,36 +402,35 @@ void skipper_lqi::step()
     /* Outport: '<Root>/Out6' */
     skipper_lqi_Y.directional_vel = rtb_state_gain[5];
 
-    /* Gain: '<Root>/Gain12' */
-    tmp_7 = _mm_set1_pd(57.295779513082323);
-    tmp_5 = _mm_mul_pd(tmp_7, _mm_loadu_pd(&rtb_state_gain[6]));
-    _mm_storeu_pd(&tmp_6[0], tmp_5);
+    /* Outport: '<Root>/Out7' incorporates:
+     *  Gain: '<Root>/Gain12'
+     */
+    skipper_lqi_Y.roll = 57.295779513082323 * rtb_state_gain[6];
 
-    /* Outport: '<Root>/Out7' */
-    skipper_lqi_Y.roll = tmp_6[0];
+    /* Outport: '<Root>/Out8' incorporates:
+     *  Gain: '<Root>/Gain11'
+     */
+    skipper_lqi_Y.pitch = 57.295779513082323 * rtb_state_gain[7];
 
-    /* Outport: '<Root>/Out8' */
-    skipper_lqi_Y.pitch = tmp_6[1];
+    /* Outport: '<Root>/Out9' incorporates:
+     *  Gain: '<Root>/Gain10'
+     */
+    skipper_lqi_Y.yaw = 57.295779513082323 * rtb_state_gain[8];
 
-    /* Gain: '<Root>/Gain10' */
-    tmp_5 = _mm_mul_pd(tmp_7, _mm_loadu_pd(&rtb_state_gain[8]));
-    _mm_storeu_pd(&tmp_6[0], tmp_5);
+    /* Outport: '<Root>/Out10' incorporates:
+     *  Gain: '<Root>/Gain9'
+     */
+    skipper_lqi_Y.lateral_rate = 57.295779513082323 * rtb_state_gain[9];
 
-    /* Outport: '<Root>/Out9' */
-    skipper_lqi_Y.yaw = tmp_6[0];
+    /* Outport: '<Root>/Out11' incorporates:
+     *  Gain: '<Root>/Gain8'
+     */
+    skipper_lqi_Y.longitudinal_rate = 57.295779513082323 * rtb_state_gain[10];
 
-    /* Outport: '<Root>/Out10' */
-    skipper_lqi_Y.lateral_rate = tmp_6[1];
-
-    /* Gain: '<Root>/Gain8' */
-    tmp_7 = _mm_mul_pd(tmp_7, _mm_loadu_pd(&rtb_state_gain[10]));
-    _mm_storeu_pd(&tmp_6[0], tmp_7);
-
-    /* Outport: '<Root>/Out11' */
-    skipper_lqi_Y.longitudinal_rate = tmp_6[0];
-
-    /* Outport: '<Root>/Out12' */
-    skipper_lqi_Y.directional_rate = tmp_6[1];
+    /* Outport: '<Root>/Out12' incorporates:
+     *  Gain: '<Root>/Gain7'
+     */
+    skipper_lqi_Y.directional_rate = 57.295779513082323 * rtb_state_gain[11];
 
     /* Outport: '<Root>/Out13' */
     skipper_lqi_Y.thrust = skipper_lqi_B.thrust;
@@ -516,36 +510,22 @@ void skipper_lqi::step()
     tmp_2[12] = tmp_0[0];
     tmp_2[13] = tmp_0[1];
     tmp_2[14] = tmp_0[2];
-    for (i = 0; i <= 10; i += 2) {
-      _mm_storeu_pd(&tmp_1[i], _mm_loadu_pd(&skipper_lqi_ConstP.gravity_Value[i]));
-      tmp_7 = _mm_loadu_pd(&tmp[i]);
-      _mm_storeu_pd(&tmp_2[i], tmp_7);
-      _mm_storeu_pd(&tmp_3[i], _mm_add_pd(_mm_add_pd(_mm_add_pd(_mm_mul_pd
-        (_mm_loadu_pd(&skipper_lqi_ConstP.input_gain_Gain[i + 12]), _mm_set1_pd
-         (skipper_lqi_B.counter_rotating)), _mm_mul_pd(_mm_loadu_pd
-        (&skipper_lqi_ConstP.input_gain_Gain[i]), _mm_set1_pd
-        (skipper_lqi_B.thrust))), _mm_mul_pd(_mm_loadu_pd
-        (&skipper_lqi_ConstP.input_gain_Gain[i + 24]), _mm_set1_pd
-        (skipper_lqi_B.upper_gimbal_angle))), _mm_mul_pd(_mm_loadu_pd
-        (&skipper_lqi_ConstP.input_gain_Gain[i + 36]), _mm_set1_pd
-        (skipper_lqi_B.lower_gimbal_angle))));
+    for (i = 0; i < 12; i++) {
+      tmp_1[i] = skipper_lqi_ConstP.gravity_Value[i];
+      tmp_2[i] = tmp[i];
+      tmp_3[i] = ((skipper_lqi_ConstP.input_gain_Gain[i + 12] *
+                   skipper_lqi_B.counter_rotating +
+                   skipper_lqi_ConstP.input_gain_Gain[i] * skipper_lqi_B.thrust)
+                  + skipper_lqi_ConstP.input_gain_Gain[i + 24] *
+                  skipper_lqi_B.upper_gimbal_angle) +
+        skipper_lqi_ConstP.input_gain_Gain[i + 36] *
+        skipper_lqi_B.lower_gimbal_angle;
     }
 
     tmp_3[12] = 0.0;
     tmp_3[13] = 0.0;
     tmp_3[14] = 0.0;
-    for (i = 0; i <= 12; i += 2) {
-      /* Sum: '<Root>/TARGET_IN' */
-      tmp_7 = _mm_loadu_pd(&tmp_1[i]);
-      tmp_5 = _mm_loadu_pd(&tmp_2[i]);
-      tmp_4 = _mm_loadu_pd(&tmp_3[i]);
-
-      /* Sum: '<Root>/TARGET_IN' */
-      _mm_storeu_pd(&skipper_lqi_B.state_with_error_derivative[i], _mm_add_pd
-                    (_mm_add_pd(tmp_7, tmp_5), tmp_4));
-    }
-
-    for (i = 14; i < 15; i++) {
+    for (i = 0; i < 15; i++) {
       /* Sum: '<Root>/TARGET_IN' */
       skipper_lqi_B.state_with_error_derivative[i] = (tmp_1[i] + tmp_2[i]) +
         tmp_3[i];
