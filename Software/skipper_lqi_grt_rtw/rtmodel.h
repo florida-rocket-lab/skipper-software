@@ -1,5 +1,5 @@
 /*
- * skipper_lqi_types.h
+ *  rtmodel.h:
  *
  * Student License - for use by students to meet course requirements and
  * perform academic research at degree granting institutions only.  Not
@@ -7,9 +7,9 @@
  *
  * Code generation for model "skipper_lqi".
  *
- * Model version              : 1.113
+ * Model version              : 1.116
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:35:23 2025
+ * C++ source code generated on : Tue Jun 24 13:39:23 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -18,10 +18,17 @@
  * Validation result: Not run
  */
 
-#ifndef skipper_lqi_types_h_
-#define skipper_lqi_types_h_
+#ifndef rtmodel_h_
+#define rtmodel_h_
+#include "skipper_lqi.h"
+#define MODEL_CLASSNAME                skipper_lqi
+#define MODEL_STEPNAME                 step
+#define GRTINTERFACE                   0
 
-/* Forward declaration for rtModel */
-typedef struct tag_RTM_skipper_lqi_T RT_MODEL_skipper_lqi_T;
-
-#endif                                 /* skipper_lqi_types_h_ */
+/*
+ * ROOT_IO_FORMAT: 0 (Individual arguments)
+ * ROOT_IO_FORMAT: 1 (Structure reference)
+ * ROOT_IO_FORMAT: 2 (Part of model data structure)
+ */
+#define ROOT_IO_FORMAT                 2
+#endif                                 /* rtmodel_h_ */

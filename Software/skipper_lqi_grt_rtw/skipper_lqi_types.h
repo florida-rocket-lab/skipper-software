@@ -1,5 +1,5 @@
 /*
- * rtGetInf.h
+ * skipper_lqi_types.h
  *
  * Student License - for use by students to meet course requirements and
  * perform academic research at degree granting institutions only.  Not
@@ -7,9 +7,9 @@
  *
  * Code generation for model "skipper_lqi".
  *
- * Model version              : 1.113
+ * Model version              : 1.116
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jun 18 17:35:23 2025
+ * C++ source code generated on : Tue Jun 24 13:39:23 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -18,32 +18,10 @@
  * Validation result: Not run
  */
 
-#ifndef rtGetInf_h_
-#define rtGetInf_h_
+#ifndef skipper_lqi_types_h_
+#define skipper_lqi_types_h_
 
-extern "C"
-{
+/* Forward declaration for rtModel */
+typedef struct tag_RTM_skipper_lqi_T RT_MODEL_skipper_lqi_T;
 
-#include "rt_nonfinite.h"
-
-}
-
-#include "rtwtypes.h"
-#ifdef __cplusplus
-
-extern "C"
-{
-
-#endif
-
-  extern real_T rtGetInf(void);
-  extern real32_T rtGetInfF(void);
-  extern real_T rtGetMinusInf(void);
-  extern real32_T rtGetMinusInfF(void);
-
-#ifdef __cplusplus
-
-}                                      /* extern "C" */
-
-#endif
-#endif                                 /* rtGetInf_h_ */
+#endif                                 /* skipper_lqi_types_h_ */

@@ -24,6 +24,11 @@
     Izz = 30.93;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
+
+    % Define reference for use.
+    x_ref = 10;
+    y_ref = 1;
+    z_ref = 0;
     
     % Define equillibrium point. When trimming for hovering all parameters
     % should be zero except thrust, T, as defined by the state, X, and
