@@ -1,28 +1,56 @@
 #ifndef SKIPPER_ARDUINOTEST_H
 #define SKIPPER_ARDUINOTEST_H
 
+#include <Arduino.h>
+#include "cases.h"
 
-class ArduinoTest
-{
+/**
+ * @brief A simple test harness for Arduino using LED blink patterns to indicate pass/fail.
+ *
+ * This class wraps a test assertion and provides visual feedback on two LEDs:
+ * - success_pin: blink pattern indicates a passing test
+ * - fail_pin: blink pattern indicates a failing test
+ *
+ * Usage:
+ *   ArduinoTest tester(FAIL_LED_PIN, PASS_LED_PIN);
+ *   tester.show_assertion(true); // immediate pass indication
+ *   tester.assert(myTestFunction); // runs myTestFunction and indicates pass/fail
+ */
+class ArduinoTest {
 public:
-    ArduinoTest(unsigned char fail_pin, unsigned char success_pin);
+    /**
+     * @param fail_pin    Digital output pin for the failure LED
+     * @param success_pin Digital output pin for the success LED
+     */
+    ArduinoTest(uint8_t fail_pin, uint8_t success_pin);
 
-    void show_assertion(bool assertion);  // This shows a pre-computed assertion; good for when a crash is will CERTAINLY not happen.
-    void assert(bool (*assert_function)());  // This shows the "begin-test", and THEN runs the function; good for when a crash may happen.
+        void begin();
+
+
+    /**
+     * @brief Display a precomputed assertion result.
+     * @param assertion  True for success, false for failure
+     */
+    void show_assertion(bool assertion);
+
+    /**
+     * @brief Run a test function and display its result.
+     * @param assert_function  Pointer to a function returning bool
+     */
+    void assert(bool (*assert_function)());
 
 private:
-
+    // Blink patterns
     void blink_fail();
     void blink_success();
     void blink_both();
 
+    // High-level states
     void success();
     void fail();
-    void begin();
 
-    unsigned char fail_pin;
-    unsigned char success_pin;
+    uint8_t fail_pin;
+    uint8_t success_pin;
 };
 
-
-#endif //SKIPPER_ARDUINOTEST_H
+#endif // SKIPPER_ARDUINOTEST_H
