@@ -31,6 +31,9 @@ skipper_transceiver_test:  # This is the test suite to try on the NANO
 flight_computer:
   - "../Software/shared"
   - "../Software/flight_computer"
+  - "../Software/flight-controller"
+  - "../Software/flight-controller/tmwinternal"
+
 
 flight_computer_test:  # This is the test suite to try on the Teensy 4.0
   - "../Software/shared"

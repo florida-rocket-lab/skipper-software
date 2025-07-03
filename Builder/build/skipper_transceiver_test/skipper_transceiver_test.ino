@@ -8,13 +8,8 @@
 #include "skipper_lib.h"
 #include "arduinotest.h"
 
-// ===========================================================================
-//                                   ROLE
-// ===========================================================================
-// This is your **flight computer** side — must be ROLE_SENDER:
 #define ROLE_SENDER
 
-// --- Pin & ID setup based on role  ----------------------------------------
 #ifdef ROLE_SENDER
   #define CE_PIN       NANO_CE_PIN
   #define CSN_PIN      NANO_CSN_PIN
@@ -26,7 +21,6 @@
   #error "This sketch must be compiled with ROLE_SENDER"
 #endif
 
-// --- Tester & Radio instances  --------------------------------------------
 ArduinoTest        tester(FAIL_LED, SUCCESS_LED);
 RadioCommunication radioComm(
   CE_PIN,
@@ -35,12 +29,8 @@ RadioCommunication radioComm(
   RADIO_COMMUNICATION_CHANNEL
 );
 
-// ===========================================================================
-//                            “main” sketch
-// ===========================================================================
 void setup() {
   Serial.begin(115200);
-  // 3× both‐LED blink to show “testing has begun”
   tester.show_assertion(true);
 
   radioComm.init();

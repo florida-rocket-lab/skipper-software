@@ -8,13 +8,8 @@
 #include "skipper_lib.h"
 #include "arduinotest.h"
 
-// ===========================================================================
-//                                  ROLE
-// ===========================================================================
-// This is your **ground station** side — must be ROLE_RECEIVER:
 #define ROLE_RECEIVER
 
-// --- Pin & ID setup based on role  ----------------------------------------
 #ifdef ROLE_SENDER
   #error "This sketch must be compiled with ROLE_RECEIVER"
 #elif defined(ROLE_RECEIVER)
@@ -26,7 +21,6 @@
   #define PEER_ID      FLIGHT_COMPUTER_ID
 #endif
 
-// --- Tester & Radio instances  --------------------------------------------
 ArduinoTest        tester(FAIL_LED, SUCCESS_LED);
 RadioCommunication radioComm(
   CE_PIN,
@@ -35,12 +29,8 @@ RadioCommunication radioComm(
   RADIO_COMMUNICATION_CHANNEL
 );
 
-// ===========================================================================
-//                                  “main” sketch
-// ===========================================================================
 void setup() {
   Serial.begin(115200);
-  // 3× both‐LED blink to show “ready for echoes”
   tester.show_assertion(true);
 
   radioComm.init();
