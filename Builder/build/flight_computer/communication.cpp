@@ -267,5 +267,9 @@ bool UARTCommunication::ping() {
 }
 
 
-template UniquePtr<CommandPacket> RadioCommunication::receive<CommandPacket>();
+template UniquePtr<Vector3>       RadioCommunication::receive<Vector3>();
+template UniquePtr<IMUData>       RadioCommunication::receive<IMUData>();
+template UniquePtr<StateSpace>    RadioCommunication::receive<StateSpace>();
+template UniquePtr<Control>       RadioCommunication::receive<Control>();
 template UniquePtr<TelemetryPacket> RadioCommunication::receive<TelemetryPacket>();
+template UniquePtr<CommandPacket> RadioCommunication::receive<CommandPacket>();

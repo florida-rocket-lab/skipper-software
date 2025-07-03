@@ -1,21 +1,30 @@
+#ifndef TEENSY_H
+#define TEENSY_H
 
-#ifndef SKIPPER_GNC_TEENSY_H
-#define SKIPPER_GNC_TEENSY_H
+#include <Arduino.h>
+#include <Wire.h>
+#include "MPU6050.h"
+#include "datatypes.h"   
+#include "skipper_lqi.h"
+#include <Servo.h>
 
-#include "../shared/skipper_lib.h"
 
-class Teensy
-{
+class Teensy {
 public:
-    Teensy() = default;
-    void receive_command();
-    void send_telemetry();
+  void init();
+  void read_imu();
+  void run_gnc();
+   void printIMUData();
 
 private:
-    UniquePtr<CommandPacket> command_buffer;
-    TelemetryPacket telemetry_buffer;
-    RTX3Communication nano_pipe{};
+  MPU6050 mpu;
+  IMUData imu_data;
+  skipper_lqi controller;
+
+  Servo upperServo, lowerServo;
+  static constexpr int thrustPin = TEENSY_ESC1_PIN;
+  static constexpr int contraPin = TEENSY_ESC2_PIN;
+
 };
 
-
-#endif //SKIPPER_GNC_TEENSY_H
+#endif  
