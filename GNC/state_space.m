@@ -16,19 +16,19 @@
     
     
     % Define known parameters of system.
-    M = 1.71;
+    M = 1.74;
     g = 1;
     rho = 5.58/12;
-    Ixx = 8.78;
-    Iyy = 30.37;
-    Izz = 30.93;
+    Ixx = 15.03;
+    Iyy = 36.56;
+    Izz = 39.31;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 
     % Define reference for use.
     x_ref = 10;
-    y_ref = 1;
-    z_ref = 0;
+    y_ref = 5;
+    z_ref = 5;
     
     % Define equillibrium point. When trimming for hovering all parameters
     % should be zero except thrust, T, as defined by the state, X, and
