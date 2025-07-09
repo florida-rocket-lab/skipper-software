@@ -1,18 +1,22 @@
+#define _SS_MAX_RX_BUFF 256
+#include <SoftwareSerial.h>
 #include "nano.h"
-Nano me;
+
+Nano nano;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial);
-  Serial.println("NANO: Setup begin");
-
-  me.init_radio();
-
+  nano.init_radio();
+  Serial.println("NANO: ready");
 }
 
 void loop() {
-    me.send_to_ground();
-    Serial.print("Radio status: ");
-    Serial.println((int)me.get_radio_status());
-    delay(200);
+  auto link = nano.debug_link();
+  while (link && link->available()) {
+    Serial.print(link->read(), HEX);
+    Serial.print(' ');
+  }
+
+  nano.process_ground_to_teensy();
+  nano.process_teensy_to_ground();
 }

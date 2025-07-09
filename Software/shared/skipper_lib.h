@@ -12,4 +12,4 @@
 #include "communication.h"
 
 
-#endif //SKIPPER_GNC_SKIPPER_LIB_H
+#endif 

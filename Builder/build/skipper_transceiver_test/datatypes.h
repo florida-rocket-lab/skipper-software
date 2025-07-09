@@ -25,9 +25,9 @@ struct Vector3 : public BaseSerializable
 
     // INTERNAL DATA
     double data[3] = {0, 0, 0};
-    double& x = data[0];
-    double& y = data[1];
-    double& z = data[2];
+    double x = data[0];
+    double y = data[1];
+    double z = data[2];
 
     // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 3 * sizeof(double);

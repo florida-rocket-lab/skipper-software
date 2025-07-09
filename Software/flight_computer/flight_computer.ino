@@ -1,15 +1,22 @@
-#include "teensy.h"
+#include "teensy.h"          
+#include "communication.h"
+#include "constants.h"
 
-Teensy board;
+Teensy             board;
+RTX3Communication  nano_link;
 
-void setup() {
-  board.init();
-}
+IMUData imu;                 
+
+void setup() { board.init(); }
 
 void loop() {
   board.read_imu();
-  board.printIMUData();   // dump the latest IMU reading
-  board.run_gnc();
+  imu = board.getIMUData();
 
-  delay(100); // or whatever your loop rate is
+  nano_link.send(&imu,
+                 GROUND_STATION_ID,
+                 FLIGHT_COMPUTER_ID,
+                 CMD_IMU_DATA);      
+
+  delay(50);   
 }

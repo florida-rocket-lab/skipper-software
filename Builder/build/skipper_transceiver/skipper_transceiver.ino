@@ -1,18 +1,36 @@
+#define _SS_MAX_RX_BUFF 256
+#include <SoftwareSerial.h>
 #include "nano.h"
-Nano me;
+
+Nano nano;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial);
-  Serial.println("NANO: Setup begin");
-
-  me.init_radio();
-
+  nano.init_radio();
 }
 
 void loop() {
-    me.send_to_ground();
-    Serial.print("Radio status: ");
-    Serial.println((int)me.get_radio_status());
-    delay(200);
+  auto link = nano.debug_link();        // SW-Serial from Teensy
+  static bool in_frame = false;
+  static uint8_t count = 0;
+
+  while (link && link->available()) {
+    uint8_t b = link->read();
+    if (!in_frame) {
+      if (b == 0xAA) {                   // start marker
+        in_frame = true;
+        count = 0;
+        Serial.print("FRAME: ");
+        Serial.print("AA ");
+      }
+    } else if (count < 15) {
+      Serial.print(b, HEX);
+      Serial.print(' ');
+      count++;
+    }
+    if (count == 15) {
+      in_frame = false;
+      Serial.println();
+    }
+  }
 }

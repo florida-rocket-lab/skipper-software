@@ -1,12 +1,18 @@
-//
-// Created by logan on 3/6/2025.
-//
 
 #ifndef SKIPPER_CONSTANTS_H
 #define SKIPPER_CONSTANTS_H
 
-// I've just compiled all the pin information into one spot for easy access.
+// I've just compiled all the pin information into one spot for easy access. - Logan
 #include <Arduino.h>
+
+
+#define USE_LQI_STUB
+inline uint8_t mapThrustToPwm(float thrust) {
+  // simple linear mapping 0…maxThrust → 0…255
+  constexpr float maxThrust = 1.0f; 
+  int v = (int)(thrust / maxThrust * 255.0f);
+  return constrain(v, 0, 255);
+}
 
 #define RADIO_COMMUNICATION_ADDRESS "00001"
 #define RADIO_COMMUNICATION_CHANNEL 76
@@ -24,7 +30,6 @@
 #define BLINK_ON_TIME_MS 200
 #define BLINK_OFF_TIME_MS 100
 
-// TODO: CHANGE THESE PINS, MR. JOSE
 #define UNO_SUCCESS_PIN 5
 #define UNO_FAIL_PIN 6
 #define NANO_SUCCESS_PIN A1
@@ -34,8 +39,10 @@
 
 #define TEENSY_RX3_PIN 15  // Used for Serial3...
 #define TEENSY_TX3_PIN 14
-#define NANO_RX1_PIN 1     // Used for Serial1...
-#define NANO_TX1_PIN 0
+#define NANO_RX1_PIN 2    // Used for Serial1...
+#define NANO_TX1_PIN 3
+
+
 
 // This was found in the test-stand-software.ino; not sure if we are keeping this
 #define TEENSY_ESC1_PIN 9     // The original file by Jose says that this controls Servo 1; this is propeller 1 on the contra-rotating propeller
@@ -46,7 +53,11 @@
 //communication IDs 
 #define GROUND_STATION_ID     1
 #define FLIGHT_COMPUTER_ID    2
-#define PAYLOAD_CONTROLLER_ID 3
+#define FLIGHT_TRANSCEIVER_ID 3
+
+constexpr uint8_t CMD_IMU   = 1;
+constexpr uint8_t CMD_ACT   = 2;
+constexpr uint8_t CMD_STATE = 3;
 
 // command IDs 
 #define CMD_IMU_DATA          101
