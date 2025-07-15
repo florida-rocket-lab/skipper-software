@@ -24,10 +24,12 @@
 #define SKIPPER_COBS_H
 
 #include "arduino_compat.h"
+#include <Arduino.h>
 
 // max overhead = input size + 1
 inline UniquePtr<char[]> cobs_encode(const char* input, size_t length, size_t& out_len) {
-    UniquePtr<char[]> output = make_unique<char>(length + 2); // +1 code byte, +1 null terminator
+    size_t worst = length + length/254 + 2;
+    UniquePtr<char[]> output = make_unique<char>(worst);    
     size_t read_index = 0, write_index = 1, code_index = 0;
     char code = 1;
 
@@ -73,8 +75,6 @@ inline UniquePtr<char[]> cobs_decode(const char* input, size_t length, size_t& o
 }
 
 
-// need to add more :(
-
 inline uint8_t compute_crc8(const char* data, size_t len) {
     uint8_t crc = 0x00;
     for (size_t i = 0; i < len; ++i) {
@@ -86,4 +86,4 @@ inline uint8_t compute_crc8(const char* data, size_t len) {
 }
 
 
-#endif // SKIPPER_COBS_H
+#endif 

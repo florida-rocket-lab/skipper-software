@@ -3,11 +3,10 @@
 // full-scale ranges and scale-factors
 #define ACCEL_FS   MPU6050_ACCEL_FS_2
 #define GYRO_FS    MPU6050_GYRO_FS_250
-#define ACCEL_SF   16384.0   // 2 g → 16384 LSB/g
-#define GYRO_SF    131.0     // 250 dps → 131 LSB/dps
+#define ACCEL_SF   16384.0   // 2 g to 16384 LSB/g
+#define GYRO_SF    131.0     // 250 dps to 131 LSB/dps
 
 void Teensy::init() {
-  Serial.begin(9600);
   Wire.begin();
   delay(100);
 
@@ -20,7 +19,7 @@ void Teensy::init() {
   mpu.setFullScaleAccelRange(ACCEL_FS);
   mpu.setFullScaleGyroRange(GYRO_FS);
 
-  controller.initialize();
+  //controller.initialize();
 
   upperServo.attach(thrustPin);
   lowerServo.attach(contraPin);
@@ -60,22 +59,22 @@ void Teensy::printIMUData() {
   Serial.println(imu.gyr.z);
 }
 
-void Teensy::run_gnc() {
-  controller.step();
+// void Teensy::run_gnc() {
+//   //controller.step();
 
-  auto& out         = controller.getRTM()->skipper_lqi_Y;
-  float thrust      = out.thrust;
-  float contra_spin = out.counter_rotating;
-  float upper_ang   = out.upper_gimbal_angle;
-  float lower_ang   = out.lower_gimbal_angle;
+//   auto& out         = controller.getRTM()->skipper_lqi_Y;
+//   float thrust      = out.thrust;
+//   float contra_spin = out.counter_rotating;
+//   float upper_ang   = out.upper_gimbal_angle;
+//   float lower_ang   = out.lower_gimbal_angle;
 
-  upperServo.write(upper_ang);
-  lowerServo.write(lower_ang);
+//   upperServo.write(upper_ang);
+//   lowerServo.write(lower_ang);
 
-  // mapThrustToPwm is provided by constants.h :contentReference[oaicite:1]{index=1}
-  analogWrite(thrustPin, mapThrustToPwm(thrust));
-  analogWrite(contraPin, mapThrustToPwm(contra_spin));
-}
+//   // mapThrustToPwm is provided by constants.h :contentReference[oaicite:1]{index=1}
+//   analogWrite(thrustPin, mapThrustToPwm(thrust));
+//   analogWrite(contraPin, mapThrustToPwm(contra_spin));
+// }
 
 IMUData Teensy::getIMUData() const {
   return imu_data;

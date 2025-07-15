@@ -67,10 +67,9 @@ constexpr uint8_t CMD_STATE = 3;
 
 
 
-#define MAX_PACKET_SIZE 576  // might need to adjust based on largest serialized+encoded message
+#define MAX_PACKET_SIZE 260
 
 
-
-
-
-#endif //SKIPPER_CONSTANTS_H
+extern uint8_t TX_BUF[MAX_PACKET_SIZE];
+extern uint8_t RX_BUF[MAX_PACKET_SIZE];
+#endif

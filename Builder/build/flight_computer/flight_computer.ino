@@ -1,22 +1,32 @@
-#include "teensy.h"          // add
-#include "communication.h"
-#include "constants.h"
+#include <Arduino.h>
+#include <Skipper.h>
+#include "teensy.h"      // defines class Teensy
 
-Teensy             board;
-RTX3Communication  nano_link;
+// the UART link to the Nano
+UARTCommunication transceiver(&Serial3);
 
-IMUData imu;                 // re-use same object each loop
+// rename the instance so it doesn't shadow the `teensy` namespace
+Teensy imuBoard;
 
-void setup() { board.init(); }
+void setup() {
+  Serial.begin(115200);
+  Serial3.begin(38400);  
+
+  while (!Serial) { }
+  
+  imuBoard.init();                
+  Serial.println(F("Flight computer ready"));
+}
 
 void loop() {
-  board.read_imu();
-  imu = board.getIMUData();
+  imuBoard.read_imu();               // was teensy.read_imu();
+  IMUData imu = imuBoard.getIMUData();  // was teensy.getIMUData();
+  imuBoard.printIMUData();
+  transceiver.send(&imu,
+                   FLIGHT_TRANSCEIVER_ID,
+                   FLIGHT_COMPUTER_ID,
+                   CMD_IMU_DATA);
 
-  nano_link.send(&imu,
-                 GROUND_STATION_ID,
-                 FLIGHT_COMPUTER_ID,
-                 CMD_IMU_DATA);      // already in constants.h
-
-  delay(50);   // 20 Hz
+  Serial.println(F("Sent IMU packet"));
+  delay(100);
 }

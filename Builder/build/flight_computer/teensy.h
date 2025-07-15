@@ -8,11 +8,11 @@
 #include "constants.h"     
 #include <Servo.h>
 
-#ifdef USE_LQI_STUB
-  #include "skipper_lqi_stub.h"
-#else
-  #include "skipper_lqi.h"
-#endif
+// #ifdef USE_LQI_STUB
+//   #include "skipper_lqi_stub.h"
+// #else
+//   #include "skipper_lqi.h"
+// #endif
 
 class Teensy {
 public:
@@ -26,7 +26,7 @@ public:
 private:
   MPU6050     mpu;
   IMUData     imu_data;
-  skipper_lqi controller;
+  //skipper_lqi controller;
 
   Servo       upperServo;
   Servo       lowerServo;
