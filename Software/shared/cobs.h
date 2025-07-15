@@ -1,89 +1,60 @@
-// ==============================================
-// COBS Encoding/Decoding for Packet Framing
-// ----------------------------------------------
-// This header implements COBS (Consistent Overhead Byte Stuffing), 
-// used to encode serialized binary data before transmission.
-// COBS removes all 0x00 bytes, making it safe to frame packets 
-// with a fixed start byte 0xAA.
-//
-// How it works (super simple):
-// - cobs_encode() replaces 0x00s and adds a code byte every block
-// - cobs_decode() reverses the process to get the original data back
-//
-// Usage:
-// 1. After serializing a message but before sending → call `cobs_encode()`
-// 2. After receiving raw bytes but before deserializing → call `cobs_decode()`
-//
-// Typical flow:
-//   - serialize() → cobs_encode() → send()
-//   - receive() → cobs_decode() → deserialize()
-//
-// Author: Mr.ChatGPT
-// ==============================================
-#ifndef SKIPPER_COBS_H
-#define SKIPPER_COBS_H
+#pragma once
+#include <stddef.h>
+#include <stdint.h>
 
-#include "arduino_compat.h"
-#include <Arduino.h>
-
-// max overhead = input size + 1
-inline UniquePtr<char[]> cobs_encode(const char* input, size_t length, size_t& out_len) {
-    size_t worst = length + length/254 + 2;
-    UniquePtr<char[]> output = make_unique<char>(worst);    
-    size_t read_index = 0, write_index = 1, code_index = 0;
-    char code = 1;
-
-    while (read_index < length) {
-        if (input[read_index] == 0) {
-            output[code_index] = code;
+// COBS encode: returns encoded length, or 0 on overflow
+inline size_t cobs_encode(const uint8_t* in, size_t len, uint8_t* out, size_t maxOut)
+{
+    size_t wr = 1, codePos = 0;
+    uint8_t code = 1;
+    for (size_t rd = 0; rd < len; ++rd) {
+        if (in[rd] == 0) {
+            out[codePos] = code;
             code = 1;
-            code_index = write_index++;
-            ++read_index;
+            codePos = wr++;
+            if (wr >= maxOut) return 0;
         } else {
-            output[write_index++] = input[read_index++];
-            ++code;
-            if (code == 0xFF) {
-                output[code_index] = code;
+            out[wr++] = in[rd];
+            if (++code == 0xFF) {
+                out[codePos] = code;
                 code = 1;
-                code_index = write_index++;
+                codePos = wr++;
+                if (wr >= maxOut) return 0;
             }
         }
     }
-
-    output[code_index] = code;
-    out_len = write_index;
-    return output;
+    out[codePos] = code;
+    return wr;
 }
 
-inline UniquePtr<char[]> cobs_decode(const char* input, size_t length, size_t& out_len) {
-    UniquePtr<char[]> output = make_unique<char>(length);
-    size_t read_index = 0, write_index = 0;
-
-    while (read_index < length) {
-        uint8_t code = static_cast<uint8_t>(input[read_index++]);
-        for (uint8_t i = 1; i < code; ++i) {
-            if (read_index >= length) break;
-            output[write_index++] = input[read_index++];
+// COBS decode: returns decoded length, or 0 on overflow
+inline size_t cobs_decode(const uint8_t* in, size_t len, uint8_t* out, size_t maxOut)
+{
+    size_t rd = 0, wr = 0;
+    while (rd < len) {
+        uint8_t code = in[rd++];
+        for (uint8_t i = 1; i < code && rd < len; ++i) {
+            if (wr >= maxOut) return 0;
+            out[wr++] = in[rd++];
         }
-        if (code != 0xFF && read_index < length) {
-            output[write_index++] = 0;
+        if (code != 0xFF && rd < len) {
+            if (wr >= maxOut) return 0;
+            out[wr++] = 0;
         }
     }
-
-    out_len = write_index;
-    return output;
+    return wr;
 }
 
-
-inline uint8_t compute_crc8(const char* data, size_t len) {
-    uint8_t crc = 0x00;
+// CRC‑8 (polynomial 0x07)
+inline uint8_t compute_crc8(const uint8_t* d, size_t len)
+{
+    uint8_t crc = 0;
     for (size_t i = 0; i < len; ++i) {
-        crc ^= static_cast<uint8_t>(data[i]);
-        for (uint8_t j = 0; j < 8; ++j)
+        crc ^= d[i];
+        for (uint8_t b = 0; b < 8; ++b) {
             crc = (crc & 0x80) ? (crc << 1) ^ 0x07 : (crc << 1);
+        }
     }
     return crc;
 }
 
-
-#endif 

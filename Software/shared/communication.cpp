@@ -2,262 +2,68 @@
 #include <string.h>
 
 
-static uint8_t RADIO_RX_BUF[MAX_PACKET_SIZE];
-static char UART_RX_BUF[MAX_PACKET_SIZE];
-uint8_t TX_BUF[MAX_PACKET_SIZE];  
-uint8_t RX_BUF[MAX_PACKET_SIZE]; 
+// RF helpers (27‑byte IMUFrame burst) 
 
-
-
-RadioCommunication::RadioCommunication(uint8_t ce, uint8_t csn,
-                                       const uint8_t addr[6],
-                                       uint8_t channel)
-  : nrf(ce, csn),
-    address(addr),
-    rf_channel(channel)
-{}
-
-void RadioCommunication::init() {
-    if (!nrf.begin()) {
-        status = Status::RADIO_INIT_FAILURE;
-        return;
-    }
-    nrf.enableDynamicPayloads();
-    nrf.setPayloadSize(32);     
-    nrf.startListening();
-
-    nrf.setChannel(rf_channel);
-    nrf.setDataRate(RF24_250KBPS);
-    nrf.setPALevel(RF24_PA_LOW);
-    nrf.openWritingPipe(address);
-    nrf.openReadingPipe(1, address);
-    nrf.startListening(); 
-    status = Status::OK;
-}
-
-bool RadioCommunication::alive() {
-    return nrf.available();
-}
-
-bool RadioCommunication::ping() {
-    const char pingMsg[] = "PING";
-    nrf.stopListening();
-    nrf.write(pingMsg, sizeof(pingMsg));
-    nrf.startListening();
-    unsigned long start = millis();
-    while (!alive()) {
-        if (millis() - start > PING_TIMEOUT_MS) {
-            status = Status::RADIO_AVAILABILITY_FAILURE;
-            return false;
-        }
-    }
-    char resp[4];
-    nrf.read(resp, 4);
-    if (strncmp(resp, "PING", 4) != 0) {
-        status = Status::RADIO_WRONG_HANDSHAKE_FAILURE;
-        return false;
-    }
-    status = Status::OK;
-    return true;
-}
-
-void RadioCommunication::send(const BaseSerializable* d, uint8_t rx, uint8_t tx, uint8_t cmd) {
-    auto [buf, len] = d->serialize();
-    size_t cobs_len;
-    auto enc = cobs_encode(buf.get(), len, cobs_len);
-    auto [pkt, pkt_len] = wrap_packet(
-      reinterpret_cast<const uint8_t*>(enc.get()),
-      cobs_len, rx, tx, cmd
-    );
-    for (size_t off = 0; off < pkt_len; off += 32) {
-        size_t chunk = Min<size_t>(32, pkt_len - off);
-        nrf.write(pkt.get() + off, chunk);   
-    }
-    nrf.startListening();
-}
-
-void RadioCommunication::send(UniquePtr<BaseSerializable> d, uint8_t rx, uint8_t tx, uint8_t cmd) {
-    send(d.get(), rx, tx, cmd);
-}
-
-UniquePtr<BaseSerializable> RadioCommunication::receive(size_t) {
-    return {};
-}
-
-template<typename T>
-UniquePtr<T> RadioCommunication::receive() {
-    static_assert(T::BUFFER_SIZE + 2 <= MAX_PACKET_SIZE, "Buffer overflow");
-    // 1) wait start
-    uint8_t b;
-    unsigned long t0 = millis();
-    for (;;) {
-        if (nrf.available()) {
-            nrf.read(&b, 1);
-            if (b == 0xAA) break;
-        }
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::RADIO_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }
-    
-    // 2) header
-    t0 = millis();
-    while (!nrf.available()) {
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::RADIO_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }
-    uint8_t hdr[6];                 // one extra byte for LEN MSB
-    nrf.read(hdr, 6);
-    uint16_t len = uint16_t(hdr[1]) | (uint16_t(hdr[2]) << 8);
-    // 3) payload+CRC
-    auto& raw = RADIO_RX_BUF;
-    t0 = millis();
-    while (!nrf.available()) {
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::RADIO_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }   
-    nrf.read(raw, len - 2);
-    // 4) CRC
-    size_t pl = (len - 2) - 1; 
-    if (compute_crc8(reinterpret_cast<const char*>(raw), pl) != raw[pl]) {
-        return {};
-    }
-    // 5) COBS decode + construct
-    size_t dec_len;
-    UniquePtr<char[]> dec = cobs_decode(reinterpret_cast<const char*>(raw), pl, dec_len);
-    return UniquePtr<T>( new T(Move(dec)) );
-
-}
-
-template UniquePtr<Vector3>  RadioCommunication::receive<Vector3>();
-template UniquePtr<IMUData>  RadioCommunication::receive<IMUData>();
-
-//  UARTCommunication 
-
-UARTCommunication::UARTCommunication(Stream* ser)
-  : serial(ser)
+bool rf_sendIMU(RF24& radio, const IMUFrame& imu)
 {
-    if (!serial) status = Status::SERIAL_INIT_FAILURE;
+    uint8_t buf[27];
+    buf[0] = IMU_START;
+    buf[1] = IMU_FRAME_LEN;
+    memcpy(buf + 2, &imu, sizeof(IMUFrame));
+    buf[26] = crc8(buf + 2, sizeof(IMUFrame));
+    return radio.write(buf, sizeof(buf));
 }
 
-bool UARTCommunication::alive() {
-    return serial->available() > 0;
-}
-
-bool UARTCommunication::ping() {
-    const char msg[] = "PING";
-    serial->print(msg);
-    unsigned long start = millis();
-    while (serial->available() < 4) {
-        if (millis() - start > PING_TIMEOUT_MS) {
-            status = Status::SERIAL_AVAILABILITY_FAILURE;
-            return false;
-        }
-    }
-    char resp[5] = {0};
-    serial->readBytes(resp, 4);
-    if (strncmp(resp, "PING", 4) != 0) {
-        status = Status::SERIAL_WRONG_HANDSHAKE_FAILURE;
-        return false;
-    }
-    status = Status::OK;
+bool rf_recvIMU(RF24& radio, IMUFrame& imu)
+{
+    if (!radio.available()) return false;
+    uint8_t raw[27];
+    radio.read(raw, sizeof(raw));
+    if (raw[0] != IMU_START || raw[1] != IMU_FRAME_LEN) return false;
+    if (crc8(raw + 2, sizeof(IMUFrame)) != raw[26]) return false;
+    memcpy(&imu, raw + 2, sizeof(IMUFrame));
     return true;
 }
 
-void UARTCommunication::send(const BaseSerializable* d, uint8_t rx, uint8_t tx, uint8_t cmd) {
-    auto [buf, len] = d->serialize();
-    size_t cobs_len;
-    auto enc = cobs_encode(buf.get(), len, cobs_len);
-    auto [pkt, pkt_len] = wrap_packet(
-      reinterpret_cast<const uint8_t*>(enc.get()),
-      cobs_len, rx, tx, cmd
-    );
-    serial->write(pkt.get(), pkt_len);
+//= UART helpers (COBS framing)
+
+static uint8_t cobsBuf[260];
+static uint8_t rawBuf[260];
+
+bool uart_sendCOBS(Stream& s, const uint8_t* buf, size_t n)
+{
+    size_t encLen = cobs_encode(buf, n, cobsBuf, sizeof(cobsBuf));
+    if (!encLen) return false;
+    uint8_t hdr[3] = { 0xAA, uint8_t(encLen+1), uint8_t((encLen+1)>>8) };
+    uint8_t crc = compute_crc8(cobsBuf, encLen);
+    s.write(hdr, 3);
+    s.write(cobsBuf, encLen);
+    s.write(crc);
+    return true;
 }
 
-void UARTCommunication::send(UniquePtr<BaseSerializable> d, uint8_t rx, uint8_t tx, uint8_t cmd) {
-    send(d.get(), rx, tx, cmd);
+size_t uart_recvCOBS(Stream& s, uint8_t* out, size_t max)
+{
+    if (!s.available() || s.peek() != 0xAA) return 0;
+    s.read();
+    while (s.available() < 2) {}
+    uint16_t len = s.read() | (uint16_t(s.read()) << 8);
+    if (len < 2 || len > sizeof(rawBuf)) return 0;
+    while (s.available() < len) {}
+    s.readBytes(rawBuf, len);
+    if (compute_crc8(rawBuf, len-1) != rawBuf[len-1]) return 0;
+    size_t decLen = cobs_decode(rawBuf, len-1, out, max);
+    return decLen;
 }
 
-UniquePtr<BaseSerializable> UARTCommunication::receive(size_t) {
-    return {};
+
+bool uart_sendIMUFrame(Stream& s, const IMUFrame& imu)
+{
+    uint8_t buf[IMU_FRAME_LEN + 2];        // 0xAA len payload crc
+    buf[0] = IMU_START;
+    buf[1] = IMU_FRAME_LEN;
+    memcpy(buf + 2, &imu, sizeof(IMUFrame));
+    buf[IMU_FRAME_LEN + 1] = crc8(buf + 2, sizeof(IMUFrame));
+    size_t written = s.write(buf, sizeof(buf));
+    return (written == sizeof(buf));
 }
-
-template<typename T>
-UniquePtr<T> UARTCommunication::receive() {
-    // 1) skip until 0xAA
-    unsigned long t0 = millis();
-    for (;;) {
-        if (serial->available() && serial->read() == 0xAA) break;
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::SERIAL_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }
-    // 2) header
-    t0 = millis();
-    while (serial->available() < 5) {
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::SERIAL_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }
-    uint8_t hdr[5];                     
-    serial->readBytes(hdr, 5);                
-    uint16_t len = uint16_t(hdr[0]) | (uint16_t(hdr[1]) << 8);
-
-    uint8_t  rx  = hdr[2];
-    uint8_t  tx  = hdr[3];
-    uint8_t  cmd = hdr[4];
-    size_t toRead = len - 2; 
-
-
-
-
-    auto& raw = UART_RX_BUF;
-    t0 = millis();
-    while (serial->available() < (int)toRead) {
-        if (millis() - t0 > PING_TIMEOUT_MS) {
-            status = Status::SERIAL_AVAILABILITY_FAILURE;
-            return {};
-        }
-    }
-    serial->readBytes(raw, toRead);
-    size_t pl = toRead - 1;
-    Serial.print(F("CRC calc=")); Serial.print(compute_crc8(raw, pl), HEX);
-    Serial.print(F("  CRC rx=")); Serial.println(raw[pl], HEX);
-    if (compute_crc8(raw, pl) != raw[pl]) { 
-        return {};
-    }
-    // 4) COBS decode + construct
-    size_t dec_len;
-    UniquePtr<char[]> dec = cobs_decode(raw, pl, dec_len);
-    return UniquePtr<T>( new T(Move(dec)) );
-}
-
-// Explicit instantiations:
-template UniquePtr<Vector3>      UARTCommunication::receive<Vector3>();
-template UniquePtr<IMUData>      UARTCommunication::receive<IMUData>();
-
-template UniquePtr<StateSpace>       RadioCommunication::receive<StateSpace>();
-template UniquePtr<Control>          RadioCommunication::receive<Control>();
-template UniquePtr<TelemetryPacket>  RadioCommunication::receive<TelemetryPacket>();
-template UniquePtr<CommandPacket>    RadioCommunication::receive<CommandPacket>();
-template UniquePtr<TelemetryPacket> UARTCommunication::receive<TelemetryPacket>();
-
-
-
-USBCommunication::USBCommunication()
-  : UARTCommunication(&Serial)
-{}
-
-RTX1Communication::RTX1Communication()
-  : UARTCommunication(&Serial) { }
-
-RTX3Communication::RTX3Communication()
-  : UARTCommunication(&Serial) { }

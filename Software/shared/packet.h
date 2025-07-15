@@ -1,34 +1,19 @@
-#ifndef SKIPPER_PACKET_H
-#define SKIPPER_PACKET_H
+#pragma once
+#include <Arduino.h>
 
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>         
-#include "arduino_compat.h"
-#include "cobs.h"
+#pragma pack(push,1)
+struct IMUFrame {
+  float ax, ay, az;
+  float gx, gy, gz;
+};
+#pragma pack(pop)
+static_assert(sizeof(IMUFrame)==24, "IMUFrame size mismatch");
 
+inline uint8_t crc8(const uint8_t* d, uint8_t len) {   
+  uint8_t c=0; while (len--) { c ^= *d++;
+    for (uint8_t i=0;i<8;i++) c = (c&0x80) ? (c<<1)^0x07 : (c<<1); }
+  return c;
+}
 
-inline auto wrap_packet(const uint8_t *payload,
-                        size_t payload_len,
-                        uint8_t RX, uint8_t TX, uint8_t CMD)
-      -> Pair<UniquePtr<uint8_t[]>, size_t>
-{
-    uint16_t len_no_crc = payload_len + 3;        // RX + TX + CMD  (3 bytes)
-    size_t   total_len  = payload_len + 7;          // start + header(5) + payload + CRC
-
-    auto buf = UniquePtr<uint8_t[]>(new uint8_t[total_len]);
-
-    buf[0] = 0xAA;
-    buf[1] = len_no_crc & 0xFF;                     // LEN LSB
-    buf[2] = len_no_crc >> 8;                       // LEN MSB
-    buf[3] = RX;                                    
-    buf[4] = TX;
-    buf[5] = CMD;
-    memcpy(buf.get() + 6, payload, payload_len);
-    buf[6 + payload_len] = compute_crc8(
-            reinterpret_cast<const char*>(buf.get() + 6),
-            payload_len);
-
-    return { Move(buf), Move(total_len) };
-  }
-#endif 
+constexpr uint8_t IMU_START     = 0xAA;
+constexpr uint8_t IMU_FRAME_LEN = sizeof(IMUFrame)+1; 
