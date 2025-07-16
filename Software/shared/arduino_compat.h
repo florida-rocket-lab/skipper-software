@@ -1,20 +1,28 @@
 #ifndef ARDUINO_COMPAT_H
 #define ARDUINO_COMPAT_H
-#include <stddef.h>
+#include <stddef.h>       
+                        
 
+template<typename T> struct _rr          { using type = T; };
+template<typename T> struct _rr<T&>      { using type = T; };
+template<typename T> struct _rr<T&&>     { using type = T; };
 
-// std::Move 
-template <typename T>
-T&& Move(T& t) {
-    return static_cast<T&&>(t);
+template<typename T>
+using remove_reference_t = typename _rr<T>::type;
+
+template<typename T>
+constexpr remove_reference_t<T>&& Move(T&& t) noexcept {
+    return static_cast<remove_reference_t<T>&&>(t);
 }
 
+template<typename T>
+constexpr T Min(T a, T b) { return a < b ? a : b; }
 
-// std::Forward 
-template <typename T>
-T&& Forward(T& t) {
-    return static_cast<T&&>(t);
+template<typename T>
+constexpr remove_reference_t<T>&& Forward(remove_reference_t<T>& t) noexcept {
+    return static_cast<remove_reference_t<T>&&>(t);
 }
+
 
 //std::Pair
 template <typename T1, typename T2>
@@ -26,7 +34,6 @@ struct Pair {
 };
 
 
-// std::memcpy    (raw byte copy)
 template <typename T>
 inline void compat_memcpy(T* dest, const T* src, size_t count) {
     for (size_t i = 0; i < count; ++i) {
@@ -38,8 +45,6 @@ inline void compat_memcpy(T* dest, const T* src, size_t count) {
 
 
 
-// std::unique_ptr  
-// for single objects
 template <typename T>
 class UniquePtr {
 private:
@@ -78,7 +83,6 @@ public:
     UniquePtr& operator=(const UniquePtr&) = delete;
 };
 
-//  for arrays: 
 template <typename T>
 class UniquePtr<T[]> {
 private:
@@ -119,11 +123,10 @@ public:
 
 
 
-// std::make_unique 
 template <typename T>
 UniquePtr<T[]> make_unique(size_t size) {
     return UniquePtr<T[]>(new T[size]());
 }
 
 
-#endif // ARDUINO_COMPAT_H
+#endif

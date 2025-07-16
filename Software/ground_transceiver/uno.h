@@ -1,27 +1,27 @@
-
 #ifndef SKIPPER_GNC_UNO_H
 #define SKIPPER_GNC_UNO_H
 
 #include "../shared/skipper_lib.h"
 
-class Uno
-{
+class Uno {
 public:
     Uno();
-    void send_to_sky();
-    void receive_from_sky();
+
+    /// Bring up the RF link to the Nano
     void init_radio();
-    Status get_radio_status() const { return nano_pipe.get_status(); }
 
-
+    /// Listen for a TelemetryPacket and print it over USB
+    void receive_from_sky();
 
 private:
-    UniquePtr<CommandPacket> command_buffer;
+    // Must match the Nano’s address
+    static const uint8_t RADIO_ADDRESS[6];
+
+    // Buffer to hold the last-received telemetry (nullptr if none)
     UniquePtr<TelemetryPacket> telemetry_buffer;
 
-    USBCommunication terminal_pipe{};
+    // RF24 link to the Nano
     RadioCommunication nano_pipe;
 };
 
-
-#endif //SKIPPER_GNC_UNO_H
+#endif // SKIPPER_GNC_UNO_H

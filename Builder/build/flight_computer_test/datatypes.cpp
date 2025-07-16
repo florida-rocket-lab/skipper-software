@@ -2,7 +2,6 @@
 #include "arduino_compat.h"
 #include "datatypes.h"
 
-// ======================== BEGIN PRIVATE UTILITY FUNCTIONS ========================
 
 namespace  // anonymous namespace means function is declared only in translation unit, making it private to this source file.
 {
@@ -18,9 +17,7 @@ namespace  // anonymous namespace means function is declared only in translation
     }
 }
 
-// ======================== END PRIVATE UTILITY FUNCTIONS ========================
 
-// ======================== BEGIN SERIALIZERS AND DESERIALIZERS FOR ALL TYPES ========================
 // TODO: ADD "<???>.deserialize(<???>.serialize().first) == <???>" for all classes to Catch2 Unit Testing.
 
 // Begin: Vector3 Serializer and Deserializer
@@ -39,10 +36,8 @@ void Vector3::deserialize(const UniquePtr<char[]>& buffer)
 {
     compat_memcpy(reinterpret_cast<char*>(this->data), reinterpret_cast<const char*>(buffer.get()), Vector3::BUFFER_SIZE);
 }
-// End: Vector3 Serializer and Deserializer
 
 
-// Begin: IMUData Serializer and Deserializer
 Pair<UniquePtr<char[]>, unsigned int> IMUData::serialize() const
 {
     const Pair<UniquePtr<char[]>, unsigned int> acc_info = acc.serialize();
@@ -77,10 +72,8 @@ void IMUData::deserialize(const UniquePtr<char[]> &buffer)
     this->acc.deserialize(acc_buffer);
     this->gyr.deserialize(gyr_buffer);
 }
-// End: IMUData Serializer and Deserializer
 
 
-// Begin: StateSpace Serializer and Deserializer
 Pair<UniquePtr<char[]>, unsigned int> StateSpace::serialize() const
 {
     const Pair<UniquePtr<char[]>, unsigned int> i_pos_info = i_pos.serialize();
@@ -122,10 +115,8 @@ void StateSpace::deserialize(const UniquePtr<char[]> &buffer)
     this->tb_rot.deserialize(tb_rot_buffer);
     this->b_ang_vel.deserialize(b_ang_vel_buffer);
 }
-// End: StateSpace Serializer and Deserializer
 
 
-// Begin: Control Serializer and Deserializer
 Pair<UniquePtr<char[]>, unsigned int> Control::serialize() const
 {
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
@@ -140,40 +131,37 @@ void Control::deserialize(const UniquePtr<char[]> &buffer)
 {
     compat_memcpy(reinterpret_cast<char*>(this->data), buffer.get(), Control::BUFFER_SIZE);
 }
-// End: Control Serializer and Deserializer
 
-// Begin: TelemetryPacket Serializer and Deserializer
 Pair<UniquePtr<char[]>, unsigned int> TelemetryPacket::serialize() const
 {
     // Get serialization information from properties
-    const Pair<UniquePtr<char[]>, unsigned int> imu_data_info = imu_data.serialize();
+    const auto imu_data_info          = imu_data.serialize();
 
-    const Pair<UniquePtr<char[]>, unsigned int> actual_state_space_info = actual_state_space.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> reference_state_space_info = reference_state_space.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> look_ahead_state_space_info = look_ahead_state_space.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> base_point_state_space_info = base_point_state_space.serialize();
+    const auto actual_state_space_info = actual_state_space.serialize();
+    const auto look_ahead_state_space_info = look_ahead_state_space.serialize();
 
-    const Pair<UniquePtr<char[]>, unsigned int> target_control_info = target_control.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> actual_control_info = actual_control.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> derivative_control_info = derivative_control.serialize();
-    const Pair<UniquePtr<char[]>, unsigned int> base_point_control_info = base_point_control.serialize();
+    const auto target_control_info    = target_control.serialize();
+    const auto actual_control_info    = actual_control.serialize();
+    const auto derivative_control_info = derivative_control.serialize();
 
     Pair<UniquePtr<char[]>, unsigned int> buffer_info{};
 
-    buffer_info.second = imu_data_info.second + actual_state_space_info.second + reference_state_space_info.second + look_ahead_state_space_info.second + base_point_state_space_info.second + target_control_info.second + actual_control_info.second + derivative_control_info.second + base_point_control_info.second;
+    buffer_info.second = imu_data_info.second
+                    + actual_state_space_info.second
+                    + look_ahead_state_space_info.second
+                    + target_control_info.second
+                    + actual_control_info.second
+                    + derivative_control_info.second;    
     buffer_info.first = make_unique<char>(buffer_info.second);
 
     // Write serialized property data to buffer
     unsigned int buffer_offset = 0;
-    add_to_buffer(buffer_info.first, imu_data_info, buffer_offset);
-    add_to_buffer(buffer_info.first, actual_state_space_info, buffer_offset);
-    add_to_buffer(buffer_info.first, reference_state_space_info, buffer_offset);
+    add_to_buffer(buffer_info.first, imu_data_info,            buffer_offset);
+    add_to_buffer(buffer_info.first, actual_state_space_info,  buffer_offset);
     add_to_buffer(buffer_info.first, look_ahead_state_space_info, buffer_offset);
-    add_to_buffer(buffer_info.first, base_point_state_space_info, buffer_offset);
-    add_to_buffer(buffer_info.first, target_control_info, buffer_offset);
-    add_to_buffer(buffer_info.first, actual_control_info, buffer_offset);
-    add_to_buffer(buffer_info.first, derivative_control_info, buffer_offset);
-    add_to_buffer(buffer_info.first, base_point_control_info, buffer_offset);
+    add_to_buffer(buffer_info.first, target_control_info,      buffer_offset);
+    add_to_buffer(buffer_info.first, actual_control_info,      buffer_offset);
+    add_to_buffer(buffer_info.first, derivative_control_info,  buffer_offset);
 
     return buffer_info;
 }
@@ -183,45 +171,34 @@ void TelemetryPacket::deserialize(const UniquePtr<char[]> &buffer)
     UniquePtr<char[]> imu_data_buffer = make_unique<char>(IMUData::BUFFER_SIZE);
 
     UniquePtr<char[]> actual_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
-    UniquePtr<char[]> reference_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
     UniquePtr<char[]> look_ahead_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
-    UniquePtr<char[]> base_point_state_space_buffer = make_unique<char>(StateSpace::BUFFER_SIZE);
 
     UniquePtr<char[]> target_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
     UniquePtr<char[]> actual_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
     UniquePtr<char[]> derivative_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
-    UniquePtr<char[]> base_point_control_buffer = make_unique<char>(Control::BUFFER_SIZE);
 
     // Copy and split the buffer into its corresponding property buffer
     unsigned int buffer_offset = 0;
     read_from_buffer(imu_data_buffer, buffer, IMUData::BUFFER_SIZE, buffer_offset);
 
     read_from_buffer(actual_state_space_buffer, buffer, StateSpace::BUFFER_SIZE, buffer_offset);
-    read_from_buffer(reference_state_space_buffer, buffer, StateSpace::BUFFER_SIZE, buffer_offset);
     read_from_buffer(look_ahead_state_space_buffer, buffer, StateSpace::BUFFER_SIZE, buffer_offset);
-    read_from_buffer(base_point_state_space_buffer, buffer, StateSpace::BUFFER_SIZE, buffer_offset);
 
     read_from_buffer(target_control_buffer, buffer, Control::BUFFER_SIZE, buffer_offset);
     read_from_buffer(actual_control_buffer, buffer, Control::BUFFER_SIZE, buffer_offset);
     read_from_buffer(derivative_control_buffer, buffer, Control::BUFFER_SIZE, buffer_offset);
-    read_from_buffer(base_point_control_buffer, buffer, Control::BUFFER_SIZE, buffer_offset);
 
     // Move each buffer into its corresponding property
     this->imu_data.deserialize(imu_data_buffer);
 
     this->actual_state_space.deserialize(actual_state_space_buffer);
-    this->reference_state_space.deserialize(reference_state_space_buffer);
     this->look_ahead_state_space.deserialize(look_ahead_state_space_buffer);
-    this->base_point_state_space.deserialize(base_point_state_space_buffer);
 
     this->target_control.deserialize(target_control_buffer);
     this->actual_control.deserialize(actual_control_buffer);
     this->derivative_control.deserialize(derivative_control_buffer);
-    this->base_point_control.deserialize(base_point_control_buffer);
 }
-// End: TelemetryPacket Serializer and Deserializer
 
-// Begin: Message Serializer and Deserializer
 
 template<unsigned int packet_size>
 Pair<UniquePtr<char[]>, unsigned int> Message<packet_size>::serialize() const
@@ -240,9 +217,7 @@ void Message<packet_size>::deserialize(const UniquePtr<char[]>& buffer)
     compat_memcpy(this->data, buffer.get(), Message<packet_size>::BUFFER_SIZE);
 }
 
-// End: Message Serializer and Deserializer
 
-// Begin: Command Packet Serializer and Deserializer
 
 Pair<UniquePtr<char[]>, unsigned int> CommandPacket::serialize() const
 {
@@ -266,11 +241,8 @@ void CommandPacket::deserialize(const UniquePtr<char[]>& buffer)
     this->message.deserialize(message_buffer);
 }
 
-// End: Command Packet Serializer and Deserializer
 
-// ======================== END SERIALIZERS AND DESERIALIZERS FOR ALL TYPES ========================
 
-// ======================== BEGIN DESERIALIZATION CONSTRUCTORS ========================
 
 Vector3::Vector3(UniquePtr<char[]> &&buffer)
 {
@@ -302,6 +274,5 @@ CommandPacket::CommandPacket(UniquePtr<char[]> &&buffer)
     CommandPacket::deserialize(buffer);
 }
 
-// ======================== END DESERIALIZATION CONSTRUCTORS ========================
 
 

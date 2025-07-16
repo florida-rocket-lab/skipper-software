@@ -1,258 +1,142 @@
-
 #ifndef SKIPPER_GNC_DATATYPES_H
 #define SKIPPER_GNC_DATATYPES_H
 
 #include "arduino_compat.h"
 #include "constants.h"
+using fp_t = float;
 
 class BaseSerializable {
-    public:
-        virtual ~BaseSerializable() = default;
-        virtual Pair<UniquePtr<char[]>, unsigned int> serialize() const = 0;
-        virtual void deserialize(const UniquePtr<char[]>& buffer) = 0;
- };
+public:
+    virtual ~BaseSerializable() = default;
+    virtual Pair<UniquePtr<char[]>, unsigned int> serialize() const = 0;
+    virtual void deserialize(const UniquePtr<char[]>& buffer) = 0;
+};
 
-struct Vector3 : public BaseSerializable
-{
-    
-    // CONSTRUCTORS
-    virtual ~Vector3() override = default;
+struct Vector3 : public BaseSerializable {
+    fp_t data[3] = {0, 0, 0};
+    fp_t& x = data[0];
+    fp_t& y = data[1];
+    fp_t& z = data[2];
+
+    // ctors
     Vector3() = default;
-    Vector3(double x_, double y_, double z_): data{x_, y_, z_} {};
-    explicit Vector3(double* data_): data{data_[0], data_[1], data_[2]} {};
-    explicit Vector3(const UniquePtr<double>& data_): data{data_.get()[0], data_.get()[1], data_.get()[2]} {}
-    explicit Vector3(UniquePtr<char[]>&& buffer);  // construct from buffer
+    Vector3(fp_t x_, fp_t y_, fp_t z_)            : data{x_, y_, z_} {}
+    explicit Vector3(fp_t* p)                     : data{p[0], p[1], p[2]} {}
+    explicit Vector3(const UniquePtr<fp_t[]>& p)   : data{p[0], p[1], p[2]} {}
+    explicit Vector3(UniquePtr<char[]>&& buf);
 
-    // INTERNAL DATA
-    double data[3] = {0, 0, 0};
-    double& x = data[0];
-    double& y = data[1];
-    double& z = data[2];
+    // (de)serialisers
+    static constexpr unsigned int BUFFER_SIZE = 3 * sizeof(fp_t);
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 
-    // SERIALIZERS
-    static constexpr unsigned int BUFFER_SIZE = 3 * sizeof(double);
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
-
-    // MUTATORS
-    void set_data(double x_, double y_, double z_)
-    {
-        this->data[0] = x_;
-        this->data[1] = y_;
-        this->data[2] = z_;
-    };
-    void set_data(const double* data_)
-    {
-        this->data[0] = data_[0];
-        this->data[1] = data_[1];
-        this->data[2] = data_[2];
-    };
-    void set_data(const UniquePtr<double>& data_)
-    {
-    this->data[0] = data_.get()[0];
-    this->data[1] = data_.get()[1];
-    this->data[2] = data_.get()[2];
-    };
-    void set_data(const Vector3& data_)
-    {
-        this->data[0] = data_.x;
-        this->data[1] = data_.y;
-        this->data[2] = data_.z;
-    };
+    // mutators
+    template<typename... Args> void set_data(Args&&... args) {
+        fp_t tmp[3] = {static_cast<fp_t>(args)...};
+        compat_memcpy(data, tmp, sizeof(tmp));
+    }
 };
 
-struct IMUData : public BaseSerializable
-{
-    // CONSTRUCTORS
-    virtual ~IMUData() override = default;
+struct IMUData : public BaseSerializable {
+    Vector3 acc {};
+    Vector3 gyr {};
+
     IMUData() = default;
-    explicit IMUData(UniquePtr<char[]>&& buffer);  // construct from buffer
-    explicit IMUData(double* data_): acc{data_[0], data_[1], data_[2]}, gyr{data_[3], data_[4], data_[5]} {};
+    explicit IMUData(UniquePtr<char[]>&& buf);
+    explicit IMUData(fp_t* p) : acc{p}, gyr{p + 3} {}
 
-    // INTERNAL DATA
-    Vector3 acc{};
-    Vector3 gyr{};
-
-    // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 2 * Vector3::BUFFER_SIZE;
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
-
-    // MUTATORS
-    template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
-    void set_acc(Args&&... args) {acc.set_data(Forward<Args>(args)...);}
-    template <typename... Args>
-    void set_gyr(Args&&... args) {gyr.set_data(Forward<Args>(args)...);}
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
 
-struct StateSpace : public BaseSerializable
-{
-    // CONSTRUCTORS
-    virtual ~StateSpace() override = default;
+struct StateSpace : public BaseSerializable {
+    Vector3 i_pos {}, b_vel {}, tb_rot {}, b_ang_vel {};
+
     StateSpace() = default;
-    explicit StateSpace(UniquePtr<char[]>&& buffer);  // construct from buffer
-    explicit StateSpace(double* data_):
-        i_pos{data_[0], data_[1], data_[2]},
-        b_vel{data_[3], data_[4], data_[5]},
-        tb_rot{data_[6], data_[7], data_[8]},
-        b_ang_vel{data_[9], data_[10], data_[11]} {};
+    explicit StateSpace(UniquePtr<char[]>&& buf);
+    explicit StateSpace(fp_t* p)
+        : i_pos{p}, b_vel{p + 3}, tb_rot{p + 6}, b_ang_vel{p + 9} {}
 
-    // INTERNAL DATA
-    Vector3 i_pos{};     // position in inertial frame
-    Vector3 b_vel{};     // velocity in body frame
-    Vector3 tb_rot{};    // rotation in 3-2-1 Tait-Bryan angles
-    Vector3 b_ang_vel{}; // angular velocity in body frame
-
-    // SERIALIZERS
     static constexpr unsigned int BUFFER_SIZE = 4 * Vector3::BUFFER_SIZE;
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
-
-    // MUTATORS
-    template <typename... Args>  // Thanks to Anthony Thisse for coming in clutch
-    void set_i_pos(Args&&... args) {i_pos.set_data(Forward<Args>(args)...);}
-    template <typename... Args>
-    void set_b_vel(Args&&... args) {b_vel.set_data(Forward<Args>(args)...);}
-    template <typename... Args>
-    void set_tb_rot(Args&&... args) {tb_rot.set_data(Forward<Args>(args)...);}
-    template <typename... Args>
-    void set_b_ang_vel(Args&&... args) {b_ang_vel.set_data(Forward<Args>(args)...);}
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
 
-struct Control : public BaseSerializable
-{
-    virtual ~Control() override = default;
+struct Control : public BaseSerializable {
+    fp_t data[4] = {0,0,0,0};
+    fp_t& T      = data[0];
+    fp_t& xi     = data[1];
+    fp_t& zeta   = data[2];
+    fp_t& tauRCS = data[3];
 
-    // INDICES
-    static constexpr unsigned int THRUST_IDX = 0;
-    static constexpr unsigned int PRIMARY_GIMBAL_IDX = 1;
-    static constexpr unsigned int SECONDARY_GIMBAL_IDX = 2;
-    static constexpr unsigned int BODY_TORQUE_IDX = 3;
-
-    // CONSTRUCTORS
     Control() = default;
-    Control(double T_, double x_, double z_, double t_): data{T_, x_, z_, t_} {};
-    explicit Control(double* data_): data{data_[0], data_[1], data_[2], data_[3]} {};
-    explicit Control(const UniquePtr<double[]>& data_): data{data_[0], data_[1], data_[2], data_[3]} {};
-    explicit Control(UniquePtr<char[]>&& buffer);  // construct from buffer
+    Control(fp_t T_, fp_t x_, fp_t z_, fp_t t_) : data{T_,x_,z_,t_} {}
+    explicit Control(fp_t* p)                  : data{p[0],p[1],p[2],p[3]} {}
+    explicit Control(const UniquePtr<fp_t[]>& p): data{p[0],p[1],p[2],p[3]}{}
+    explicit Control(UniquePtr<char[]>&& buf);
 
-    // INTERNAL DATA
-    double data[4] = {0, 0, 0, 0};
-    double& T = data[THRUST_IDX];
-    double& xi = data[PRIMARY_GIMBAL_IDX];
-    double& zeta = data[SECONDARY_GIMBAL_IDX];
-    double& tauRCS = data[BODY_TORQUE_IDX];
-
-    // SERIALIZERS
-    static constexpr unsigned int BUFFER_SIZE = 4 * sizeof(double);
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
-
-    // MUTATORS
-    void set_data(double T_, double x_, double z_, double t_)
-    {
-        this->data[0] = T_;
-        this->data[1] = x_;
-        this->data[2] = z_;
-        this->data[3] = t_;
-    };
-    void set_data(const double* data_)
-    {
-        this->data[0] = data_[0];
-        this->data[1] = data_[1];
-        this->data[2] = data_[2];
-        this->data[3] = data_[3];
-    };
-    void set_data(const UniquePtr<double[]>& data_)
-    {
-        this->data[0] = data_[0];
-        this->data[1] = data_[1];
-        this->data[2] = data_[2];
-        this->data[3] = data_[3];
-    };
-    void set_data(const Control& data_)
-    {
-        this->data[0] = data_.T;
-        this->data[1] = data_.xi;
-        this->data[2] = data_.zeta;
-        this->data[3] = data_.tauRCS;
-    };
+    static constexpr unsigned int BUFFER_SIZE = 4 * sizeof(fp_t);
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
-template<unsigned int packet_size>
-struct Message : public BaseSerializable
-{
-    // CONSTRUCTORS
-    Message() = default;
-    explicit Message(UniquePtr<char[]>&& buffer);
 
+template<unsigned int packet_size>
+struct Message : public BaseSerializable {
     char data[packet_size]{};
 
-    // SERIALIZERS
+    Message() = default;
+    explicit Message(UniquePtr<char[]>&& buf);
+
     static constexpr unsigned int BUFFER_SIZE = packet_size;
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
 
-struct TelemetryPacket : public BaseSerializable
-{
-    // CONSTRUCTORS
-    virtual ~TelemetryPacket() override = default;
-    TelemetryPacket() = default;
-    explicit TelemetryPacket(UniquePtr<char[]>&& buffer);  // construct from buffer
-
-    TelemetryPacket(double* data_, UniquePtr<char[]>& out_, UniquePtr<char[]>& err_) :
-        imu_data{data_},
-         actual_state_space{data_ + StateSpace::BUFFER_SIZE/sizeof(double)},
-        reference_state_space{data_ + 2*StateSpace::BUFFER_SIZE/sizeof(double)}, 
-        look_ahead_state_space{data_ + 3*StateSpace::BUFFER_SIZE/sizeof(double)},
-        base_point_state_space{data_ + 4*StateSpace::BUFFER_SIZE/sizeof(double)},
-        target_control{data_ + 5*StateSpace::BUFFER_SIZE/sizeof(double)},
-        actual_control{data_ + (5*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE)/sizeof(double)},
-        derivative_control{data_ + (5*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE)/sizeof(double)}, 
-        base_point_control{data_ + (5*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE)/sizeof(double)},
-        out_stream(Move(out_)), err_stream(Move(err_)) 
-        {};
-
-    // INTERNAL DATA
-    IMUData imu_data{};
-
-    StateSpace actual_state_space{};
-    StateSpace reference_state_space{};
-    StateSpace look_ahead_state_space{};
-    StateSpace base_point_state_space{};
-
-    Control target_control{};
-    Control actual_control{};
-    Control derivative_control{};
-    Control base_point_control{};
-
+struct TelemetryPacket : public BaseSerializable {
+    IMUData     imu_data{};
+    StateSpace  actual_state_space{};
+    StateSpace  look_ahead_state_space{};
+    Control     target_control{};
+    Control     actual_control{};
+    Control     derivative_control{};
     Message<256> out_stream;
     Message<256> err_stream;
 
-    // SERIALIZERS
-    static constexpr unsigned int BUFFER_SIZE = 
-    IMUData::BUFFER_SIZE +
-    4 * StateSpace::BUFFER_SIZE +
-    4 * Control::BUFFER_SIZE;
+    TelemetryPacket() = default;
+    explicit TelemetryPacket(UniquePtr<char[]>&& buf);
 
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
+    TelemetryPacket(fp_t* d, UniquePtr<char[]>& o, UniquePtr<char[]>& e) :
+        imu_data{d},
+        actual_state_space{ d + IMUData::BUFFER_SIZE / sizeof(fp_t) },
+        look_ahead_state_space{ d + (IMUData::BUFFER_SIZE + StateSpace::BUFFER_SIZE) / sizeof(fp_t) },
+        target_control{ d + (IMUData::BUFFER_SIZE + 2*StateSpace::BUFFER_SIZE) / sizeof(fp_t) },
+        actual_control{ d + (IMUData::BUFFER_SIZE + 2*StateSpace::BUFFER_SIZE + Control::BUFFER_SIZE) / sizeof(fp_t) },
+        derivative_control{ d + (IMUData::BUFFER_SIZE + 2*StateSpace::BUFFER_SIZE + 2*Control::BUFFER_SIZE) / sizeof(fp_t) },
+        out_stream(Move(o)), err_stream(Move(e)) { }
+
+    static constexpr unsigned int BUFFER_SIZE =
+          IMUData::BUFFER_SIZE
+        + 2 * StateSpace::BUFFER_SIZE
+        + 3 * Control::BUFFER_SIZE;       // 24 + 96 + 48 = 168 B
+
+    static_assert(BUFFER_SIZE ==
+        IMUData::BUFFER_SIZE + 2*StateSpace::BUFFER_SIZE + 3*Control::BUFFER_SIZE,
+        "TelemetryPacket size math wrong");
+
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
 
-
-struct CommandPacket : public BaseSerializable
-{
-    // CONSTRUCTORS
-    virtual ~CommandPacket() override = default;
-    CommandPacket() = default;
-    explicit CommandPacket(UniquePtr<char[]>&& buffer);
-
+struct CommandPacket : public BaseSerializable {
     Message<MESSAGE_SIZE> message{};
 
-    // SERIALIZERS
+    CommandPacket() = default;
+    explicit CommandPacket(UniquePtr<char[]>&& buf);
+
     static constexpr unsigned int BUFFER_SIZE = Message<MESSAGE_SIZE>::BUFFER_SIZE;
-    [[nodiscard]] Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
-    void deserialize(const UniquePtr<char[]>& buffer) override;
+    Pair<UniquePtr<char[]>, unsigned int> serialize() const override;
+    void deserialize(const UniquePtr<char[]>&) override;
 };
 
-#endif //SKIPPER_GNC_DATATYPES_H
+#endif

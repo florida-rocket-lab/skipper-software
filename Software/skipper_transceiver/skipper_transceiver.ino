@@ -1,18 +1,14 @@
 #include "nano.h"
-Nano me;
+
+Nano nano;
 
 void setup() {
-  Serial.begin(9600);
-  while (!Serial);
-  Serial.println("NANO: Setup begin");
-
-  me.init_radio();
-
+  Serial.begin(115200);
+  nano.init_radio();         // calls uno_pipe.init() internally
+  nano.init_teensy_link();
 }
 
 void loop() {
-    me.send_to_ground();
-    Serial.print("Radio status: ");
-    Serial.println((int)me.get_radio_status());
-    delay(200);
+  nano.process_ground_to_teensy();   // pull commands off RF → UART
+  nano.process_teensy_to_ground();   // pull IMU off UART → RF
 }
