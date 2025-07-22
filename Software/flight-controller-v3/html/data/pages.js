@@ -1,1 +1,0 @@
-var reportPages = [["Summary","skipper_lqi_for_export_survey.html"],["Subsystem Report","skipper_lqi_for_export_subsystems.html"],["Code Interface Report","skipper_lqi_for_export_interface.html"]];
