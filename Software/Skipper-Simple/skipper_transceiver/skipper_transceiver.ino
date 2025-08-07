@@ -35,7 +35,7 @@ bool uart_recvIMUFrame(Stream& s, IMUFrame& out) {
 void setup() {
     Serial.begin(115200);
     while (!Serial) {}
-    teenLink.begin(2400); // Lowered from 9600
+    teenLink.begin(57600); // Lowered from 9600
     radio.begin();
     radio.setRetries(15, 15);
     radio.setAutoAck(false);
@@ -50,7 +50,6 @@ void setup() {
     radio.flush_tx();
     radio.flush_rx();
     printf_begin();
-    radio.printDetails();
     delay(1000);
     Serial.println(F("Nano relay ready"));
 }
@@ -88,5 +87,4 @@ void loop() {
         radio.startListening();
         Serial.println(ok ? F("TX ok") : F("TX fail"));
     }
-    delay(50);
 }

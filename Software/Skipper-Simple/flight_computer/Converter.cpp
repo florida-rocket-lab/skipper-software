@@ -9,8 +9,8 @@ uint16_t thrustToPwm(float T)
 
 uint16_t gimbalDegToPwm(float gimbalDeg)
 {
-    float servoDeg = constrain(gimbalDeg * GEAR_RATIO,
-                               -GIMBAL_RANGE, GIMBAL_RANGE);
+    float servoDeg = constrain(gimbalDeg * GEAR_RATIO, -GIMBAL_RANGE, GIMBAL_RANGE);
+    if (fabs(servoDeg) < 0.1f) servoDeg = 0.0f; // Deadband
     float n = (servoDeg + GIMBAL_RANGE) / (2.0f * GIMBAL_RANGE);
-    return uint16_t(n * (SERVO_MAX_US - SERVO_MIN_US) + SERVO_MIN_US);
+    return static_cast<uint16_t>(round(n * (SERVO_MAX_US - SERVO_MIN_US) + SERVO_MIN_US));
 }
