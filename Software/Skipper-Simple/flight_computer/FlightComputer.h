@@ -39,6 +39,13 @@ private:
     RF24      radio{TEENSY_CE_PIN, TEENSY_CSN_PIN};
     Servo     esc1, esc2, servoUp, servoLo;
     File      logFile;
+    float alt0 = 0.0f, altFilt = 0.0f;
+
+
+    static constexpr uint32_t RUN_WINDOW_MS = 15000; // 15 s from ARM
+    bool     runActive = false;
+    uint32_t runStopMs = 0;
+
 
     // Init helpers 
     bool initIMU();
@@ -52,7 +59,9 @@ private:
     struct IMURaw { int16_t ax, ay, az, gx, gy, gz; };
     IMURaw  readIMU();
     void    updateAHRS(const IMURaw&);
-    void    buildPlantState(const IMURaw&, float alt);
+    void buildPlantState(const IMURaw& r, float alt, float dt);
+    void setReferenceFeet(float alt_ft, float cross_ft, float down_ft);
+
 
     // Control and output
     void pushState();

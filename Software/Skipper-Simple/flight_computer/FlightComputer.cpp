@@ -3,16 +3,22 @@
 
 static constexpr float  kA = 1.f / 16384.f;
 static constexpr float  kG = (1.f / 131.f) * (PI / 180.f);
-static constexpr uint32_t CTRL_PERIOD_US = 50;          // 200 Hz
+static constexpr uint32_t CTRL_PERIOD_US = 25'000;    // 40Hz
 static constexpr float SEA_LVL_hPa       = 1013.25f;
 
-//  Hard-coded phase durations (ms) 
-static constexpr uint32_t COUNTDOWN_MS = 5000;
+//  Hard-coded phase durations 
+static constexpr uint32_t COUNTDOWN_MS = 10000;
 static constexpr uint32_t ASCENT_MS    = 5000;
 static constexpr uint32_t HOVER_MS     = 2000;
 static constexpr uint32_t DESCENT_MS   = 5000;
 
-// Private plant state (12-D)
+constexpr float M2FT     = 3.2808399f;
+constexpr float MPS2FTPS = 3.2808399f;
+constexpr float RAD2DEG  = 57.2957795f;
+
+
+
+// Private plant state 
 struct State12 { float v[12]; };
 static State12 plantState;
 
@@ -32,6 +38,8 @@ bool FlightComputer::begin() {
     fcPhase      = FlightPhase::IDLE;
     phaseStartMs = millis();
     setLED(true, false);                    // green solid
+
+    lastCtrlUs = micros(); 
     return true;
 }
 
@@ -41,8 +49,17 @@ void FlightComputer::update() {
     handleRadioCmd();
     handleSerialCmd();
 
+
     uint32_t now   = millis();
     uint32_t since = now - phaseStartMs;
+
+    // HARD TIMEOUT
+    if (runActive && (int32_t)(now - runStopMs) >= 0) {
+        runActive = false;
+        fcPhase   = FlightPhase::DISARMED;
+        disarmMotors();             
+        setLED(true, false);      
+    }
 
     switch (fcPhase) {
     case FlightPhase::IDLE:
@@ -77,14 +94,14 @@ void FlightComputer::update() {
         break;
 
     case FlightPhase::DESCENT: {
-        // Linear ramp from 1 m to 0 m over 5s 
         float progress = (float)since / (float)DESCENT_MS;
         altRef = max(0.0f, 1.0f * (1.0f - progress));
         if (since >= DESCENT_MS) {
             fcPhase      = FlightPhase::DISARMED;
             phaseStartMs = now;
             disarmMotors();
-            setLED(true, false);                         // green solid
+            setLED(true, false);
+            runActive = false;        
         }
         break;
     }
@@ -96,7 +113,9 @@ void FlightComputer::update() {
 
     // sensors 
     IMURaw r   = readIMU();
-    float alt  = bmp.readAltitude(SEA_LVL_hPa);
+    float rawAlt  = bmp.readAltitude(SEA_LVL_hPa) - alt0;
+    altFilt = 0.95f*altFilt + 0.05f*rawAlt;   // simple IIR
+    float alt = altFilt;  
     updateAHRS(r);
 
     //log telem 
@@ -109,18 +128,20 @@ void FlightComputer::update() {
         fcPhase == FlightPhase::HOVER  ||
         fcPhase == FlightPhase::DESCENT)
     {
-        buildPlantState(r, alt);
-        pushState();
         if (micros() - lastCtrlUs >= CTRL_PERIOD_US) {
-            lastCtrlUs += CTRL_PERIOD_US;
-            runController();
-        }
+        lastCtrlUs += CTRL_PERIOD_US;
+        const float dt = CTRL_PERIOD_US * 1e-6f;     // 0.025 s
+        buildPlantState(r, alt, dt); 
+        pushState();
+        runController();
+        }   
     }
 }
 
 // Init 
 bool FlightComputer::initIMU() {
-    Wire.begin(); Wire.setClock(1'000'000);
+    Wire.begin(); 
+    Wire.setClock(1'000'000);
     mpu.initialize();
     mpu.setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
     mpu.setFullScaleGyroRange(MPU6050_GYRO_FS_250);
@@ -129,8 +150,13 @@ bool FlightComputer::initIMU() {
     return true;
 }
 
-bool FlightComputer::initBaro()  { 
-    return bmp.begin(0x77); 
+bool FlightComputer::initBaro() {
+  if (!bmp.begin(0x77)) return false;
+  delay(100);
+  alt0 = bmp.readAltitude(SEA_LVL_hPa);   // baseline
+
+  altFilt = 0;
+  return true;
 }
 
 bool FlightComputer::initRadio() {
@@ -139,6 +165,7 @@ bool FlightComputer::initRadio() {
     radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MAX);
     radio.openWritingPipe(RADIO_ADDRESS);
+    radio.openReadingPipe(1, RADIO_ADDRESS);   
     radio.startListening();
     return true;
 }
@@ -166,55 +193,98 @@ FlightComputer::IMURaw FlightComputer::readIMU() {
 void FlightComputer::updateAHRS(const IMURaw& r) {
     ahrs.updateIMU(r.gx*kG,r.gy*kG,r.gz*kG, r.ax*kA*9.80665f,r.ay*kA*9.80665f,r.az*kA*9.80665f);
 }
-void FlightComputer::buildPlantState(const IMURaw& r, float alt) {
-    velX += r.ax*kA*9.80665f*0.005f;
-    velY += r.ay*kA*9.80665f*0.005f;
-    auto&s = plantState.v;
-    s[0]=alt; 
-    s[1]=0; 
-    s[2]=0; 
-    s[3]=0;
-    s[4]=velX; s[5]=velY;
-    s[6]=ahrs.getRollRadians();
-    s[7]=ahrs.getPitchRadians();
-    s[8]=ahrs.getYawRadians();
-    s[9]=r.gx*kG; 
-    s[10]=r.gy*kG; 
-    s[11]=r.gz*kG;
+void FlightComputer::buildPlantState(const FlightComputer::IMURaw& r,
+                                     float alt_m, float dt) {
+  velX += r.ax * kA * 9.80665f * dt;   
+  velY += r.ay * kA * 9.80665f * dt;  
+  const float alt_ft  = alt_m * M2FT;
+  const float vX_ftps = velX * MPS2FTPS;  
+  const float vY_ftps = velY * MPS2FTPS;
+
+  auto& s = plantState.v;
+  s[0]  = alt_ft;         // altitude
+  s[1]  = 0.0f;           // crossrange
+  s[2]  = 0.0f;           // downrange  
+  s[3]  = vX_ftps;        // lateral_vel
+  s[4]  = vY_ftps;        // longitudinal_vel
+  s[5]  = 0.0f;           // directional_vel
+  s[6]  = ahrs.getRollRadians()  * RAD2DEG;
+  s[7]  = ahrs.getPitchRadians() * RAD2DEG;
+  s[8]  = ahrs.getYawRadians()   * RAD2DEG;
+  s[9]  = (r.gx * kG) * RAD2DEG; 
+  s[10] = (r.gy * kG) * RAD2DEG;
+  s[11] = (r.gz * kG) * RAD2DEG;
 }
 void FlightComputer::pushState() {
     memcpy(ctrl.skipper_lqi_for_export_U.imu_state_in,
            plantState.v, sizeof(plantState.v));
 }
 
-/* ───── Control / actuation ─────────────────────────────────────────────── */
+void FlightComputer::setReferenceFeet(float alt_ft, float cross_ft, float down_ft){
+  ctrl.skipper_lqi_for_export_U.reference[0] = cross_ft; // x
+  ctrl.skipper_lqi_for_export_U.reference[1] = down_ft;  // y
+  ctrl.skipper_lqi_for_export_U.reference[2] = alt_ft;   // z
+}
+
+
+// control 
 void FlightComputer::runController() {
-    /* Feed reference vector */
-    ctrl.skipper_lqi_for_export_U.reference[0] = altRef;   // z
-    ctrl.skipper_lqi_for_export_U.reference[1] = 0.0f;     // x
-    ctrl.skipper_lqi_for_export_U.reference[2] = 0.0f;     // y
+  setReferenceFeet(altRef * M2FT, 0.0f, 0.0f);
 
-    ctrl.step();
-    const auto& y = ctrl.skipper_lqi_for_export_Y;
+  ctrl.step();
+  const auto& y = ctrl.skipper_lqi_for_export_Y;
 
-    pwmEsc      = thrustToPwm(y.thrust);
-    rollDegCmd  = constrain(y.upper_gimbal_angle, -30.f, 30.f);
-    pitchDegCmd = constrain(y.lower_gimbal_angle, -30.f, 30.f);
-    pwmUp       = gimbalDegToPwm(rollDegCmd);
-    pwmLo       = gimbalDegToPwm(pitchDegCmd);
+  pwmEsc      = thrustToPwm_fromLbf(y.thrust);
+  rollDegCmd  = constrain(y.upper_gimbal_angle, -GIMBAL_RANGE, GIMBAL_RANGE);
+  pitchDegCmd = constrain(y.lower_gimbal_angle, -GIMBAL_RANGE, GIMBAL_RANGE);
+  pwmUp       = gimbalDegToPwm(rollDegCmd);
+  pwmLo       = gimbalDegToPwm(pitchDegCmd);
 
+  esc1.writeMicroseconds(pwmEsc);
+  esc2.writeMicroseconds(pwmEsc);
+  servoUp.writeMicroseconds(pwmUp);
+  servoLo.writeMicroseconds(pwmLo);
+
+  if (fcPhase == FlightPhase::DISARMED){
+    pwmEsc = ESC_MIN_US;
     esc1.writeMicroseconds(pwmEsc);
     esc2.writeMicroseconds(pwmEsc);
-    servoUp.writeMicroseconds(pwmUp);
-    servoLo.writeMicroseconds(pwmLo);
-}
-void FlightComputer::disarmMotors() { esc1.writeMicroseconds(1000); esc2.writeMicroseconds(1000); }
+  }
 
-/* ───── Telemetry / logging ─────────────────────────────────────────────── */
-void FlightComputer::sendTelemetry(const IMURaw& r, float alt) {
-    IMUFrame f{ r.ax*kA, r.ay*kA, r.az*kA, r.gx*kG, r.gy*kG, r.gz*kG };
-    rf_sendIMU(radio, f);
 }
+
+void FlightComputer::disarmMotors() {
+  pwmEsc = ESC_MIN_US;
+  esc1.writeMicroseconds(pwmEsc);
+  esc2.writeMicroseconds(pwmEsc);
+  rollDegCmd = pitchDegCmd = 0.0f;                 
+  pwmUp = pwmLo = (SERVO_MIN_US + SERVO_MAX_US)/2;
+  servoUp.writeMicroseconds(pwmUp);
+  servoLo.writeMicroseconds(pwmLo);
+}
+
+
+void FlightComputer::sendTelemetry(const IMURaw& imu, float alt_m) {
+  TelemetryV1 t{};
+  t.ax_mg = int16_t(imu.ax * 1000.0f);
+  t.ay_mg = int16_t(imu.ay * 1000.0f);
+  t.az_mg = int16_t(imu.az * 1000.0f);
+  auto dps10 = [](float rad_s){ return int16_t(rad_s * 57.2957795f * 10.0f); };
+  t.gx_dps10 = dps10(imu.gx);
+  t.gy_dps10 = dps10(imu.gy);
+  t.gz_dps10 = dps10(imu.gz);
+  t.alt_cm   = int16_t(alt_m * 100.0f);
+  t.esc_us   = pwmEsc;
+  t.servo_x_us = pwmUp;
+  t.servo_y_us = pwmLo;
+  t.phase    = uint8_t(fcPhase);
+  t.ver      = 1;
+  t.thrust_milli = int16_t(ctrl.skipper_lqi_for_export_Y.thrust * 1000.f);
+
+
+  rf_sendTelemetry(radio, t);  
+}
+
 void FlightComputer::logFrame(const IMURaw& r, float alt) {
     if (!logFile) return;
     logFile.print(millis()); logFile.print(',');
@@ -231,21 +301,32 @@ void FlightComputer::logFrame(const IMURaw& r, float alt) {
     if (logFile.position() % 512 == 0) logFile.flush();
 }
 
-/* ───── Command handling ────────────────────────────────────────────────── */
+
+// commands 
 void FlightComputer::handleRadioCmd() {
     if (!radio.available()) return;
     char c; radio.read(&c, 1);
-    if (c=='A' && fcPhase==FlightPhase::IDLE)        { fcPhase=FlightPhase::COUNTDOWN; phaseStartMs=millis(); }
+
+    if (c=='A' && fcPhase==FlightPhase::IDLE) {
+        fcPhase=FlightPhase::COUNTDOWN; 
+        phaseStartMs=millis();
+        runActive = true;
+        runStopMs = phaseStartMs + RUN_WINDOW_MS;   // 15 s window starts now
+    }
     if (c=='L' && fcPhase<=FlightPhase::DESCENT)     { fcPhase=FlightPhase::DESCENT;   phaseStartMs=millis(); }
 }
 void FlightComputer::handleSerialCmd() {
     if (!Serial.available()) return;
     char c = tolower(Serial.read());
-    if ((c=='a') && fcPhase==FlightPhase::IDLE)      { fcPhase=FlightPhase::COUNTDOWN; phaseStartMs=millis(); }
+    if ((c=='a') && fcPhase==FlightPhase::IDLE) {
+        fcPhase=FlightPhase::COUNTDOWN; 
+        phaseStartMs=millis();
+        runActive = true;
+        runStopMs = phaseStartMs + RUN_WINDOW_MS;
+    }
     if ((c=='l') && fcPhase<=FlightPhase::DESCENT)   { fcPhase=FlightPhase::DESCENT;   phaseStartMs=millis(); }
 }
 
-/* ───── LED helper ──────────────────────────────────────────────────────── */
 void FlightComputer::setLED(bool g, bool r) {
     digitalWrite(TEENSY_SUCCESS_PIN, g);
     digitalWrite(TEENSY_FAIL_PIN,    r);

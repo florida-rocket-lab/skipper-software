@@ -1,10 +1,8 @@
 #include "Converter.h"
 
-uint16_t thrustToPwm(float T)
-{
-    T = constrain(T, -MAX_THRUST_N, MAX_THRUST_N);
-    float n = (T + MAX_THRUST_N) / (2.0f * MAX_THRUST_N);
-    return uint16_t(n * (ESC_MAX_US - ESC_MIN_US) + ESC_MIN_US);
+uint16_t thrustToPwm_fromLbf(float lbf){
+  float n = constrain(lbf / MAX_THRUST_LBF, 0.f, 1.f);
+  return uint16_t(ESC_MIN_US + n * (ESC_MAX_US - ESC_MIN_US));
 }
 
 uint16_t gimbalDegToPwm(float gimbalDeg)

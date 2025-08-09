@@ -1,64 +1,86 @@
-/*──────────────────────── Servo Range Calibrator ────────────────────────*
- * 1. Edit MIN_US / MAX_US for each servo in the CONFIG block below.      *
- * 2. Upload → the sketch sweeps both servos from min → max → min.        *
- * 3. Watch the motion (or the Serial plot) and note the true limits.     *
- * 4. Tweak the numbers, re-upload, repeat until happy.                   *
- *------------------------------------------------------------------------*/
-
 #include <Servo.h>
 
-/* ───────────── CONFIG – edit here ───────────── */
-static const uint16_t A_MIN_US = 1100;   // lower bound for Servo A
-static const uint16_t A_MAX_US = 2400;   // upper bound for Servo A
-static const uint16_t B_MIN_US = 1200;   // lower bound for Servo B
-static const uint16_t B_MAX_US = 2500;   // upper bound for Servo B
+/* CONFIG */
+const int A_MIN_US = 1100;
+const int A_MAX_US = 2400;
+const int B_MIN_US = 1100;
+const int B_MAX_US = 2400;
 
-static const uint16_t STEP_US  = 10;     // pulse-width step each update
-static const uint16_t HOLD_MS  = 15;     // delay between steps
-/* ────────────────────────────────────────────── */
+const int STEP_US  = 10;
+const int HOLD_MS  = 15;
 
-static const int RED_LED   = 21;
-static const int GREEN_LED = 20;
-static const int SERVO_A_PIN = 5;
-static const int SERVO_B_PIN = 6;
+const int RED_LED = 32, GREEN_LED = 31;
+const int SERVO_A_PIN = 5, SERVO_B_PIN = 6;
 
 Servo servoA, servoB;
+inline void led(bool g, bool r){ digitalWrite(GREEN_LED,g); digitalWrite(RED_LED,r); }
 
-/* helpers */
-void led(bool g, bool r) { digitalWrite(GREEN_LED, g); digitalWrite(RED_LED, r); }
+static inline int lerpB(int pw){
+  // linear map A range -> B range using 32-bit math
+  const int aSpan = A_MAX_US - A_MIN_US;
+  const int bSpan = B_MAX_US - B_MIN_US;
+  return B_MIN_US + (int32_t)(pw - A_MIN_US) * bSpan / aSpan;
+}
 
-void setup() {
-  pinMode(RED_LED,   OUTPUT);
-  pinMode(GREEN_LED, OUTPUT);
+void setup(){
+  pinMode(RED_LED,OUTPUT); pinMode(GREEN_LED,OUTPUT);
   Serial.begin(115200);
-
   servoA.attach(SERVO_A_PIN, A_MIN_US, A_MAX_US);
   servoB.attach(SERVO_B_PIN, B_MIN_US, B_MAX_US);
-
-  led(1,0); delay(300);                // green = ready
-  led(0,0);
+  led(1,0); delay(300); led(0,0);
 }
 
 void loop() {
-  /* sweep up */
-  for (uint16_t pw = A_MIN_US; pw <= A_MAX_US; pw += STEP_US) {
-    servoA.writeMicroseconds(pw);
-    servoB.writeMicroseconds(map(pw, A_MIN_US, A_MAX_US, B_MIN_US, B_MAX_US));
-    Serial.println(pw);                // view as graph if you like
-    led(0,1); delay(HOLD_MS);          // red LED while moving
+  const int centerA = (A_MIN_US + A_MAX_US) / 2;
+  const int centerB = (B_MIN_US + B_MAX_US) / 2;
+
+  // --- Servo A ---
+  servoB.writeMicroseconds(centerB);            // park B at center
+  servoA.writeMicroseconds(centerA); delay(500);
+
+  for (int pw = centerA; pw <= A_MAX_US; pw += STEP_US) { // center -> right
+    servoA.writeMicroseconds(pw); led(0,1); delay(HOLD_MS);
   }
+  servoA.writeMicroseconds(centerA); led(1,1); delay(500); // back to center
 
-  /* hold at max */
-  led(1,1); delay(500);
-
-  /* sweep down */
-  for (uint16_t pw = A_MAX_US; pw >= A_MIN_US; pw -= STEP_US) {
-    servoA.writeMicroseconds(pw);
-    servoB.writeMicroseconds(map(pw, A_MIN_US, A_MAX_US, B_MIN_US, B_MAX_US));
-    Serial.println(pw);
-    led(0,1); delay(HOLD_MS);
+  for (int pw = centerA; pw >= A_MIN_US; pw -= STEP_US) { // center -> left
+    servoA.writeMicroseconds(pw); led(0,1); delay(HOLD_MS);
   }
+  servoA.writeMicroseconds(centerA); led(1,1); delay(800); // settle
 
-  /* hold at min */
-  led(1,1); delay(500);
+  // --- Servo B ---
+  servoA.writeMicroseconds(centerA);            // park A at center
+  servoB.writeMicroseconds(centerB); delay(500);
+
+  for (int pw = centerB; pw <= B_MAX_US; pw += STEP_US) { // center -> right
+    servoB.writeMicroseconds(pw); led(0,1); delay(HOLD_MS);
+  }
+  servoB.writeMicroseconds(centerB); led(1,1); delay(500);
+
+  for (int pw = centerB; pw >= B_MIN_US; pw -= STEP_US) { // center -> left
+    servoB.writeMicroseconds(pw); led(0,1); delay(HOLD_MS);
+  }
+  servoB.writeMicroseconds(centerB); led(1,1); delay(1200); // pause before repeat
 }
+
+
+
+
+
+// void loop() {
+//   servoA.writeMicroseconds(1500);
+//   servoB.writeMicroseconds(1500);
+
+//   led(1, 0); // green LED on
+//   delay(1000); // just hold position
+// }
+
+// #include <Servo.h>
+// Servo s;
+// void setup(){ s.attach(5); delay(300); }
+// void loop(){
+//   s.writeMicroseconds(800); delay(1500);
+//   s.writeMicroseconds(1500); delay(1500);
+//   s.writeMicroseconds(2200); delay(1500);
+// }
+
