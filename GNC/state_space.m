@@ -22,13 +22,14 @@
     Ixx = 15.03;
     Iyy = 36.56;
     Izz = 39.31;
+    T_max = 3.5;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 
     % Define reference for use.
-    x_ref = 10;
-    y_ref = 5;
-    z_ref = 5;
+    x_ref = 3;
+    y_ref = 0;
+    z_ref = 0;
     
     % Define equillibrium point. When trimming for hovering all parameters
     % should be zero except thrust, T, as defined by the state, X, and
@@ -184,9 +185,9 @@
         % to Bryson's rule. Apply this to Q matrix to augment it.
         % NOTE: Error never decreases, it only over grows, so the maximum
         % values allowed for it naturally need to be large.
-        x_error_max = 1e3;
-        y_error_max = 100;
-        z_error_max = 100;
+        x_error_max = 10;
+        y_error_max = 5;
+        z_error_max = 5;
 
         Qi = diag([ ...
             diag(Q)' ...
