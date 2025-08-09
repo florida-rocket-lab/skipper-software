@@ -22,6 +22,7 @@
     Ixx = 15.03;
     Iyy = 36.56;
     Izz = 39.31;
+    T_max = 3.5;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 
@@ -184,9 +185,9 @@
         % to Bryson's rule. Apply this to Q matrix to augment it.
         % NOTE: Error never decreases, it only over grows, so the maximum
         % values allowed for it naturally need to be large.
-        x_error_max = 1e3;
-        y_error_max = 100;
-        z_error_max = 100;
+        x_error_max = 10;
+        y_error_max = 5;
+        z_error_max = 5;
 
         Qi = diag([ ...
             diag(Q)' ...

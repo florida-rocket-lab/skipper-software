@@ -1,9 +1,9 @@
 ###########################################################################
-# CMakeLists.txt generated for component skipper_lqi
+# CMakeLists.txt generated for component skipper_lqi_for_export
 # Product type: executable
 ###########################################################################
 cmake_minimum_required(VERSION 3.12)
-project(skipper_lqi)
+project(skipper_lqi_for_export)
 
 # Propagate the CMAKE_EXPORT_COMPILE_COMMANDS variable from the 
 # environment if it is defined as an environment variable, but not as a 
@@ -15,7 +15,7 @@ endif()
 
 
 # Set directory properties.
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT skipper_lqi)
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT skipper_lqi_for_export)
 
 ###########################################################################
 ## Path variables
@@ -45,24 +45,25 @@ find_library(FOUND_LIBM m NO_SYSTEM_ENVIRONMENT_PATH PATHS ${CMAKE_C_IMPLICIT_LI
 ## Target definition and commands
 ###########################################################################
 
-# Definition of target "skipper_lqi".
-add_executable(skipper_lqi  ${START_DIR}/skipper_lqi_grt_rtw/rt_nonfinite.cpp
-    ${START_DIR}/skipper_lqi_grt_rtw/skipper_lqi.cpp
-    ${START_DIR}/skipper_lqi_grt_rtw/skipper_lqi_data.cpp
+# Definition of target "skipper_lqi_for_export".
+add_executable(skipper_lqi_for_export  ${START_DIR}/skipper_lqi_for_export_grt_rtw/rt_nonfinite.cpp
+    ${START_DIR}/skipper_lqi_for_export_grt_rtw/skipper_lqi_for_export.cpp
+    ${START_DIR}/skipper_lqi_for_export_grt_rtw/skipper_lqi_for_export_data.cpp
     ${MATLAB_ROOT}/rtw/c/src/common/rt_cppclass_main.cpp)
 
-# Set properties for target "skipper_lqi".
-set_target_properties(skipper_lqi PROPERTIES PREFIX ""
+# Set properties for target "skipper_lqi_for_export".
+set_target_properties(skipper_lqi_for_export PROPERTIES PREFIX ""
     POSITION_INDEPENDENT_CODE ON
     RUNTIME_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>"
     LIBRARY_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>"
     ARCHIVE_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>")
 
-# Specify language features required for target "skipper_lqi".
-target_compile_features(skipper_lqi PUBLIC cxx_std_11)
+# Specify language features required for target "skipper_lqi_for_export".
+target_compile_features(skipper_lqi_for_export PUBLIC cxx_std_11)
 
-# Specify compiler preprocessor definitions for target "skipper_lqi".
-target_compile_definitions(skipper_lqi PRIVATE -DMODEL=skipper_lqi
+# Specify compiler preprocessor definitions for target 
+# "skipper_lqi_for_export".
+target_compile_definitions(skipper_lqi_for_export PRIVATE -DMODEL=skipper_lqi_for_export
     -DNUMST=1
     -DNCSTATES=0
     -DHAVESTDIO
@@ -78,19 +79,19 @@ target_compile_definitions(skipper_lqi PRIVATE -DMODEL=skipper_lqi
     -DINTEGER_CODE=0
     -DMT=0)
 
-# Specify include directories for target "skipper_lqi".
-target_include_directories(skipper_lqi PRIVATE ${START_DIR}
-    ${START_DIR}/skipper_lqi_grt_rtw
+# Specify include directories for target "skipper_lqi_for_export".
+target_include_directories(skipper_lqi_for_export PRIVATE ${START_DIR}
+    ${START_DIR}/skipper_lqi_for_export_grt_rtw
     ${MATLAB_ROOT}/extern/include
     ${MATLAB_ROOT}/simulink/include
     ${MATLAB_ROOT}/rtw/c/src
     ${MATLAB_ROOT}/rtw/c/src/ext_mode/common)
 
-# Specify library link dependencies for target "skipper_lqi". CMake 
-# generator expressions are used to create a CMakeLists.txt file that 
-# supports multiple platforms with differently named system library 
+# Specify library link dependencies for target "skipper_lqi_for_export". 
+# CMake generator expressions are used to create a CMakeLists.txt file 
+# that supports multiple platforms with differently named system library 
 # dependencies.
-target_link_libraries(skipper_lqi PRIVATE $<$<BOOL:${FOUND_LIBM}>:m>
+target_link_libraries(skipper_lqi_for_export PRIVATE $<$<BOOL:${FOUND_LIBM}>:m>
     $<$<BOOL:${WIN32}>:kernel32>
     $<$<BOOL:${WIN32}>:ws2_32>
     $<$<BOOL:${WIN32}>:mswsock>
@@ -100,26 +101,26 @@ target_link_libraries(skipper_lqi PRIVATE $<$<BOOL:${FOUND_LIBM}>:m>
 # executable programs for Apple platforms.
 if(APPLE AND (CMAKE_C_COMPILER_ID STREQUAL "AppleClang"))
     string(APPEND _dsymutilcmd "$<IF:$<CONFIG:DEBUG,RELWITHDEBINFO>,"
-                "xcrun;dsymutil;$<TARGET_FILE:skipper_lqi>;--flat,"
+                "xcrun;dsymutil;$<TARGET_FILE:skipper_lqi_for_export>;--flat,"
                 "true"
         >)
-    add_custom_command(TARGET skipper_lqi
+    add_custom_command(TARGET skipper_lqi_for_export
             POST_BUILD
             COMMAND "${_dsymutilcmd}"
             COMMAND_EXPAND_LISTS
-            BYPRODUCTS skipper_lqi.dwarf)
+            BYPRODUCTS skipper_lqi_for_export.dwarf)
 endif()
 
 
 ###########################################################################
 ## Build success message
 ###########################################################################
-add_custom_command(TARGET skipper_lqi POST_BUILD
-     COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan "\\#\\#\\# Created executable: $<TARGET_FILE:skipper_lqi>")
+add_custom_command(TARGET skipper_lqi_for_export POST_BUILD
+     COMMAND ${CMAKE_COMMAND} -E cmake_echo_color --cyan "\\#\\#\\# Created executable: $<TARGET_FILE:skipper_lqi_for_export>")
 
 ###########################################################################
 ## Call toolchain hook function if defined
 ###########################################################################
 if(COMMAND toolchain_target_hook)
-    toolchain_target_hook(skipper_lqi)
+    toolchain_target_hook(skipper_lqi_for_export)
 endif()
