@@ -7,9 +7,9 @@
  *
  * Code generation for model "skipper_lqi_for_export".
  *
- * Model version              : 1.121
+ * Model version              : 1.122
  * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Wed Jul 16 14:14:08 2025
+ * C++ source code generated on : Sat Aug  9 19:26:02 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -90,7 +90,7 @@ struct ConstP_skipper_lqi_for_export_T {
    */
   real_T lqr_gain_Gain[48];
 
-  /* Expression: [M*g*4 1 pi/22 pi/22]'
+  /* Expression: [3.5 1 pi/22 pi/22]'
    * Referenced by: '<S1>/saturator'
    */
   real_T saturator_UpperSat[4];

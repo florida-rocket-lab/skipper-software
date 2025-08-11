@@ -12,6 +12,7 @@
 #include <RF24.h>
 #include "constants.h"
 #include "communication.h"
+#include <Skipper.h>
 
 RF24 radio(UNO_CE_PIN, UNO_CSN_PIN);
 const uint64_t pipe = *(uint64_t*)RADIO_ADDRESS;

@@ -8,9 +8,9 @@ static constexpr float SEA_LVL_hPa       = 1013.25f;
 
 //  Hard-coded phase durations 
 static constexpr uint32_t COUNTDOWN_MS = 10000;
-static constexpr uint32_t ASCENT_MS    = 5000;
-static constexpr uint32_t HOVER_MS     = 2000;
-static constexpr uint32_t DESCENT_MS   = 5000;
+static constexpr uint32_t ASCENT_MS    = 15000;
+static constexpr uint32_t HOVER_MS     = 10000;
+static constexpr uint32_t DESCENT_MS   = 15000;
 
 constexpr float M2FT     = 3.2808399f;
 constexpr float MPS2FTPS = 3.2808399f;

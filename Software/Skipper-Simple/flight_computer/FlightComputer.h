@@ -42,7 +42,7 @@ private:
     float alt0 = 0.0f, altFilt = 0.0f;
 
 
-    static constexpr uint32_t RUN_WINDOW_MS = 15000; // 15 s from ARM
+    static constexpr uint32_t RUN_WINDOW_MS = 60000; // 40 s from ARM
     bool     runActive = false;
     uint32_t runStopMs = 0;
 
