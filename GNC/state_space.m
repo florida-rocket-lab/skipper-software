@@ -22,7 +22,7 @@
     Ixx = 15.03;
     Iyy = 36.56;
     Izz = 39.31;
-    T_max = 3.5;
+    T_max = 1.2;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 
