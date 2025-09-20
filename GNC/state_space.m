@@ -27,9 +27,9 @@
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 
     % Define reference for use.
-    x_ref = 3;
-    y_ref = 0;
-    z_ref = 0;
+    x_ref = 10;
+    y_ref = 10;
+    z_ref = 10;
     
     % Define equillibrium point. When trimming for hovering all parameters
     % should be zero except thrust, T, as defined by the state, X, and
@@ -139,22 +139,22 @@
     
     % Define maximum values for each state and control to use with Bryson's
     % rule to tune LQR gain matrix, K.
-    x_max = 100;
-    y_max = 5;
-    z_max = 5;
-    u_max = 10;
-    v_max = 10;
-    w_max = 10;
+    x_max = 10;
+    y_max = .1;
+    z_max = .1;
+    u_max = .5;
+    v_max = .5;
+    w_max = .5;
     phi_max = 1;
-    theta_max = pi/3;
-    psi_max = pi/3;
-    p_max = 1/10;
-    q_max = 1/10;
-    r_max = 1/10;
+    theta_max = pi/12;
+    psi_max = pi/12;
+    p_max = 1/2;
+    q_max = 1/2;
+    r_max = 1/2;
     T_max = M*g*4;
     tauR_max = 1;
-    xi_max = pi/22;
-    zeta_max = pi/22;
+    xi_max = pi/32;
+    zeta_max = pi/32;
     
     % Form LQR weighting matrices using Bryson's rule:
     %   Q: LQR weight matrix on state
