@@ -12,7 +12,7 @@ const int HOLD_MS  = 15;
 const int RED_LED = 32, GREEN_LED = 31;
 const int SERVO_A_PIN = 5, SERVO_B_PIN = 6;
 
-Servo servoA, servoB;
+Servo servoA, servoB;d
 inline void led(bool g, bool r){ digitalWrite(GREEN_LED,g); digitalWrite(RED_LED,r); }
 
 static inline int lerpB(int pw){

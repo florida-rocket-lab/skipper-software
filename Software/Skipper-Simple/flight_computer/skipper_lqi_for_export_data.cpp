@@ -124,7 +124,7 @@ const ConstP_skipper_lqi_for_export_T skipper_lqi_for_export_ConstP{
   /* Expression: [3.5 1 pi/22 pi/22]'
    * Referenced by: '<S1>/saturator'
    */
-  { 1.2, 1.0, 0.14279966607226333, 0.14279966607226333 },
+  { 2.2, 1.0, 0.14279966607226333, 0.14279966607226333 },
 
   /* Expression: [0 -1 -pi/22 -pi/22]'
    * Referenced by: '<S1>/saturator'
