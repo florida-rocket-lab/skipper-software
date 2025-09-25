@@ -1,9 +1,9 @@
 #pragma once
 #include <Arduino.h>          
 
-constexpr float   MAX_THRUST_LBF = 1.2f;
+constexpr float   MAX_THRUST_LBF = 1.4f;
 constexpr uint16_t ESC_MIN_US     = 1000;    
-constexpr uint16_t ESC_MAX_US   = 2000; 
+constexpr uint16_t ESC_MAX_US   = 1700; 
 
 
 constexpr uint16_t SERVO_MIN_US   = 1000;   

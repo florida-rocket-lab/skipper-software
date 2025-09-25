@@ -5,14 +5,14 @@ Servo servoBig;
 Servo ESCone;
 Servo ESCtwo;
 
-const int buzzerPin = 32;
+const int buzzerPin = 22;
 
 void setup() {
     Serial.begin(9600);
-    servoSmall.attach(5);
+    servoSmall.attach(8);
     servoBig.attach(6);
-    ESCone.attach(7);
-   ESCtwo.attach(8);
+    ESCone.attach(1);
+   ESCtwo.attach(3);
     armServos();
     armESC();
 
