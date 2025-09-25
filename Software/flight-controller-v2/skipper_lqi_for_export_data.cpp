@@ -1,33 +1,31 @@
-/*
- * skipper_lqi_for_export_data.cpp
- *
- * Student License - for use by students to meet course requirements and
- * perform academic research at degree granting institutions only.  Not
- * for government, commercial, or other organizational use.
- *
- * Code generation for model "skipper_lqi_for_export".
- *
- * Model version              : 1.122
- * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Sat Aug  9 19:26:02 2025
- *
- * Target selection: grt.tlc
- * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: ARM Compatible->ARM Cortex-M
- * Code generation objective: Debugging
- * Validation result: Not run
- */
-
+//
+// Sponsored License - for use in support of a program or activity
+// sponsored by MathWorks.  Not for government, commercial or other
+// non-sponsored organizational use.
+//
+// File: skipper_lqi_for_export_data.cpp
+//
+// Code generated for Simulink model 'skipper_lqi_for_export'.
+//
+// Model version                  : 1.123
+// Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
+// C/C++ source code generated on : Thu Sep 25 15:38:50 2025
+//
+// Target selection: ert.tlc
+// Embedded hardware selection: ARM Compatible->ARM Cortex-M
+// Code generation objectives: Unspecified
+// Validation result: Not run
+//
 #include "skipper_lqi_for_export.h"
 
-/* Invariant block signals (default storage) */
-const ConstB_skipper_lqi_for_export_T skipper_lqi_for_export_ConstB{
+// Invariant block signals (default storage)
+const skipperLQR::ConstB_skipper_lqi_for_export_T skipper_lqi_for_export_ConstB{
   {
     0.0,
     0.0,
     0.0
   }
-  ,                                    /* '<Root>/initial_error' */
+  ,                                    // '<Root>/initial_error'
 
   {
     0.0,
@@ -43,24 +41,19 @@ const ConstB_skipper_lqi_for_export_T skipper_lqi_for_export_ConstB{
     0.0,
     0.0
   }
-  /* '<Root>/initial_state' */
+  // '<Root>/initial_state'
 };
 
-/* Constant parameters (default storage) */
-const ConstP_skipper_lqi_for_export_T skipper_lqi_for_export_ConstP{
-  /* Expression: Uff
-   * Referenced by: '<Root>/ff_control'
-   */
-  { 1.7400000000000002, 0.0, 0.0, 0.0 },
+// Constant parameters (default storage)
+const skipperLQR::ConstP_skipper_lqi_for_export_T skipper_lqi_for_export_ConstP{
+  // Expression: d
+  //  Referenced by: '<Root>/gravity_const'
 
-  /* Expression: d
-   * Referenced by: '<Root>/gravity_const'
-   */
   { 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
 
-  /* Expression: A
-   * Referenced by: '<Root>/state_gain'
-   */
+  // Expression: A
+  //  Referenced by: '<Root>/state_gain'
+
   { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -0.0, 0.0, -0.0, 0.0, 0.0, 0.0, 0.0,
@@ -72,16 +65,16 @@ const ConstP_skipper_lqi_for_export_T skipper_lqi_for_export_ConstP{
     0.0, 0.0, 0.0, 0.0, -0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, -0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0 },
 
-  /* Expression: -E
-   * Referenced by: '<Root>/extraction_gain'
-   */
+  // Expression: -E
+  //  Referenced by: '<Root>/extraction_gain'
+
   { -1.0, -0.0, -0.0, -0.0, -1.0, -0.0, -0.0, -0.0, -1.0, -0.0, -0.0, -0.0, -0.0,
     -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0,
     -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0 },
 
-  /* Expression: C
-   * Referenced by: '<Root>/output_gain'
-   */
+  // Expression: C
+  //  Referenced by: '<Root>/output_gain'
+
   { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -93,50 +86,46 @@ const ConstP_skipper_lqi_for_export_T skipper_lqi_for_export_ConstP{
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 },
 
-  /* Expression: -K2
-   * Referenced by: '<Root>/lqi_gain'
-   */
-  { 0.69600000000000106, -2.8869293957883219E-17, 8.9841662498610945E-17,
-    3.2988635735920105E-17, 4.6068604257663989E-14, -6.6301698820574031E-15,
-    -5.89016934148927E-14, -0.028559933214589044, 1.094570543316942E-13,
-    -4.8474021730398186E-14, 0.028559933214555189, 1.0732703580307292E-13 },
+  // Expression: -K2
+  //  Referenced by: '<Root>/lqi_gain'
 
-  /* Expression: -K1
-   * Referenced by: '<Root>/lqr_gain'
-   */
-  { -1.9351580045845433, 3.6559591373012969E-17, -6.1143029804326588E-18,
-    -4.969736981542779E-17, -6.2997094807031964E-13, 8.6035913992327876E-14,
-    8.23748746420823E-13, 0.58300976413417782, -1.4345888536942102E-12,
-    6.4287626109505124E-13, -0.56854581256956649, -1.4015623532008264E-12,
-    -2.6867761082669714, 3.1298774348814123E-17, 7.8552902672033711E-17,
-    -3.4828699724974668E-17, -5.3863574115233612E-12, 7.2785593120127517E-13,
-    7.0602955267504333E-12, 5.936370942172422, -1.1826989253041827E-11,
-    5.3302102950376033E-12, -5.6447728498384242, -1.1563827547881036E-11,
-    -7.8359512121540839E-16, -0.99999999999999933, -1.2696382357520921E-14,
-    4.3250556089380608E-15, 8.3038829269823635E-11, -3.7511850583794495E-11,
-    42.81200391449255, 8.1172304778812119E-11, -3.9187506401075326E-11,
-    5.2709716950701977E-12, 5.1351927147733879E-11, 46.406253972096444,
-    -1.4179078739557972E-14, -11.404385121522333, -5.1403290319411833E-14,
-    -4.7861566970111783E-15, 5.589933746272419E-10, -2.5260537676158926E-10,
-    294.43196472895715, 5.4611797191222447E-10, -2.7370903552231345E-10,
-    3.6760522718004806E-11, 3.5891178475391216E-10, 330.3632080974362 },
+  { 0.69600000000000051, -5.7566871930392654E-17, -4.8771177326676E-16,
+    -2.82278576850932E-16, -1.0297139689817284E-14, 4.4697613425006419E-14,
+    1.5117171217443043E-12, -0.019634954085286638, -1.9835941593387544E-13,
+    1.2907577335678759E-13, 0.019634954084124481, -4.0998127836581691E-13 },
 
-  /* Expression: [3.5 1 pi/22 pi/22]'
-   * Referenced by: '<S1>/saturator'
-   */
-  { 3.5, 1.0, 0.14279966607226333, 0.14279966607226333 },
+  // Expression: -K1
+  //  Referenced by: '<Root>/lqr_gain'
 
-  /* Expression: [0 -1 -pi/22 -pi/22]'
-   * Referenced by: '<S1>/saturator'
-   */
-  { 0.0, -1.0, -0.14279966607226333, -0.14279966607226333 },
+  { -4.5426850271640022, 1.7460177756763749E-16, 2.0873484800385281E-15,
+    1.530308740336887E-15, 5.769323854051644E-13, -2.5957297662929908E-12,
+    -8.787767568197347E-11, 1.283534468262014, 1.1539819194337726E-11,
+    -7.5065618877052036E-12, -1.273771882836471, 2.3175480109793605E-11,
+    -14.476703488520114, -1.1403625909688083E-16, 1.4763693723009494E-15,
+    1.1923832068880172E-15, 4.20608318972932E-12, -2.1371718566809578E-11,
+    -7.21339474453103E-10, 17.408550420406108, 9.2112940702540711E-11,
+    -5.9855689209683332E-11, -16.772798448332495, 1.8471370667407192E-10,
+    1.7063845316370581E-15, -1.000000000000004, -1.205162832274704E-13,
+    1.7593256656601203E-14, -6.2918763515679135E-10, 4.0890684145215964E-10,
+    123.29425504388672, -1.2616202140877164E-9, 2.9161172434283241E-11,
+    -1.5125008634165827E-10, -5.1029135084146304E-9, 132.24849306911531,
+    5.3356170488203913E-15, -5.8360945845659478, -4.3997457436149857E-13,
+    7.3259330254185236E-14, -4.2301086209753858E-9, 2.7491659421924766E-9,
+    835.481865584676, -8.481627455068434E-9, 2.03065146404946E-10,
+    -1.0542053955019382E-9, -3.557340870305714E-8, 928.74991462448486 },
 
-  /* Expression: B
-   * Referenced by: '<Root>/input_gain'
-   */
+  // Expression: B
+  //  Referenced by: '<Root>/input_gain'
+
   { 0.0, 0.0, 0.0, 0.57471264367816088, 0.0, -0.0, 0.0, 0.0, 0.0, 0.0, -0.0,
     -0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.066533599467731214, 0.0,
     -0.0, 0.0, 0.0, 0.0, -0.0, 0.0, -1.0, 0.0, 0.0, 0.0, -0.0,
     -0.022130743982494528, -0.0, 0.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
     -0.0, 0.0, -0.020582548969727804 }
 };
+
+//
+// File trailer for generated code.
+//
+// [EOF]
+//

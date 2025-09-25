@@ -1,6 +1,6 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><link rel="stylesheet" type="text/css" href="rtwreport.css" /><script language="JavaScript" type="text/javascript" src="rtwshrink.js"></script><script>function postParentWindowMessage(message) {window.parent.postMessage(message, "*");}</script><style> h3 { margin-bottom: 1ex; } h4.function {   font-size: larger; font-weight: normal;   color: #c05709;	margin-bottom: 0ex; } .description {	border-style: none;	color: DimGray; } .footnote { margin-top: 0.5ex; font-size: small; color: DimGray;} a:link { color: #0076a8 } a:visited, a:hover { color: #004b87 } ul.services { margin-top: 0.5ex; } .include { color: #992211 } a.include:link { color:inherit; text-decoration: none } a.include:hover { text-decoration: underline } a.fcn:link { color:inherit; text-decoration: none } a.fcn:hover { text-decoration: underline } code.usage { white-space: pre-wrap; } .programlisting {   margin-left: 4ex; margin-right: 4ex;   margin-top: 2ex;  margin-bottom: 2ex; } .tooltip { position: relative; display: inline-block; } .tooltip .tooltip-text {   visibility: hidden;   position: absolute;   top: 110%;   left: 0;   background-color: white;   z-index: 1;   box-shadow: 5px 5px 10px 5px Gainsboro;   border-radius: 10px;   padding: 10px 15px 0px; } .tooltip:hover .tooltip-text { visibility: visible; } .tooltip-text .footnote { white-space: nowrap;} </style><title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><link rel="stylesheet" type="text/css" href="rtwreport.css" /><script language="JavaScript" type="text/javascript" src="rtwshrink.js"></script><script>function postParentWindowMessage(message) {window.parent.postMessage(message, "*");}</script><style> h3 { margin-bottom: 1ex; } h4.function {   font-size: larger; font-weight: normal;   color: #c05709;	margin-bottom: 0ex; } .description {	border-style: none;	color: DimGray; } .footnote { margin-top: 0.5ex; font-size: small; color: DimGray;} a:visited, a:hover { color: #004b87 } ul.services { margin-top: 0.5ex; } .include { color: #992211 } a.include:link { color:inherit; text-decoration: none } a.include:hover { text-decoration: underline } a.fcn:link { color:inherit; text-decoration: none } a.fcn:hover { text-decoration: underline } code.usage { white-space: pre-wrap; } .programlisting {   margin-left: 4ex; margin-right: 4ex;   margin-top: 2ex;  margin-bottom: 2ex; } .tooltip { position: relative; display: inline-block; } .tooltip .tooltip-text {   visibility: hidden;   position: absolute;   top: 110%;   left: 0;   background-color: white;   z-index: 1;   box-shadow: 5px 5px 10px 5px Gainsboro;   border-radius: 10px;   padding: 10px 15px 0px; } .tooltip:hover .tooltip-text { visibility: visible; } .tooltip-text .footnote { white-space: nowrap;} </style><title>
 Code Interface Report for skipper_lqi_for_export
 </title>
 
@@ -140,7 +140,7 @@ Initialization entry point of generated code
 </span>
 <div class="programlisting">
 <code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
-void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export::initialize'})" class="fcn">initialize</a>(void)</code>
+void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipperLQR::initialize'})" class="fcn">initialize</a>(void)</code>
 </div>
 </div>
 </section>
@@ -160,7 +160,7 @@ Termination entry point of generated code
 </span>
 <div class="programlisting">
 <code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
-void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export::terminate'})" class="fcn">terminate</a>(void)</code>
+void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipperLQR::terminate'})" class="fcn">terminate</a>(void)</code>
 </div>
 </div>
 </section>
@@ -180,7 +180,7 @@ Output entry point of generated code. Must be called periodically, every 0.05 se
 </span>
 <div class="programlisting">
 <code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
-void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export::step'})" class="fcn">step</a>(void)</code>
+void <a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipperLQR::step'})" class="fcn">step</a>(void)</code>
 </div>
 </div>
 </section>
@@ -225,7 +225,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_U.imu_state_in
 Input data for &lt;Root&gt;/imu_state_in
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T imu_state_in[12][ 1];
   ...
@@ -240,7 +241,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_U.reference
 Input data for &lt;Root&gt;/refeference_in
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T reference[3][1];
   ...
@@ -260,7 +262,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.altitude
 Output data for &lt;Root&gt;/Out1
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T altitude;
   ...
@@ -275,7 +278,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.crossrange
 Output data for &lt;Root&gt;/Out2
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T crossrange;
   ...
@@ -290,7 +294,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.control
 Output data for &lt;Root&gt;/control_commands_out
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T control[4][1];
   ...
@@ -305,7 +310,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.downrange
 Output data for &lt;Root&gt;/Out3
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T downrange;
   ...
@@ -320,7 +326,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.lateral_vel
 Output data for &lt;Root&gt;/Out4
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T lateral_vel;
   ...
@@ -335,7 +342,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.longitudinal_vel
 Output data for &lt;Root&gt;/Out5
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T longitudinal_vel;
   ...
@@ -350,7 +358,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.directional_vel
 Output data for &lt;Root&gt;/Out6
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T directional_vel;
   ...
@@ -365,7 +374,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.roll
 Output data for &lt;Root&gt;/Out7
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T roll;
   ...
@@ -380,7 +390,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.pitch
 Output data for &lt;Root&gt;/Out8
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T pitch;
   ...
@@ -395,7 +406,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.yaw
 Output data for &lt;Root&gt;/Out9
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T yaw;
   ...
@@ -410,7 +422,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.lateral_rate
 Output data for &lt;Root&gt;/Out10
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T lateral_rate;
   ...
@@ -425,7 +438,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.longitudinal_rate
 Output data for &lt;Root&gt;/Out11
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T longitudinal_rate;
   ...
@@ -440,7 +454,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.directional_rate
 Output data for &lt;Root&gt;/Out12
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T directional_rate;
   ...
@@ -455,7 +470,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.thrust
 Output data for &lt;Root&gt;/Out13
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T thrust;
   ...
@@ -470,7 +486,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.reaction_torque
 Output data for &lt;Root&gt;/Out14
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T reaction_torque;
   ...
@@ -485,7 +502,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.upper_gimbal_angle
 Output data for &lt;Root&gt;/Out15
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T upper_gimbal_angle;
   ...
@@ -500,7 +518,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.lower_gimbal_angle
 Output data for &lt;Root&gt;/Out16
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T lower_gimbal_angle;
   ...
@@ -515,7 +534,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.altitude_error
 Output data for &lt;Root&gt;/Out17
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T altitude_error;
   ...
@@ -530,7 +550,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.crossrange_error
 Output data for &lt;Root&gt;/Out18
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T crossrange_error;
   ...
@@ -545,7 +566,8 @@ skipper_lqi_for_export_Obj.skipper_lqi_for_export_Y.downrange_error
 Output data for &lt;Root&gt;/Out19
 </span>
 <div class="programlisting">
-<code class="usage">struct {
+<code class="usage"><span class="include">#include "<a href="javascript: void(0)" onclick="postParentWindowMessage({message:'jumpToCode',location:'skipper_lqi_for_export.h'})" class="include">skipper_lqi_for_export.h</a>"</span>
+struct {
   ...
   real_T downrange_error;
   ...
