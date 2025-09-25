@@ -13,6 +13,10 @@ if(DEFINED ENV{CMAKE_EXPORT_COMPILE_COMMANDS} AND NOT DEFINED CMAKE_EXPORT_COMPI
     set(CMAKE_EXPORT_COMPILE_COMMANDS $ENV{CMAKE_EXPORT_COMPILE_COMMANDS})
 endif()
 
+if(NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 
 # Set directory properties.
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT skipper_lqi_for_export)
@@ -27,7 +31,7 @@ get_filename_component(START_DIR .. ABSOLUTE)
 # by setting the variable from the command line, e.g.,
 # 
 # 	cmake . -DMATLAB_ROOT=/path/to/another/matlab/root
-set(MATLAB_ROOT C:/Program\ Files/MATLAB/R2024b CACHE PATH "")
+set(MATLAB_ROOT C:/Program\ Files/MATLAB/R2025a CACHE PATH "")
 
 # Additional variables that are defined conditionally.
 if("${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -46,20 +50,19 @@ find_library(FOUND_LIBM m NO_SYSTEM_ENVIRONMENT_PATH PATHS ${CMAKE_C_IMPLICIT_LI
 ###########################################################################
 
 # Definition of target "skipper_lqi_for_export".
-add_executable(skipper_lqi_for_export  ${START_DIR}/skipper_lqi_for_export_grt_rtw/rt_nonfinite.cpp
-    ${START_DIR}/skipper_lqi_for_export_grt_rtw/skipper_lqi_for_export.cpp
-    ${START_DIR}/skipper_lqi_for_export_grt_rtw/skipper_lqi_for_export_data.cpp
-    ${MATLAB_ROOT}/rtw/c/src/common/rt_cppclass_main.cpp)
+add_executable(skipper_lqi_for_export  ${START_DIR}/skipper_lqi_for_export_ert_rtw/ert_main.cpp
+    ${START_DIR}/skipper_lqi_for_export_ert_rtw/rt_nonfinite.cpp
+    ${START_DIR}/skipper_lqi_for_export_ert_rtw/skipper_lqi_for_export.cpp
+    ${START_DIR}/skipper_lqi_for_export_ert_rtw/skipper_lqi_for_export_data.cpp)
 
 # Set properties for target "skipper_lqi_for_export".
 set_target_properties(skipper_lqi_for_export PROPERTIES PREFIX ""
-    POSITION_INDEPENDENT_CODE ON
     RUNTIME_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>"
     LIBRARY_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>"
     ARCHIVE_OUTPUT_DIRECTORY "${BINARY_START_DIR}/./$<0:>")
 
 # Specify language features required for target "skipper_lqi_for_export".
-target_compile_features(skipper_lqi_for_export PUBLIC cxx_std_11)
+target_compile_features(skipper_lqi_for_export PUBLIC cxx_std_17)
 
 # Specify compiler preprocessor definitions for target 
 # "skipper_lqi_for_export".
@@ -67,25 +70,25 @@ target_compile_definitions(skipper_lqi_for_export PRIVATE -DMODEL=skipper_lqi_fo
     -DNUMST=1
     -DNCSTATES=0
     -DHAVESTDIO
-    -DRT
-    -DUSE_RTMODEL
+    -DMODEL_HAS_DYNAMICALLY_LOADED_SFCNS=0
     -DCLASSIC_INTERFACE=0
     -DALLOCATIONFCN=0
     -DTID01EQ=0
-    -DMAT_FILE=0
-    -DONESTEPFCN=1
     -DTERMFCN=1
+    -DONESTEPFCN=1
+    -DMAT_FILE=0
     -DMULTI_INSTANCE_CODE=1
     -DINTEGER_CODE=0
     -DMT=0)
 
 # Specify include directories for target "skipper_lqi_for_export".
 target_include_directories(skipper_lqi_for_export PRIVATE ${START_DIR}
-    ${START_DIR}/skipper_lqi_for_export_grt_rtw
+    ${START_DIR}/skipper_lqi_for_export_ert_rtw
     ${MATLAB_ROOT}/extern/include
     ${MATLAB_ROOT}/simulink/include
     ${MATLAB_ROOT}/rtw/c/src
-    ${MATLAB_ROOT}/rtw/c/src/ext_mode/common)
+    ${MATLAB_ROOT}/rtw/c/src/ext_mode/common
+    ${MATLAB_ROOT}/rtw/c/ert)
 
 # Specify library link dependencies for target "skipper_lqi_for_export". 
 # CMake generator expressions are used to create a CMakeLists.txt file 

@@ -35,7 +35,9 @@ private:
     MPU6050   mpu;
     Adafruit_BMP280 bmp;
     Madgwick  ahrs;
-    skipper_lqi_for_export ctrl;
+    skipperLQR ctrl;
+    skipperLQR::ExtU_skipper_lqi_for_export_T ctrlU{};
+
     RF24      radio{TEENSY_CE_PIN, TEENSY_CSN_PIN};
     Servo     esc1, esc2, servoUp, servoLo;
     File      logFile;

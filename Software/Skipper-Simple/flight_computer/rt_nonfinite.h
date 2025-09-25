@@ -1,23 +1,21 @@
-/*
- * rt_nonfinite.h
- *
- * Student License - for use by students to meet course requirements and
- * perform academic research at degree granting institutions only.  Not
- * for government, commercial, or other organizational use.
- *
- * Code generation for model "skipper_lqi_for_export".
- *
- * Model version              : 1.122
- * Simulink Coder version : 24.2 (R2024b) 21-Jun-2024
- * C++ source code generated on : Sat Aug  9 19:26:02 2025
- *
- * Target selection: grt.tlc
- * Note: GRT includes extra infrastructure and instrumentation for prototyping
- * Embedded hardware selection: ARM Compatible->ARM Cortex-M
- * Code generation objective: Debugging
- * Validation result: Not run
- */
-
+//
+// Sponsored License - for use in support of a program or activity
+// sponsored by MathWorks.  Not for government, commercial or other
+// non-sponsored organizational use.
+//
+// File: rt_nonfinite.h
+//
+// Code generated for Simulink model 'skipper_lqi_for_export'.
+//
+// Model version                  : 1.123
+// Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
+// C/C++ source code generated on : Thu Sep 25 15:38:50 2025
+//
+// Target selection: ert.tlc
+// Embedded hardware selection: ARM Compatible->ARM Cortex-M
+// Code generation objectives: Unspecified
+// Validation result: Not run
+//
 #ifndef rt_nonfinite_h_
 #define rt_nonfinite_h_
 #include "rtwtypes.h"
@@ -41,7 +39,13 @@ extern "C"
 
 #ifdef __cplusplus
 
-}                                      /* extern "C" */
+}                                      // extern "C"
 
 #endif
-#endif                                 /* rt_nonfinite_h_ */
+#endif                                 // rt_nonfinite_h_
+
+//
+// File trailer for generated code.
+//
+// [EOF]
+//

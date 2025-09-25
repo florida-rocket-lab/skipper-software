@@ -1,13 +1,16 @@
-#include "FlightComputer.h"
+//#include "FlightComputer.h"
 
-FlightComputer fc;
+//FlightComputer fc;
 
 void setup() {
   Serial.begin(115200);
-  while(!Serial && millis()<3000){}
-  if (!fc.begin()) Serial.println("Init error!");
+    Serial.println("hello pls init");
+
+  //while(!Serial && millis()<3000){}
+  //if (!fc.begin()) Serial.println("Init error!");
 }
 
 void loop() {
-  fc.update();         
+  //fc.update();   
+  Serial.println("not cooked");    
 }
