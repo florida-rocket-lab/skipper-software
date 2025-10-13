@@ -13,7 +13,7 @@
 % the nessecary variables for the model to use into the workspace.
     
     clear; clc;
-    
+        
     
     % Define known parameters of system.
     M = 1.74;
@@ -22,7 +22,7 @@
     Ixx = 15.03;
     Iyy = 36.56;
     Izz = 39.31;
-    T_max = 1.2;
+    T_max0 = 2.64554715;
 
     is_lqi = true; % Disable if running 'skipper_lqr_2.slx'.
 

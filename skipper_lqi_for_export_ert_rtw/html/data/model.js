@@ -1,1 +1,0 @@
-var modelInfo = {model:"skipper_lqi_for_export"};var modelHierarchy=[{model:"skipper_lqi_for_export",relativePath:"_internal.html",parent:"null"},];var AddCode = true;var ProtectedModel = false;
