@@ -23,7 +23,7 @@
 #include <cstring>
 #include <emmintrin.h>
 #include "skipper_lqi_for_export_private.h"
-
+2.64554715
 const real_T skipper_lqi_for_export_period{ 0.05 };
 
 /* Model step function */
