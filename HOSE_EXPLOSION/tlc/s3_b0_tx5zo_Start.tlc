@@ -1,0 +1,23 @@
+%implements s3_b0_tx5zo_Start "C"
+
+%function Start(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* Start for Constant: '<Root>/initial_state' */
+std::memcpy(&skipper_lqi_for_export_B.initial_state[0], &skipper_lqi_for_export_P.initial_state_Value[0], 12U * sizeof(real_T));
+/* Start for Constant: '<Root>/initial_error ' */
+skipper_lqi_for_export_B.initial_error[0] = skipper_lqi_for_export_P.initial_error_Value[0];
+skipper_lqi_for_export_B.initial_error[1] = skipper_lqi_for_export_P.initial_error_Value[1];
+skipper_lqi_for_export_B.initial_error[2] = skipper_lqi_for_export_P.initial_error_Value[2];
+%closefile cfgTxt
+%<cfgTxt>
+%endfunction
+%function StartFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Start(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 0, fcnProtoType)>
+%endfunction

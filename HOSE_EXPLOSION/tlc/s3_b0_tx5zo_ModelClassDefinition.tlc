@@ -1,0 +1,38 @@
+%implements s3_b0_tx5zo_ModelClassDefinition "C"
+%function ModelClassDefinition(block) Output
+%openfile tmp
+class skipper_lqi_for_export final 
+{
+  public:
+    %<SLibFillInPublicClassMembers()>
+    /* External inputs */
+    ExtU_skipper_lqi_for_export_T skipper_lqi_for_export_U;
+    /* External outputs */
+    ExtY_skipper_lqi_for_export_T skipper_lqi_for_export_Y;
+        /* model start function */
+void start();
+        /* Initial conditions function */
+void initialize();
+        /* model step function */
+%<FcnStaticOnEmptyOutputUpdateMethod()>void step()%<AddConstToStepIfNeccessary("Outputs")>;
+        /* model terminate function */
+%<FcnStaticOnEmptyTermMethod()>void terminate()%<AddConstToTermIfNecessary("terminate")>;
+        /* Constructor */
+skipper_lqi_for_export();
+        /* Destructor */
+~skipper_lqi_for_export();
+  protected:
+    %<SLibFillInProtectedClassMembers()>
+  private:
+    /* Block signals */
+    B_skipper_lqi_for_export_T skipper_lqi_for_export_B;
+    /* Block states */
+    DW_skipper_lqi_for_export_T skipper_lqi_for_export_DW;
+    /* Tunable parameters */
+    static P_skipper_lqi_for_export_T skipper_lqi_for_export_P;
+    %<SLibFillInPrivateClassMembers()>
+    %<SLibFillInLastPrivateClassMembers()>
+};
+%closefile tmp
+%return tmp
+%endfunction

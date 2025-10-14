@@ -1,0 +1,6 @@
+%implements s3_b0_tx5zo_ModuleConstants "C"
+
+%function ModuleConstants(block) Output
+
+const real_T skipper_lqi_for_export_period{0.05};
+%endfunction

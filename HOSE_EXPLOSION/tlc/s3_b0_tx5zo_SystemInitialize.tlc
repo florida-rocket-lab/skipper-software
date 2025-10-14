@@ -1,0 +1,55 @@
+%implements s3_b0_tx5zo_SystemInitialize "C"
+
+%function SystemInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+/* {S!d10}InitializeConditions for DiscreteIntegrator: '<Root>/Discrete Integrator' */
+skipper_lqi_for_export_DW.DiscreteIntegrator_DSTATE[12] = skipper_lqi_for_export_B.initial_error[0];
+skipper_lqi_for_export_DW.DiscreteIntegrator_DSTATE[13] = skipper_lqi_for_export_B.initial_error[1];
+skipper_lqi_for_export_DW.DiscreteIntegrator_DSTATE[14] = skipper_lqi_for_export_B.initial_error[2];
+/* {S!d12}InitializeConditions for RateLimiter: '<S2>/Rate Limiter3' */
+skipper_lqi_for_export_DW.PrevY = skipper_lqi_for_export_P.RateLimiter3_IC;
+/* {S!d14}InitializeConditions for RateLimiter: '<S2>/Rate Limiter2' */
+skipper_lqi_for_export_DW.PrevY_k = skipper_lqi_for_export_P.RateLimiter2_IC;
+/* {S!d16}InitializeConditions for RateLimiter: '<S2>/Rate Limiter1' */
+skipper_lqi_for_export_DW.PrevY_b = skipper_lqi_for_export_P.RateLimiter1_IC;
+/* {S!d18}InitializeConditions for RateLimiter: '<S2>/Rate Limiter' */
+skipper_lqi_for_export_DW.PrevY_l = skipper_lqi_for_export_P.RateLimiter_IC;
+/* {S!d20}InitializeConditions for Delay: '<S1>/MemoryX' */
+skipper_lqi_for_export_DW.icLoad = true;
+/* {S!d5}SystemInitialize for Enabled SubSystem: '<S30>/Enabled Subsystem' */
+/* {S!d6}SystemInitialize for Enabled SubSystem: '<S23>/MeasurementUpdate' */
+for ( int32_T i{0}; i < 12; i++) {
+    /* {S!d22}InitializeConditions for UnitDelay: '<Root>/Unit Delay' */
+    skipper_lqi_for_export_DW.UnitDelay_DSTATE[i] = skipper_lqi_for_export_P.UnitDelay_InitialCondition;
+    /* {S!d24}InitializeConditions for UnitDelay: '<Root>/Unit Delay1' */
+    skipper_lqi_for_export_DW.UnitDelay1_DSTATE[i] = skipper_lqi_for_export_P.UnitDelay1_InitialCondition;
+    /* {S!d26}InitializeConditions for DiscreteIntegrator: '<Root>/Discrete Integrator' */
+    skipper_lqi_for_export_DW.DiscreteIntegrator_DSTATE[i] = skipper_lqi_for_export_B.initial_state[i];
+    /* {S!d28}SystemInitialize for Product: '<S54>/Product3' incorporates:
+ *  Outport: '<S54>/L*(y[k]-yhat[k|k-1])'
+ */
+    skipper_lqi_for_export_B.Product3[i] = skipper_lqi_for_export_P.Lykyhatkk1_Y0;
+    /* {S!d30}SystemInitialize for Product: '<S56>/Product2' incorporates:
+ *  Outport: '<S56>/deltax'
+ */
+    skipper_lqi_for_export_B.Product2[i] = skipper_lqi_for_export_P.deltax_Y0;
+}
+/* {E!d6}End of SystemInitialize for SubSystem: '<S23>/MeasurementUpdate' */
+/* {E!d5}End of SystemInitialize for SubSystem: '<S30>/Enabled Subsystem' */
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedSystemInitializeLocalVars", localVarDecl)>
+%endfunction
+%function SystemInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void SystemInitialize(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 1, fcnProtoType)>
+%endfunction

@@ -7,9 +7,9 @@
  *
  * Code generation for model "skipper_lqi_for_export".
  *
- * Model version              : 3.4
+ * Model version              : 3.5
  * Simulink Coder version : 24.1 (R2024a) 19-Nov-2023
- * C++ source code generated on : Mon Oct 13 17:03:39 2025
+ * C++ source code generated on : Tue Oct 14 03:14:14 2025
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
